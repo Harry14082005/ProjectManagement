@@ -1,13 +1,24 @@
 package com.ct240.backend.entity;
 
 import jakarta.persistence.Entity;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
+
+@Entity
 @Setter
 @Getter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE )
 public class User {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
+    String username;
+    String password;
+    String name;
 }
