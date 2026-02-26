@@ -23,4 +23,8 @@ public class Space {
 
     @OneToMany(mappedBy = "space")
     List<Board> boards;
+
+    @OneToMany(mappedBy = "space")
+    List<SpaceUser> spaceUserList;
+
 }

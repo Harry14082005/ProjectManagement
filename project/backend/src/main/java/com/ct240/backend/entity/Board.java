@@ -30,4 +30,8 @@ public class Board {
     @OneToMany(mappedBy = "board")
     List<Card> cards;
 
+    @OneToMany(mappedBy = "board")
+    List<BoardUser> boardUserList;
+
+
 }

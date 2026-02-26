@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Setter
@@ -13,23 +12,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE )
-public class Task {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    String name;
-    String description;
-    boolean isCompleted;
-    Date deadline;
+    String content;
     Date createAt;
 
     @ManyToOne
-    @JoinColumn(name = "cardId")
-    Card card;
+    @JoinColumn(name = "taskId")
+    Task task;
 
-    @OneToMany(mappedBy = "task")
-    List<TaskAssignment> taskAssignmentList;
-
-    @OneToMany(mappedBy = "task")
-    List<Comment> comments;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    User user;
 }

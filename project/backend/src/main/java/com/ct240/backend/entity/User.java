@@ -25,4 +25,13 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     List<TaskAssignment> taskAssignmentList;
+
+    @OneToMany(mappedBy = "user")
+    List<SpaceUser> spaceUsersList;
+
+    @OneToMany(mappedBy = "user")
+    List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    List<BoardUser> boardUsersList;
 }
