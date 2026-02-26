@@ -43,6 +43,7 @@ public class AuthService {
 
         User user = userMapper.toUser(request);
 
+
         userRepository.save(user);
 
         return userMapper.toUserResponse(user);
@@ -77,13 +78,13 @@ public class AuthService {
             SignedJWT signedJWT = SignedJWT.parse(token);
 
             // kiểm tra token có hết hạn hay không
-            Date expityTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+            Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
             boolean verify = signedJWT.verify(jwsVerifier);
 
             return IntrospectResponse.builder()
                     //nếu token hợp lệ và thời gian hết han sau hiện tại thì ok
-                    .valid(verify && expityTime.after(new Date()))
+                    .valid(verify && expiryTime.after(new Date()))
                     .build();
         }
         catch (Exception e){

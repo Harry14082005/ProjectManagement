@@ -1,11 +1,10 @@
 package com.ct240.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 
 @Entity
@@ -21,4 +20,9 @@ public class User {
     String username;
     String password;
     String name;
+    String avatarURL;
+
+
+    @OneToMany(mappedBy = "user")
+    List<TaskAssignment> taskAssignmentList;
 }

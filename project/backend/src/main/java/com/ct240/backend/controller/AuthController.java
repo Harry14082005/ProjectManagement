@@ -22,6 +22,8 @@ public class AuthController {
     ApiResponse<UserResponse> register(@RequestBody @Valid UserCreationRequest request){
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
+        //authService.register(request);
+
         apiResponse.setData(authService.register(request));
         apiResponse.setMessage(SuccessMessage.REGISTER_SUCCESS.getMessage());
 

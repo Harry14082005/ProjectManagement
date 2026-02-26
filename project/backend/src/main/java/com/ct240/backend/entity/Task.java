@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Setter
@@ -25,4 +26,7 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "cardId")
     Card card;
+
+    @OneToMany(mappedBy = "task")
+    List<TaskAssignment> taskAssignmentList;
 }
