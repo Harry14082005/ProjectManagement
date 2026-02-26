@@ -2,24 +2,23 @@
 defineProps({
   text: {
     type: String,
-    default:'Xóa'
+    default:'Nhập tên task'
   },
   type:{
     type: String,
-    default:'primary'
+    default:'text'
   }
 })
 </script>
 
 <template>
-  <div :class="['btn',`btn-${type}`]">
-    {{ text }}
-  </div>
+<input :class="['input',`input-${type}`]" :type="[`${type}`]">
+</input>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
-.btn{
+.input{
   font-family:"Quicksand", sans-serif;
   font-optical-sizing: auto;
   font-style:normal;
@@ -28,27 +27,25 @@ defineProps({
   align-items: center;     
   justify-content: center;
   border-radius: 1.25rem;
-  border-width: 0;
-  width: 200px;
+  width: 150px;
   height: 40px;
+  outline: none;
+  padding: 4px;
+  
 }
 
-.btn-primary{
+.input-text{
+  border: 2px solid #d4ecf8;
   color:#2f4562;
-  background-color:#a0d8f1;
+  background-color:#f0f7ff;
+}
+.input-text:focus{
+  background-color:white;
+  border: 2px solid #d4ecf8;
+}
+.input-deadline{
+    background-color: white;
+    border: 2px solid #74c5e1;
 }
 
-.btn-secondary{
-  color:#3d5875;
-  background-color:#bce3f5;
-}
-.btn-ghost{
-  border: 1px solid #bce3f5;
-  background-color: white;
-  color:#2f4562;
-}
-.btn-delete{
-  color:#7d1f3a;
-  background-color:#d97998;
-}
 </style>
