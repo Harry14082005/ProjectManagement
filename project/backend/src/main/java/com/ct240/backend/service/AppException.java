@@ -1,2 +1,15 @@
-package com.ct240.backend.service;public class AppException {
+package com.ct240.backend.service;
+
+import com.ct240.backend.exception.ErrorCode;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class AppException extends RuntimeException{
+    private ErrorCode errorCode;
 }

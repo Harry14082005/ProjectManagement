@@ -1,0 +1,29 @@
+package com.ct240.backend.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE )
+public class Card {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
+    String name;
+    Date createAt;
+
+    @ManyToOne
+    @JoinColumn(name = "boardId")
+    Board board;
+
+    @OneToMany(mappedBy = "card")
+    List<Task> tasks;
+}

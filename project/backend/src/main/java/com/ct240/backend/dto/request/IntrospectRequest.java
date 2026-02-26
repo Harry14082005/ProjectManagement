@@ -1,2 +1,12 @@
-package com.ct240.backend.dto.request;public class IntrospectRequest {
+package com.ct240.backend.dto.request;
+
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class IntrospectRequest {
+    private String token;
 }

@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    #context-path: /identity
+    context-path: /api
 
 spring:
   datasource:
@@ -13,3 +13,5 @@ spring:
       ddl-auto: update
     show-sql: true
 
+jwt:
+  signerKey: "7d3ac7d4ea3709dfae13a99e1ec5d12ddbac686853835cfdf2cd5c03dc5ce53f"
