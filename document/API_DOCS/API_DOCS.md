@@ -12,6 +12,7 @@
 | POST | `/auth/register` | Đăng ký tài khoản |
 | POST | `/auth/login` | Đăng nhập → trả về JWT token |
 | POST | `/auth/logout` | Đăng xuất |
+| POST | `/auth/introspect` | Kiểm tra token hợp lệ |
 
 ---
 
