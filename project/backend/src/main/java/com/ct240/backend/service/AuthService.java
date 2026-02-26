@@ -20,6 +20,8 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -43,6 +45,9 @@ public class AuthService {
 
         User user = userMapper.toUser(request);
 
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         userRepository.save(user);
 
@@ -54,7 +59,10 @@ public class AuthService {
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
-        boolean authenticated = request.getPassword().equals(user.getPassword());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+
+
+        boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if(!authenticated){
             throw new AppException(ErrorCode.UNAUTHENTICATED);

@@ -1,10 +1,7 @@
 package com.ct240.backend.entity;
 
 import com.ct240.backend.enums.Role;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,10 +18,12 @@ public class SpaceUser {
     Role role;
 
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "userId")
     User user;
 
     @ManyToOne
+    @MapsId("spaceId")
     @JoinColumn(name = "spaceId")
     Space space;
 }

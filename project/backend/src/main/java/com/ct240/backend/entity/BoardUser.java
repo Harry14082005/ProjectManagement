@@ -1,9 +1,6 @@
 package com.ct240.backend.entity;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,10 +17,12 @@ public class BoardUser {
     boolean isOwner;
 
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn (name = "userId")
     User user;
 
     @ManyToOne
-    @JoinColumn(name = "boadId")
+    @MapsId("boardId")
+    @JoinColumn(name = "boardId")
     Board board;
 }

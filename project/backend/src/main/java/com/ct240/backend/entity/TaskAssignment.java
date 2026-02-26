@@ -1,9 +1,6 @@
 package com.ct240.backend.entity;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,10 +16,12 @@ public class TaskAssignment {
     TaskAssignmentId id;
 
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "userId")
     User user;
 
     @ManyToOne
+    @MapsId("taskId")
     @JoinColumn(name = "taskId")
     Task task;
 
