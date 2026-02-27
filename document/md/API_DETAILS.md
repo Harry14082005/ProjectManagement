@@ -21,6 +21,7 @@ Authorization: Bearer <token>
 - [Task](#task)
 - [TaskAssignment](#taskassignment)
 - [Comment](#comment)
+- [Template Request & Response](#template)
 
 ---
 
@@ -576,3 +577,37 @@ Xóa bình luận. Chỉ người tạo mới được xóa.
 | OWNER (0) | Toàn quyền: xóa space, thay đổi role thành viên |
 | ADMIN (1) | Quản lý board, thêm/xóa thành viên |
 | MEMBER (2) | Xem và tham gia công việc |
+
+---
+
+## Template
+
+### Request
+
+```java
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class XxxRequest {
+    String field1;
+    String field2;
+}
+```
+
+### Response
+
+```java
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class XxxResponse {
+    String id;
+    String field1;
+    String field2;
+}
+```
