@@ -142,11 +142,11 @@ Bình luận của người dùng trên một Task.
 
 | Quan hệ | Mô tả |
 |---------|-------|
-| User — Space | Nhiều-nhiều qua bảng `SpaceUser`, kèm theo RoleID |
-| Space — Board | Một Space có nhiều Board |
-| Board — BoardUser | Nhiều-nhiều qua bảng `BoardUser` |
-| Board — Card | Một Board có nhiều Card |
-| Card — Task | Một Card có nhiều Task |
-| Task — User | Nhiều-nhiều qua bảng `TaskAssignment` |
-| Task — Comment | Một Task có nhiều Comment |
-| User — Comment | Một User có thể viết nhiều Comment |
+| User - Space | Nhiều-nhiều qua bảng `SpaceUser`, kèm theo Role |
+| Space - Board | Một Space có nhiều Board |
+| Board - User | Nhiều-nhiều qua bảng `BoardUser` |
+| Board - Card | Một Board có nhiều Card |
+| Card - Task | Một Card có nhiều Task |
+| Task - User | Nhiều-nhiều qua bảng `TaskAssignment` |
+| Task - Comment | Một Task có nhiều Comment |
+| User - Comment | Một User có thể viết nhiều Comment |
