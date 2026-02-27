@@ -1,18 +1,24 @@
 <script setup>
-defineProps({
-  text: {
-    type: String,
-    default:'Nhập tên task'
-  },
+import { computed } from 'vue'
+const props = defineProps({
   type:{
     type: String,
     default:'text'
+  },
+  placeholder:{
+    type:String,
+    default:'Nhập tên task'
   }
+})
+const displayPlaceholder = computed(() => {
+  return props.type === 'text' ? props.placeholder : ''
 })
 </script>
 
 <template>
-<input :class="['input',`input-${type}`]" :type="[`${type}`]">
+<input :class="['input',`input-${type}`]" 
+       :type="[`${type}`]"
+       :placeholder="displayPlaceholder">
 </input>
 </template>
 
@@ -26,8 +32,9 @@ defineProps({
   display: flex;
   align-items: center;     
   justify-content: center;
+  text-align: center;
   border-radius: 1.25rem;
-  width: 150px;
+  width: 200px;
   height: 40px;
   outline: none;
   padding: 4px;
@@ -43,7 +50,7 @@ defineProps({
   background-color:white;
   border: 2px solid #d4ecf8;
 }
-.input-deadline{
+.input-date{
     background-color: white;
     border: 2px solid #74c5e1;
 }
