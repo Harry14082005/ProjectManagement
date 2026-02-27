@@ -21,7 +21,7 @@ public class Card {
     Date createAt;
 
     @ManyToOne
-    @JoinColumn(name = "boardId")
+    @JoinColumn(name = "board_id")
     Board board;
 
     @OneToMany(mappedBy = "card")

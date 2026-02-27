@@ -7,6 +7,7 @@ import com.ct240.backend.entity.User;
 import com.ct240.backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,17 @@ public class UserController {
         ApiResponse <List<UserResponse>> apiResponse = new ApiResponse<>();
 
         apiResponse.setData(userService.getAllUsers());
+
+        return apiResponse;
+    }
+
+    @GetMapping("/profile")
+    ApiResponse<UserResponse> getUser(Authentication authentication){
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+
+        String username = authentication.getName();
+
+        apiResponse.setData(userService.getUserByUsername(username));
 
         return apiResponse;
     }

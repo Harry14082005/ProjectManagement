@@ -18,11 +18,11 @@ public class BoardUser {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn (name = "userId")
+    @JoinColumn (name = "user_id")
     User user;
 
     @ManyToOne
     @MapsId("boardId")
-    @JoinColumn(name = "boardId")
+    @JoinColumn(name = "board_id")
     Board board;
 }

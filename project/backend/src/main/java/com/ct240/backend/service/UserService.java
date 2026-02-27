@@ -37,4 +37,12 @@ public class UserService {
                 .toList();
     }
 
+    public UserResponse getUserByUsername(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        return userMapper.toUserResponse(user);
+    }
+
 }

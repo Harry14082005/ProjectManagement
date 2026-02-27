@@ -20,10 +20,10 @@ public class Comment {
     Date createAt;
 
     @ManyToOne
-    @JoinColumn(name = "taskId")
+    @JoinColumn(name = "task_id")
     Task task;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     User user;
 }

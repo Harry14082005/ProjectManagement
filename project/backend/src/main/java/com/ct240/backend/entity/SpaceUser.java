@@ -19,11 +19,11 @@ public class SpaceUser {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     User user;
 
     @ManyToOne
     @MapsId("spaceId")
-    @JoinColumn(name = "spaceId")
+    @JoinColumn(name = "space_id")
     Space space;
 }

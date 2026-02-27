@@ -5,9 +5,14 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,9 +25,10 @@ import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.util.Collections;
 
+
 @Component
 @RequiredArgsConstructor
-public class k extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
@@ -44,11 +50,15 @@ public class k extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         try {
-            Algorithm algorithm = Algorithm.HMAC512(SIGNER_KEY);
-            JWTVerifier verifier = JWT.require(algorithm).build();
-            DecodedJWT decodedJWT = verifier.verify(token);
+            SignedJWT signedJWT = SignedJWT.parse(token);
 
-            String username = decodedJWT.getSubject();
+            JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+
+            if (!signedJWT.verify(verifier)) {
+                throw new RuntimeException("Invalid signature");
+            }
+
+            String username = signedJWT.getJWTClaimsSet().getSubject();
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -60,6 +70,8 @@ public class k extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (Exception e) {
+            System.out.println("JWT Error: " + e.getClass().getName() + ": " + e.getMessage());
+
             SecurityContextHolder.clearContext();
         }
 

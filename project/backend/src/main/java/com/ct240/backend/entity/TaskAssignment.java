@@ -17,12 +17,12 @@ public class TaskAssignment {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     User user;
 
     @ManyToOne
     @MapsId("taskId")
-    @JoinColumn(name = "taskId")
+    @JoinColumn(name = "task_id")
     Task task;
 
 }

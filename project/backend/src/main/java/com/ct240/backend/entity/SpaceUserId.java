@@ -1,5 +1,6 @@
 package com.ct240.backend.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
@@ -12,6 +13,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class SpaceUserId implements Serializable {
-    private String userId;
+    @Column(name = "space_id")
     private String spaceId;
+
+    @Column(name = "user_id")
+    private String userId;
 }

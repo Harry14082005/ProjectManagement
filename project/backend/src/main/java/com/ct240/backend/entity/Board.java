@@ -24,7 +24,7 @@ public class Board {
 
     //liên kết tới tới bảng Space
     @ManyToOne
-    @JoinColumn(name = "spaceId")
+    @JoinColumn(name = "space_id")
     Space space;
 
     @OneToMany(mappedBy = "board")
