@@ -25,11 +25,11 @@ Lưu trữ thông tin người dùng trong hệ thống.
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| UserID | INT | Khóa chính |
-| Username | VARCHAR | Tên đăng nhập, duy nhất |
-| Password | VARCHAR | Mật khẩu (đã mã hóa) |
-| Name | VARCHAR | Tên hiển thị |
-| AvatarURL | VARCHAR | Đường dẫn ảnh đại diện |
+| id | String | Khóa chính |
+| username | String | Tên đăng nhập, duy nhất |
+| password | String | Mật khẩu (đã mã hóa) |
+| name | String | Tên hiển thị |
+| avatarURL | String | Đường dẫn ảnh đại diện |
 
 ---
 
@@ -39,10 +39,10 @@ Không gian làm việc, dùng để nhóm các Board liên quan lại với nha
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| SpaceID | INT | Khóa chính |
-| SpaceName | VARCHAR | Tên không gian làm việc |
-| SpaceDescription | TEXT | Mô tả |
-| SpaceCreatedAt | DATETIME | Thời điểm tạo |
+| id | String | Khóa chính |
+| name | String | Tên không gian làm việc |
+| description | String | Mô tả |
+| createdAt | Date | Thời điểm tạo |
 
 ---
 
@@ -52,9 +52,9 @@ Bảng trung gian thể hiện quan hệ nhiều-nhiều giữa User và Space, 
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| UserID | INT | Khóa chính, khóa ngoại tham chiếu `User.UserID` |
-| SpaceID | INT | Khóa chính, khóa ngoại tham chiếu `Space.SpaceID` |
-| Role | Enum |  vai trò của người dùng trong Space này `0: OWNER, 1: ADMIN, 2: MEMBER|
+| userId | String | Khóa chính, khóa ngoại tham chiếu `User.id` |
+| spaceId | String | Khóa chính, khóa ngoại tham chiếu `Space.id` |
+| role | Enum |  vai trò của người dùng trong Space này `0: OWNER, 1: ADMIN, 2: MEMBER`|
 
 ---
 
@@ -64,12 +64,12 @@ Bảng (board) nằm trong một Space, dùng để tổ chức công việc the
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| BoardID | INT | Khóa chính |
-| SpaceID | INT | Khóa ngoại tham chiếu `Space.SpaceID` — Board thuộc Space nào |
-| BoardName | VARCHAR | Tên board |
-| BoardDescription | TEXT | Mô tả |
-| IsPrivate | BOOLEAN | Board có ở chế độ riêng tư hay không |
-| BoardCreatedAt | DATETIME | Thời điểm tạo |
+| id | String | Khóa chính |
+| spaceId | String | Khóa ngoại tham chiếu `Space.SpaceID` — Board thuộc Space nào |
+| name | String | Tên board |
+| description | String | Mô tả |
+| isPrivate | Boolean | Board có ở chế độ riêng tư hay không |
+| createdAt | Date | Thời điểm tạo |
 
 ---
 
@@ -79,9 +79,9 @@ Bảng trung gian thể hiện quan hệ nhiều-nhiều giữa User và Board, 
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| BoardID | INT | Khóa chính, khóa ngoại tham chiếu `Board.BoardID` |
-| UserID | INT | Khóa chính, khóa ngoại tham chiếu `User.UserID` |
-| IsOwner | BOOLEAN | Người dùng có phải là chủ sở hữu của board này không |
+| boardId | String | Khóa chính, khóa ngoại tham chiếu `Board.id` |
+| userId | String | Khóa chính, khóa ngoại tham chiếu `User.id` |
+| isOwner | Boolean | Người dùng có phải là chủ sở hữu của board này không |
 
 ---
 
@@ -91,10 +91,10 @@ Cột (column) trong một Board, dùng để phân loại hoặc thể hiện t
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| CardID | INT | Khóa chính |
-| BoardID | INT | Khóa ngoại tham chiếu `Board.BoardID` — Card thuộc Board nào |
-| CardName | VARCHAR | Tên cột |
-| CardCreatedAt | DATETIME | Thời điểm tạo |
+| id | String | Khóa chính |
+| boardId | String | Khóa ngoại tham chiếu `Board.id` — Card thuộc Board nào |
+| name | String | Tên cột |
+| createdAt | Date | Thời điểm tạo |
 
 ---
 
@@ -104,12 +104,12 @@ Cột (column) trong một Board, dùng để phân loại hoặc thể hiện t
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| TaskID | INT | Khóa chính |
-| CardID | INT | Khóa ngoại tham chiếu `Card.CardID` — Task thuộc Card nào |
-| TaskName | VARCHAR | Tên đầu việc |
-| IsCompleted | BOOLEAN | Trạng thái hoàn thành |
-| TaskDeadLine | DATETIME | Thời hạn hoàn thành |
-| TaskCreatedAt | DATETIME | Thời điểm tạo |
+| id | String | Khóa chính |
+| cardId | String | Khóa ngoại tham chiếu `Card.id` — Task thuộc Card nào |
+| name | String | Tên đầu việc |
+| isCompleted | Boolean | Trạng thái hoàn thành |
+| deadLine | Date | Thời hạn hoàn thành |
+| createdAt | Date | Thời điểm tạo |
 
 ---
 
@@ -119,8 +119,8 @@ Bảng trung gian thể hiện quan hệ nhiều-nhiều giữa User và Task, g
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| UserID | INT | Khóa chính, khóa ngoại tham chiếu `User.UserID` |
-| TaskID | INT | Khóa chính, khóa ngoại tham chiếu `Task.TaskID` |
+| userId | String | Khóa chính, khóa ngoại tham chiếu `User.id` |
+| taskId | String | Khóa chính, khóa ngoại tham chiếu `Task.id` |
 
 ---
 
@@ -130,11 +130,11 @@ Bình luận của người dùng trên một Task.
 
 | Cột | Kiểu | Mô tả |
 |-----|------|-------|
-| CommentID | INT | Khóa chính |
-| TaskID | INT | Khóa ngoại tham chiếu `Task.TaskID` — Comment thuộc Task nào |
-| UserID | INT | Khóa ngoại tham chiếu `User.UserID` — người viết bình luận |
-| Content | TEXT | Nội dung bình luận |
-| CreatedAt | DATETIME | Thời điểm tạo |
+| id | String | Khóa chính |
+| taskId | String | Khóa ngoại tham chiếu `Task.id` — Comment thuộc Task nào |
+| userId | String | Khóa ngoại tham chiếu `User.id` — người viết bình luận |
+| content | String | Nội dung bình luận |
+| createdAt | Date | Thời điểm tạo |
 
 ---
 
