@@ -1,45 +1,67 @@
-# 📋 Sprint 1 — Thiết Kế CSDL & Khung API `v0.1.0`
+# 📋 Phase 1 — Khởi tạo & Thiết kế hệ thống `v0.1.0`
 
-> **Dự án:** Hệ Thống Phân Công Công Việc  
+> **Dự án:** TaskFlow — Hệ Thống Quản Lý Công Việc (Trello Clone)  
 > **Công nghệ:** Java Spring Boot · Vue.js 3  
-> **Thời gian:** 2026-02-20 → 2026-03-06  
+> **Thời gian:** 2026-03-09 → 2026-03-22  
 > **Trạng thái:** 🟡 Đang thực hiện  
 
 ---
 
 ## 🎯 Mục Tiêu Giai Đoạn
 
-Thiết kế cơ sở dữ liệu đầy đủ, xây dựng khung Spring Boot với các API cơ bản (CRUD người dùng, phân công việc), và thiết lập dự án Vue.js với routing cơ bản.
+Thiết lập nền tảng kỹ thuật và thiết kế toàn bộ kiến trúc hệ thống trước khi bắt đầu code. Bao gồm: ERD, thiết kế API contract, wireframe UI và cấu hình môi trường dev.
 
 ## 🛠️ Công Nghệ Sử Dụng
 
-- `Java 17`
-- `Spring Boot 3.x`
-- `Vue.js 3`
-- `Pinia`
 - `PostgreSQL`
+- `Draw.io`
+- `Figma`
 - `Docker`
-- `JWT`
+- `Git`
+- `Java 17`
+- `Vue.js 3`
 
 ## 👥 Phân Công Công Việc
 
 | MSSV | Thành viên | Vai trò | Công việc | Trạng thái |
 |------|-----------|---------|-----------|------------|
-| B2303812 | Bùi Đông Hiển | Team Lead / Backend | Thiết kế ERD và CSDL PostgreSQL | ✅ Done |
-| | | | Thiết lập dự án Spring Boot, cấu hình JWT Auth | ✅ Done |
-| B2303824 | Trương Tuấn Kiệt | Backend Dev | API CRUD User (Spring Security) | 🔄 In Progress |
-| | | | API phân công công việc (Assignment) | 📋 Todo |
-| B2303849 | Châu Ngọc Thịnh | Frontend Dev | Thiết lập dự án Vue.js 3 + Pinia + Router | ✅ Done |
-| | | | Trang đăng nhập & quản lý người dùng | 🔄 In Progress |
-| B2303850 | Trần Phú Thịnh | Frontend Dev | Trang dashboard & danh sách công việc | 🔄 In Progress |
-| | | | Component phân công công việc (drag & drop) | 📋 Todo |
-| B2303853 | Nguyễn Thái Toàn | DevOps / Tester | Cấu hình Docker Compose (BE + DB) | ✅ Done |
-| | | | Viết test case cho API Sprint 1 | 🔄 In Progress |
+| B2303812 | Bùi Đông Hiển | Team Lead / Architect | Thiết kế ERD đầy đủ (User, Space, Board, Card, Task, Comment, Attachment) | 🔄 In Progress |
+| | | | Thiết lập Git repo, quy ước branch & commit convention | 📋 Todo |
+| | | | Viết tài liệu API Contract (RESTful endpoints, request/response schema) | 📋 Todo |
+| B2303824 | Trương Tuấn Kiệt | Backend Dev | Cài đặt Spring Boot 3.x, cấu hình Maven, project structure | 📋 Todo |
+| | | | Thiết lập Docker Compose: PostgreSQL + Spring Boot + Redis | 📋 Todo |
+| | | | Cấu hình Spring Security skeleton + JWT filter chain | 📋 Todo |
+| B2303849 | Châu Ngọc Thịnh | Backend Dev | Tạo các Entity JPA theo ERD (User, Space, Board, Card, Task) | 📋 Todo |
+| | | | Cấu hình Flyway migration scripts cho schema ban đầu | 📋 Todo |
+| | | | Thiết lập cấu trúc Repository & Service layer skeleton | 📋 Todo |
+| B2303850 | Trần Phú Thịnh | Frontend Dev | Khởi tạo dự án Vue.js 3 + Vite + Pinia + Vue Router | 📋 Todo |
+| | | | Thiết kế wireframe các màn hình chính (Login, Dashboard, Board, Card detail) | 📋 Todo |
+| | | | Cài đặt Axios, cấu hình interceptor cho JWT token | 📋 Todo |
+| B2303853 | Nguyễn Thái Toàn | QA / DevOps | Viết test plan tổng thể cho toàn dự án (các module cần test) | 📋 Todo |
+| | | | Cấu hình CI pipeline (GitHub Actions): build + lint check | 📋 Todo |
+| | | | Xác nhận môi trường Docker chạy ổn định trên máy tất cả thành viên | 📋 Todo |
+
+## 📝 Ghi Chú Cá Nhân
+
+### Bùi Đông Hiển (B2303812)
+Phụ trách chung — review toàn bộ output của giai đoạn 1
+
+### Trương Tuấn Kiệt (B2303824)
+Tham chiếu tài liệu thiết kế phần mềm mục Kiến trúc 3-Tier
+
+### Châu Ngọc Thịnh (B2303849)
+Tham chiếu ERD từ Hiển để tạo Entity đúng quan hệ
+
+### Trần Phú Thịnh (B2303850)
+Wireframe dùng Figma, export share link để team review
+
+### Nguyễn Thái Toàn (B2303853)
+Kiểm tra Docker chạy được trên Windows, macOS, Linux
 
 ## ⚠️ Ghi Chú & Rủi Ro
 
-Cần thống nhất cấu trúc response API trước khi frontend bắt đầu tích hợp.
+Giai đoạn này tập trung 100% vào thiết kế — KHÔNG viết code nghiệp vụ. Cần thống nhất API contract trước tuần 3 để Frontend và Backend làm song song.
 
 ---
 
-*Cập nhật lần cuối: 27/02/2026*
+*Cập nhật lần cuối: 04/03/2026*
