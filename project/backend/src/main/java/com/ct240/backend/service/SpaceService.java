@@ -77,5 +77,22 @@ public class SpaceService {
                 .createAt(space.getCreateAt())
                 .build();
     }
+    public SpaceResponse getSpace(String spaceId, Authentication authentication){
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () ->new AppException(ErrorCode.USER_NOT_FOUND));
+
+        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
+
+        if (!isMember){
+            throw  new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        Space space = spaceRepository.findById(spaceId).orElseThrow(
+                ()-> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        return spaceMapper.toSpaceResponse(space);
+    }
 
 }

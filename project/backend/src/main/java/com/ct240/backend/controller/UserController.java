@@ -1,6 +1,7 @@
 package com.ct240.backend.controller;
 
 import com.ct240.backend.dto.request.UserCreationRequest;
+import com.ct240.backend.dto.request.UserUpdateRequest;
 import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.User;
@@ -37,6 +38,18 @@ public class UserController {
 
         return apiResponse;
     }
+
+    @PutMapping("/update")
+    ApiResponse<UserResponse> updateUser(@RequestBody UserUpdateRequest request, Authentication authentication){
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+
+        String username = authentication.getName();
+
+        apiResponse.setData(userService.updateUser(username, request));
+
+        return apiResponse;
+    }
+
 
 
     /// tạo người dùng đem qua AuthService ///

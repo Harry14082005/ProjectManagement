@@ -1,6 +1,8 @@
 package com.ct240.backend.service;
 
 import com.ct240.backend.dto.request.UserCreationRequest;
+import com.ct240.backend.dto.request.UserUpdateRequest;
+import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.exception.ErrorCode;
@@ -43,6 +45,23 @@ public class UserService {
         );
 
         return userMapper.toUserResponse(user);
+    }
+
+    public UserResponse updateUser(String username, UserUpdateRequest request){
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        user = userMapper.toUser(user, request);
+
+        userRepository.save(user);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .username(user.getUsername())
+                .avatarURL(user.getAvatarURL())
+                .build();
     }
 
 }
