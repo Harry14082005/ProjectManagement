@@ -1,4 +1,8 @@
 package com.ct240.backend.dto.request;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 @Getter
 @Setter
 @AllArgsConstructor

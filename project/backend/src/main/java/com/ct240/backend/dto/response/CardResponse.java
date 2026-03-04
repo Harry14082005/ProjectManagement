@@ -1,4 +1,10 @@
 package com.ct240.backend.dto.response;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor

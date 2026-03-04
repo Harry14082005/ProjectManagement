@@ -24,6 +24,7 @@ import jakarta.servlet.ServletException;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 
 
 @Component
@@ -57,6 +58,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (!signedJWT.verify(verifier)) {
                 throw new RuntimeException("Invalid signature");
             }
+
+            Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+            if (expiration == null || expiration.before(new Date())) {
+                throw new RuntimeException("Token expired");
+            }
+
 
             String username = signedJWT.getJWTClaimsSet().getSubject();
 

@@ -1,6 +1,7 @@
 package com.ct240.backend.service;
 
 import com.ct240.backend.dto.request.SpaceCreationRequest;
+import com.ct240.backend.dto.request.SpaceUpdateRequest;
 import com.ct240.backend.dto.response.SpaceResponse;
 import com.ct240.backend.entity.Space;
 import com.ct240.backend.entity.SpaceUser;
@@ -17,6 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SpaceService {
@@ -93,6 +96,73 @@ public class SpaceService {
                 ()-> new AppException(ErrorCode.USER_NOT_FOUND));
 
         return spaceMapper.toSpaceResponse(space);
+    }
+
+    public List<SpaceResponse> getAllSpaces(Authentication authentication){
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        var spaceList = spaceRepository.findAllByUserId(user.getId());
+
+        return spaceList.stream()
+                .map(space -> spaceMapper.toSpaceResponse(space))
+                .collect(Collectors.toList());
+    }
+
+    public SpaceResponse updateSpace(String spaceId, SpaceUpdateRequest request, Authentication authentication){
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        /// Chỉ có quyền OWNER mới được SỬA thông tin Space ///
+
+        Space space = spaceRepository.findById(spaceId).orElseThrow(
+                () -> new AppException(ErrorCode.SPACE_NOT_FOUND)
+        );
+
+        boolean isOwner = spaceUserRepository
+                .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
+
+        if(!isOwner){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        spaceMapper.updateSpace(space, request);
+
+        spaceRepository.save(space);
+
+        return spaceMapper.toSpaceResponse(space);
+
+    }
+
+    public void deleteSpace(String spaceId, Authentication authentication){
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        /// Chỉ có quyền OWNER mới được XOÁ thông tin Space ///
+
+        Space space = spaceRepository.findById(spaceId).orElseThrow(
+                () -> new AppException(ErrorCode.SPACE_NOT_FOUND)
+        );
+
+        boolean isOwner = spaceUserRepository
+                .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
+
+        if(!isOwner){
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        ///thiết lập xoá cascade cho Entity Space
+        ///             để khi xoá space tự động xoá trong bảng SpaceUser///
+        spaceRepository.delete(space);
     }
 
 }

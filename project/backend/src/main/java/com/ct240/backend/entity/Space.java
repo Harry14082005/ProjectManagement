@@ -24,7 +24,9 @@ public class Space {
     @OneToMany(mappedBy = "space")
     List<Board> boards;
 
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "space",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     List<SpaceUser> spaceUserList;
 
 }
