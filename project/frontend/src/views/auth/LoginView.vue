@@ -71,7 +71,7 @@ const goToRegister = () => {
 </script>
 <template>
   <LoginLayout>
-     <form a@submit.prevent="handleLogin">
+     <form @submit.prevent="handleLogin">
   <div class="card">
         <div class="Title_content">Đăng nhập</div>
         <div class="label">Username</div>

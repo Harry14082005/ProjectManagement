@@ -3,7 +3,7 @@ import RegisterLayout from '@/components/layout/RegisterLayout.vue'
 </script>
 <template>
   <RegisterLayout>
-         <form action="POST">
+         <form @submit.prevent="handleLogin">
   <div class="card">
         <div class="Title_content">Đăng ký</div>
         <div class="label">Name</div>
