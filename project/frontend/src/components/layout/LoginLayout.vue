@@ -3,18 +3,7 @@
 
 <template>
   <div class="wrapper">
-     <form action="">
-  <div class="card">
-        <div class="Title_content">Đăng nhập</div>
-        <div class="label">Username</div>
-        <input class="input">
-        <div class="label">Password</div>
-        <input class="input" type="password">
-        <div class="forgot_pw">Forgot your password</div>
-        <button class="button" id="login" type="submit">Đăng nhập</button>
-        <button class="button" id="register">Tạo tài khoản mới</button>
-  </div>
-  </form>
+    <slot></slot>
   </div>
 </template>
 

@@ -1,15 +1,9 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/layout/RegisterLayout.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+  <RouterView />
 </template>
 
 <style scoped>
