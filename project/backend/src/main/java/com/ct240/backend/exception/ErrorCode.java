@@ -13,7 +13,11 @@ public enum ErrorCode {
     UNAUTHENTICATED(1003, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     USER_EXISTED(1100, "User Existed", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1101, "User Not Found", HttpStatus.NOT_FOUND),
-    SPACE_NOT_FOUND(1200, "Space Not Found", HttpStatus.NOT_FOUND);
+    SPACE_NOT_FOUND(1200, "Space Not Found", HttpStatus.NOT_FOUND),
+    BOARD_NOT_FOUND(1300, "Board Not Found", HttpStatus.NOT_FOUND),
+    CARD_NOT_FOUND(1400, "Card Not Found", HttpStatus.NOT_FOUND),
+    TASK_NOT_FOUND(1500, "Task Not Found", HttpStatus.NOT_FOUND);
+
 
     private int code;
     private String message;
