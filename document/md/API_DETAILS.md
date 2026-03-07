@@ -21,7 +21,7 @@ Authorization: Bearer <token>
 - [Task](#task)
 - [TaskAssignment](#taskassignment)
 - [Comment](#comment)
-- [Template Request & Response](#template)
+- [ErrorCode](#error-codes)
 
 ---
 
