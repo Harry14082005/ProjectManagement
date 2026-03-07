@@ -15,11 +15,11 @@ const form = reactive({
 const errorMessage = ref('')
 const isLoading = ref(false) // Thêm biến này để làm hiệu ứng loading cho nút
 
-// 2. Hàm xử lý gửi dữ liệu sang Java
+
 const handleLogin = async () => {
-  // Xóa lỗi cũ và bật trạng thái loading
+
   errorMessage.value = ''
-  
+
   if (!form.username || !form.password) {
     errorMessage.value = "Vui lòng nhập đầy đủ thông tin!"
     return
@@ -28,38 +28,44 @@ const handleLogin = async () => {
   isLoading.value = true
 
   try {
-    // Gọi Axios gửi dữ liệu (Nhớ đảm bảo cổng 8080 đúng với server Java của bạn)
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
-      username: form.username,
-      password: form.password
-    })
+
+    const response = await axios.post(
+      "http://localhost:8080/api/auth/login",
+      {
+        username: form.username,
+        password: form.password
+      }
+    )
 
     console.log("Đăng nhập thành công:", response.data)
-    
-    // Lưu token vào bộ nhớ trình duyệt
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token)
+
+    // lấy token đúng chỗ
+    const token = response.data.data.token
+
+    if (token) {
+      localStorage.setItem("token", token)
     }
 
-    // Chuyển hướng về trang chủ
-    router.push('/')
+    router.push("/")
 
   } catch (error) {
-    console.error("Lỗi từ Axios:", error)
-    
-    // Xử lý thông báo lỗi cho người dùng
-    if (error.response) {
-      if (error.response.status === 401) {
-        errorMessage.value = "Sai tên đăng nhập hoặc mật khẩu!"
-      } else {
-        errorMessage.value = `Lỗi Server: ${error.response.status}`
-      }
+
+    const code = error.response?.data?.code
+
+    if (code === 1003) {
+      errorMessage.value = "Sai mật khẩu!"
+    } else if (code === 1101) {
+      errorMessage.value = "Tài khoản không tồn tại!"
     } else {
-      errorMessage.value = "Không thể kết nối đến Backend. Hãy kiểm tra lại Server Java!"
+      errorMessage.value = "Đăng nhập thất bại, vui lòng thử lại!"
     }
+
+  console.log(errorMessage)
+
   } finally {
-    // Tắt trạng thái loading dù thành công hay thất bại
+
     isLoading.value = false
+
   }
 }
 
@@ -71,7 +77,7 @@ const goToRegister = () => {
 </script>
 <template>
   <LoginLayout>
-     <form a@submit.prevent="handleLogin">
+     <form @submit.prevent="handleLogin">
   <div class="card">
         <div class="Title_content">Đăng nhập</div>
         <div class="label">Username</div>
@@ -80,7 +86,7 @@ const goToRegister = () => {
         <input v-model="form.password" class="input" type="password">
         <div class="forgot_pw">Forgot your password</div>
         <button class="button" id="login" type="submit">Đăng nhập</button>
-        <button class="button" id="register" @click="goToRegister" type="button">Tạo tài khoản mới</button>
+        <button class="button" id="register" @click="goToRegister" type="button" :disabled="isLoading">Tạo tài khoản mới</button>
   </div>
   </form>
   </LoginLayout>

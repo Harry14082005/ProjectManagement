@@ -11,9 +11,15 @@ import org.springframework.http.HttpStatusCode;
 @NoArgsConstructor
 public enum ErrorCode {
     UNAUTHENTICATED(1003, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(1004, "Unauthorized", HttpStatus.FORBIDDEN),
+
     USER_EXISTED(1100, "User Existed", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1101, "User Not Found", HttpStatus.NOT_FOUND),
-    SPACE_NOT_FOUND(1200, "Space Not Found", HttpStatus.NOT_FOUND);
+
+    SPACE_NOT_FOUND(1200, "Space Not Found", HttpStatus.NOT_FOUND),
+    USER_EXISTED_IN_SPACE(1202, "User Existed In The Space", HttpStatus.CONFLICT),
+    USER_NOT_EXIST_IN_SPACE(1203, "User Not Exist In The Space" , HttpStatus.NOT_FOUND),
+    OWNER_CANNOT_LEAVE_SPACE(1204, "Owner Cannot Leave The Space", HttpStatus.FORBIDDEN);
 
     private int code;
     private String message;

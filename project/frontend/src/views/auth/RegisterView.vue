@@ -1,19 +1,84 @@
 <script setup>
-import RegisterLayout from '@/components/layout/RegisterLayout.vue'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+import LoginLayout from '@/components/layout/RegisterLayout.vue'
+
+const router = useRouter()
+
+// 1. Khai báo biến lưu trữ dữ liệu
+const form = reactive({
+  name:'',
+  username: '',
+  password: '',
+  confirmpassword: ''
+})
+
+const errorMessage = ref('')
+const isLoading = ref(false) // Thêm biến này để làm hiệu ứng loading cho nút
+
+
+const handleRegister = async () => {
+
+  errorMessage.value = ''
+
+  if (!form.name||!form.username || !form.password||!form.confirmpassword) {
+    errorMessage.value = "Vui lòng nhập đầy đủ thông tin!"
+    return
+  }
+
+  isLoading.value = true
+
+  try {
+
+    const response = await axios.post(
+      "http://localhost:8080/api/auth/register",
+      {
+        name: form.name,
+        username: form.username,
+        password: form.password,
+        //confirmpassword: form.confirmpassword
+      }
+    )
+
+    console.log("Đăng ký thành công:", response.data)
+
+    router.push("/")
+
+  } catch (error) {
+
+    const code = error.response?.data?.code
+
+    if (code === 1100) {
+      errorMessage.value = "Username đã tồn tại, vui lòng nhập username khác"
+    } 
+
+  console.log(errorMessage)
+
+  } finally {
+
+    isLoading.value = false
+
+  }
+  
+  //Chuyển lại trang đăng nhập
+  
+}
+
 </script>
 <template>
   <RegisterLayout>
-         <form action="POST">
+          <form @submit.prevent="handleRegister">
   <div class="card">
         <div class="Title_content">Đăng ký</div>
-        <div class="label">Name</div>
-        <input class="input">
+        <div  class="label">Name</div>
+        <input v-model="form.name" class="input">
         <div class="label">Username</div>
-        <input class="input">
+        <input v-model="form.username" class="input">
         <div class="label">Password</div>
-        <input class="input" type="password">
+        <input v-model="form.password" class="input" type="password">
         <div class="label">Confirm password</div>
-        <input class="input" type="password">
+        <input v-model="form.confirmpassword" class="input" type="password">
         <button class="button" id="login" type="submit">Đăng ký</button>
   </div>
   </form>
