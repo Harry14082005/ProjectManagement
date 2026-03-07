@@ -591,26 +591,21 @@ Xóa bình luận. Chỉ người tạo mới được xóa.
 |------|------|---------|------|
 | **1003** | `UNAUTHENTICATED` | Unauthenticated | 401 |
 | **1004** | `UNAUTHORIZED` | Unauthorized | 403 |
-
 | **11xx** | *(User)* | | |
 | **1100** | `USER_EXISTED` | User Existed | 400 |
 | **1101** | `USER_NOT_FOUND` | User Not Found | 404 |
-
 | **12xx** | *(Space)* | | |
 | **1200** | `SPACE_NOT_FOUND` | Space Not Found | 404 |
 | **1202** | `USER_EXISTED_IN_SPACE` | User Existed In The Space | 409 |
 | **1203** | `USER_NOT_EXIST_IN_SPACE` | User Not Exist In The Space | 404 |
 | **1204** | `OWNER_CANNOT_LEAVE_SPACE` | Owner Cannot Leave The Space | 403 |
-
 | **13xx** | *(Board)* | | |
 | **1300** | `BOARD_NOT_FOUND` | Board Not Found | 404 |
 | **1302** | `BOARD_ALREADY_EXISTS` | Board Already Exists | 409 |
 | **1303** | `USER_NOT_IN_BOARD` | User Not In Board | 403 |
 | **1304** | `OWNER_CANNOT_LEAVE_BOARD` | Owner Cannot Leave The Board | 403 |
-
 | **14xx** | *(Card)* | | |
 | **1400** | `CARD_NOT_FOUND` | Card Not Found | 404 |
-
 | **15xx** | *(Task)* | | |
 | **1500** | `TASK_NOT_FOUND` | Task Not Found | 404 |
 
