@@ -13,4 +13,5 @@ public interface SpaceMapper {
     void updateSpace(@MappingTarget  Space space, SpaceUpdateRequest request);
 
     SpaceResponse toSpaceResponse(Space space);
+
 }
