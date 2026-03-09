@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
         response.setMessage(ex.getErrorCode().getMessage());
 
         return ResponseEntity
-                .status(HttpStatus.CONFLICT) // 409 chuẩn REST cho duplicate
+                .status(ex.getErrorCode().getStatusCode())
                 .body(response);
     }
 }

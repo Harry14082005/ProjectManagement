@@ -9,9 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SpaceUserRepository extends JpaRepository<SpaceUser, String> {
 
     boolean existsByUserIdAndSpaceId(String userId, String spaceId);
     boolean existsByUserIdAndSpaceIdAndRole(String userId, String spaceId, Role role);
+
+    Optional<SpaceUser> findByUserIdAndSpaceId(String userId, String spaceId);
+
+    @Query("SELECT su.user FROM SpaceUser su WHERE su.space.id = :spaceId")
+    List<User> findUsersBySpaceId(@Param("spaceId") String spaceId);
 }

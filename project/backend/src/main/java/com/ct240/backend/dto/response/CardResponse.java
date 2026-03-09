@@ -15,5 +15,5 @@ public class CardResponse {
     String id;
     String boardId;
     String name;
-    Date createdAt;
+    Date createAt;
 }

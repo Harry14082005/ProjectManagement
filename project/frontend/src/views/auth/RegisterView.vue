@@ -80,7 +80,6 @@ const handleRegister = async () => {
         <div class="label">Confirm password</div>
         <input v-model="form.confirmpassword" class="input" type="password">
         <button class="button" id="register" type="submit">Đăng ký</button>
-  </div>
   </form>
   </RegisterLayout>
 </template>

@@ -41,7 +41,6 @@ public class SpaceService {
 //
 //    }
     public SpaceResponse createSpace(SpaceCreationRequest request, Authentication authentication){
-        SpaceResponse spaceResponse = new SpaceResponse();
 
         //lấy người dùng
         String username = authentication.getName();
@@ -73,12 +72,7 @@ public class SpaceService {
         spaceUserRepository.save(spaceUser);
 
         //gán response
-        return SpaceResponse.builder()
-                .id(space.getId())
-                .name(space.getName())
-                .description(space.getDescription())
-                .createAt(space.getCreateAt())
-                .build();
+        return spaceMapper.toSpaceResponse(space);
     }
     public SpaceResponse getSpace(String spaceId, Authentication authentication){
         String username = authentication.getName();
@@ -93,8 +87,8 @@ public class SpaceService {
         }
 
         Space space = spaceRepository.findById(spaceId).orElseThrow(
-                ()-> new AppException(ErrorCode.USER_NOT_FOUND));
-
+                ()-> new AppException(ErrorCode.SPACE_NOT_FOUND));
+//
         return spaceMapper.toSpaceResponse(space);
     }
 
