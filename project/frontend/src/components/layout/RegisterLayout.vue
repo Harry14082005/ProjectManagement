@@ -10,7 +10,8 @@
 <style scoped>
 .wrapper{
   display: flex;
-  justify-content: center;
+  align-self: center;
   align-items: center;
+  justify-items: center;
 }
 </style>
