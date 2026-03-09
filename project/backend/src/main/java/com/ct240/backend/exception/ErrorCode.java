@@ -16,14 +16,17 @@ public enum ErrorCode {
     USER_EXISTED(1100, "User Existed", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1101, "User Not Found", HttpStatus.NOT_FOUND),
 
-    SPACE_NOT_FOUND(1200, "Space Not Found", HttpStatus.NOT_FOUND),
+    SPACE_NOT_FOUND(1201, "Space Not Found", HttpStatus.NOT_FOUND),
     USER_EXISTED_IN_SPACE(1202, "User Existed In The Space", HttpStatus.CONFLICT),
     USER_NOT_EXIST_IN_SPACE(1203, "User Not Exist In The Space" , HttpStatus.NOT_FOUND),
     OWNER_CANNOT_LEAVE_SPACE(1204, "Owner Cannot Leave The Space", HttpStatus.FORBIDDEN),
 
-    BOARD_NOT_FOUND(1300, "Board Not Found", HttpStatus.NOT_FOUND),
-    CARD_NOT_FOUND(1400, "Card Not Found", HttpStatus.NOT_FOUND),
-    TASK_NOT_FOUND(1500, "Task Not Found", HttpStatus.NOT_FOUND);
+    BOARD_NOT_FOUND(1301, "Board Not Found", HttpStatus.NOT_FOUND),
+    USER_EXISTED_IN_BOARD(1302, "User Existed In The Board", HttpStatus.CONFLICT),
+    USER_NOT_EXIST_IN_BOARD(1303, "User Not Exist In The Board" , HttpStatus.NOT_FOUND),
+
+    CARD_NOT_FOUND(1401, "Card Not Found", HttpStatus.NOT_FOUND),
+    TASK_NOT_FOUND(1501, "Task Not Found", HttpStatus.NOT_FOUND);
 
     private int code;
     private String message;

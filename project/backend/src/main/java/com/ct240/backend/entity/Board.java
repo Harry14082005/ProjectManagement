@@ -27,9 +27,9 @@ public class Board {
     @JoinColumn(name = "space_id")
     Space space;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Card> cards;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     List<BoardUser> boardUserList;
 }

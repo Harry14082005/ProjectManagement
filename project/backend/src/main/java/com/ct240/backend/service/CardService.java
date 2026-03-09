@@ -52,7 +52,7 @@ public class CardService {
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
 
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         //tao card
         Card card = cardMapper.toCard(request);
@@ -79,7 +79,7 @@ public class CardService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         var cardList = cardRepository.findByBoardId(boardId);
@@ -104,7 +104,7 @@ public class CardService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         cardMapper.updateCard(card, request);
         cardRepository.save(card);
@@ -124,7 +124,7 @@ public class CardService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         cardRepository.delete(card);
 

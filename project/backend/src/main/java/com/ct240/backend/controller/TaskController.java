@@ -51,7 +51,7 @@ public class TaskController {
         return apiResponse;
     }
 
-    @DeleteMapping ("/task/{taskId}")
+    @DeleteMapping ("/tasks/{taskId}")
     ApiResponse<Void> deleteTask(
             @PathVariable String taskId,
             Authentication authentication){

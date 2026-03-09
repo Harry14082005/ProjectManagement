@@ -12,6 +12,7 @@ import org.mapstruct.MappingTarget;
 public interface TaskMapper {
     Task toTask(TaskCreationRequest request);
     @Mapping(source = "card.id", target = "cardId")
+    @Mapping(source = "completed", target = "isCompleted")
     TaskResponse toTaskResponse (Task task);
 
     void updateTask (@MappingTarget Task task, TaskUpdateRequest request);

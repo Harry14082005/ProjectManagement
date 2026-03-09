@@ -52,7 +52,7 @@ public class TaskService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         //Tao task
         Task task = taskMapper.toTask(request);
@@ -78,7 +78,7 @@ public class TaskService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         var taskList = taskRepository.findByCardId(cardId);
 
@@ -101,7 +101,7 @@ public class TaskService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         // update task
         taskMapper.updateTask(task, request);
@@ -123,7 +123,7 @@ public class TaskService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         taskRepository.delete(task);
     }

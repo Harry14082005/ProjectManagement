@@ -27,9 +27,9 @@ public class Task {
     @JoinColumn(name = "cardId")
     Card card;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     List<TaskAssignment> taskAssignmentList;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comment> comments;
 }

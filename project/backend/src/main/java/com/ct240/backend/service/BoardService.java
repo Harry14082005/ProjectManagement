@@ -51,7 +51,7 @@ public class BoardService {
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember)
         {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         Board board = boardMapper.toBoard(request);
         board.setSpace(space);// relationship to space, that's why add this code
@@ -84,7 +84,7 @@ public class BoardService {
         boolean isMember = boardUserRepository.existsByUserIdAndBoardId(user.getId(), boardId);
 
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         Board board = boardRepository.findById(boardId).orElseThrow(
@@ -92,7 +92,7 @@ public class BoardService {
         );
         // xuly private
         if(board.isPrivate()){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         return boardMapper.toBoardResponse(board);
@@ -108,7 +108,7 @@ public class BoardService {
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         // xuly private
         var boardList = boardRepository.findBySpaceIdAndIsPrivateFalse(spaceId);
@@ -136,7 +136,7 @@ public class BoardService {
                 .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
 
         if (!isOwner){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         boardMapper.updateBoard(board, request);
@@ -155,9 +155,9 @@ public class BoardService {
             Board board = boardRepository.findById(boardId).orElseThrow(
                     () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
             );
-            boolean isOwner = boardUserRepository.existsByUserIdAndBoardIdAndIsOwner(user.getId(), boardId, Role.OWNER);
+            boolean isOwner = boardUserRepository.existsByUserIdAndBoardIdAndIsOwner(user.getId(), boardId, true);
             if (!isOwner){
-                throw new AppException(ErrorCode.UNAUTHENTICATED);
+                throw new AppException(ErrorCode.UNAUTHORIZED);
             }
             boardRepository.delete(board);
         }

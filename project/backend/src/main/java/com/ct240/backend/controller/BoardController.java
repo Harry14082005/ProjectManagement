@@ -38,10 +38,10 @@ public class BoardController {
     }
 
     @GetMapping ("/spaces/{spaceId}/boards")
-    ApiResponse<List<BoardResponse>> getAllBoards (String boardId, Authentication authentication){
+    ApiResponse<List<BoardResponse>> getAllBoards (@PathVariable String spaceId, Authentication authentication){
         ApiResponse<List<BoardResponse>> apiResponse = new ApiResponse<>();
 
-        apiResponse.setData(boardService.getAllBoards(boardId, authentication));
+        apiResponse.setData(boardService.getAllBoards(spaceId, authentication));
 
         return apiResponse;
     }
