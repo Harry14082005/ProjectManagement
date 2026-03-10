@@ -110,7 +110,7 @@ Cập nhật thông tin người dùng.
 
 Tìm kiếm người dùng với keyword `?keyword=`.
 
-**Response — `List<SpaceUserResponse>`**
+**Response — `List<UserResponse>`**
 ```json
 [
     "user": {
