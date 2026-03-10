@@ -28,8 +28,11 @@ public enum ErrorCode {
 
     CARD_NOT_FOUND(1401, "Card Not Found", HttpStatus.NOT_FOUND),
 
+
     TASK_NOT_FOUND(1501, "Task Not Found", HttpStatus.NOT_FOUND),
-    USER_NOT_ASSIGNED_TO_TASK(1503, "User Not Assigned To The Task", HttpStatus.NOT_FOUND);
+    USER_NOT_ASSIGNED_TO_TASK(1503, "User Not Assigned To The Task", HttpStatus.NOT_FOUND),
+
+    COMMENT_NOT_FOUND(1601, "Comment Not Found", HttpStatus.NOT_FOUND);
 
     private int code;
     private String message;

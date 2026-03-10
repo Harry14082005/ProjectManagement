@@ -170,14 +170,15 @@ const goToRegister = () => {
   border: 1px solid #bce3f5;
   background-color: white;
   box-shadow: 0 1px #bce3f5;
-  color: #2f4562
+  color: #2f4562;
+  cursor:pointer;
 }
 #register{
   margin-top: 20px;
   width: 150px;
   background-color: white;
   color:#2f4562;
-  
+  cursor:pointer;
   transition: all 0.3s ease;
 }
 #login:hover {
@@ -186,5 +187,8 @@ const goToRegister = () => {
 }
 #login:active {
   transform: scale(0.95); 
+}
+#register:hover{
+  color: #bce3f5; 
 }
 </style>
