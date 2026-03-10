@@ -8,7 +8,7 @@ import IconSetting from '../icons/IconSetting.vue';
     <div class="list_icon">
       <IconList/>
     </div>
-    <div class="search"> Search </div>
+    <input class="search" placeholder="Search"></input>
     <div class="left_navbar">
       <div><i id="icon1" class="fa-solid fa-bell"></i></div>
       <div id="icon2" class="avatar">A</div>
@@ -35,12 +35,16 @@ import IconSetting from '../icons/IconSetting.vue';
     height: 35px;
     font-size: 20px;
     border-radius: 1.25rem;
-    color:#5a5a5a7e;
     text-align: center;
     justify-self:center;
     align-self: center;
     margin-left: 0;
   }
+  .search::placeholder{
+    color:#5a5a5a7e;
+    text-align: center;
+  }
+  
   i{
     font-size: 15px;
     color:#2c3e50;
