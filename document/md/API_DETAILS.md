@@ -613,6 +613,23 @@ Xóa bình luận. Chỉ người tạo mới được xóa.
   "referenceId": "string"
 }
 ```
+### GET `/api/notifications`
+Xem toàn bộ thông báo.
+
+**Response — `List<NotificationResponse>`**
+```json
+[
+  {
+    "id": "string",
+    "content": "string",
+    "readStatus": false,
+    "type": "enum Type",
+    "referenceId": "string"
+  }
+]
+```
+
+
 ## Type 
 
 | Type | Ý nghĩa |
