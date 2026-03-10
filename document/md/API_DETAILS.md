@@ -21,6 +21,7 @@ Authorization: Bearer <token>
 - [Task](#task)
 - [TaskAssignment](#taskassignment)
 - [Comment](#comment)
+- [Notification](#notification)
 - [ErrorCode](#error-codes)
 
 ---
@@ -590,6 +591,36 @@ Lấy danh sách bình luận của Task.
 
 Xóa bình luận. Chỉ người tạo mới được xóa.
 
+---
+
+## Notification
+### GET `/api/notifications/subscribe`
+Đăng ký nhận thông báo real-time qua SSE (Server-Sent Events).
+
+**Headers**
+| Key | Value |
+|---|---|
+| `Authorization` | `Bearer <token>` |
+| `Accept` | `text/event-stream` |
+
+**Response — `NotificationResponse`**
+```json
+{
+  "id": "string",
+  "content": "string",
+  "readStatus": false,
+  "type": "enum Type",
+  "referenceId": "string"
+}
+```
+## Type 
+
+| Type | Ý nghĩa |
+|------|---------|
+| TASK_ASSIGNMENT (0) | Thông báo người nhận được phân công nhiệm vụ |
+| DEADLINE (1) | Thông báo hết hạn (sắp hết hạn?) |
+| COMMENT (2) | Thông báo khi có comment mới |
+| ... | Có thể bổ sung thêm nếu người dùng được thêm xoá trong Space, Board |
 ---
 
 ## Role trong Space
