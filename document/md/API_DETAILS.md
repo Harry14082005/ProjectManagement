@@ -637,6 +637,7 @@ Xóa bình luận. Chỉ người tạo mới được xóa.
 | Code | Enum | Message | HTTP |
 |------|------|---------|------|
 | **1001** | `INTERNAL_SERVER_ERROR` | Internal Server Error | 500 |
+| **1002** | `VALIDATION_ERROR` | Validation Failed | 400 |
 | **1003** | `UNAUTHENTICATED` | Unauthenticated | 401 |
 | **1004** | `UNAUTHORIZED` | Unauthorized | 403 |
 | **11xx** | *(User)* | | |
