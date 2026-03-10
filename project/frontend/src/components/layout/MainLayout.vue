@@ -1,13 +1,23 @@
 <script setup>
-import { ref } from 'vue'
 import Navbar from '../layout/AppNavbar.vue'
 import Sidebar from '../layout/AppSidebar.vue'
+import CreateSpace from './CreateSpace.vue';
+import { ref } from 'vue'
+const isModalOpen = ref(false);
+//Ham mo hop thoai
+const openModal = () => {
+  isModalOpen.value = true;
+}
+
+const closeModal = () => {
+  isModalOpen.value = false;
+}
 </script>
 
 <template>
     <div class="wrapper">
-  <Navbar></Navbar>
-    <body>
+  <Navbar @open-modal="openModal"></Navbar>
+    <div class="main-container">
     <Sidebar></Sidebar>
     <div class="maincontent">
         <div class="label_maincontent">
@@ -15,7 +25,8 @@ import Sidebar from '../layout/AppSidebar.vue'
         </div>
         <div>CÁC KHÔNG GIAN LÀM VIỆC CỦA BẠN</div>
     </div>
-      </body>
+  </div>
+      <CreateSpace v-if="isModalOpen" @close-modal="closeModal"></CreateSpace>
     </div>
 </template>
   
@@ -23,7 +34,7 @@ import Sidebar from '../layout/AppSidebar.vue'
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
-body{
+.main-container{
     
     display:grid;
     grid-template-columns: 18% 1fr;
@@ -47,5 +58,9 @@ Sidebar{
     align-self: flex-start;
     margin-left: 30px;
     margin-top: 30px;
+}
+.maincontent div{
+    font-weight: 700;
+    font-family: "Quicksand", sans-serif;
 }
 </style >

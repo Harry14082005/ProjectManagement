@@ -1,6 +1,8 @@
 <script setup>
-import IconList from '../icons/IconList.vue'
+import IconList from '../icons/IconList.vue';
 import IconSetting from '../icons/IconSetting.vue';
+import IconCreate from '../icons/IconCreate.vue';
+const emit = defineEmits(['open-modal']);
 </script>
 
 <template>
@@ -9,6 +11,12 @@ import IconSetting from '../icons/IconSetting.vue';
       <IconList/>
     </div>
     <input class="search" placeholder="Search"></input>
+    
+    <div class="create" @click="emit('open-modal')">
+      <div>Tạo mới</div>
+      <IconCreate></IconCreate>
+    </div>
+    
     <div class="left_navbar">
       <div><i id="icon1" class="fa-solid fa-bell"></i></div>
       <div id="icon2" class="avatar">A</div>
@@ -93,4 +101,23 @@ import IconSetting from '../icons/IconSetting.vue';
     align-items: center;
     justify-items: center;
   }
+  .create{
+    cursor: pointer;
+    display: flex;
+    gap:5px;
+    border:1px solid grey;
+    width: 100px;
+    height: 35px;
+    font-size: 16px;
+    border-radius: 1.25rem;
+    align-self: center;
+    margin-left: 0;
+    align-content: center;
+    justify-content: center;
+    padding: 5px;
+    color:#2c3e50;
+    align-items: center;
+    font-weight: 500;
+  }
+  
 </style >

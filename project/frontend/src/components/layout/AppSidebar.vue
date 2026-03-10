@@ -6,6 +6,7 @@ import IconHome from '../icons/IconHome.vue'
 import IconMember from '../icons/IconMember.vue'
 import IconGears from '../icons/IconGears.vue'
 import { ref } from 'vue'
+import { workspaceStore } from '@/stores/workspaceStore.js';
 const isShow = ref(false)
 </script>
 
@@ -21,7 +22,7 @@ const isShow = ref(false)
     <div>Trang chủ</div>
   </div>
   <div class="separator"></div>
-  <div>Không gian làm việc</div>
+  <div class="label">Không gian làm việc</div>
   <div class="space" @click="isShow = !isShow">
     <div class="space_avatar">T</div>
     <div>Tên không gian làm việc</div>
@@ -40,6 +41,19 @@ const isShow = ref(false)
         <div>Cài đặt</div>
       </div>
     </div>
+  <ul class="workspace-list">
+      <li v-if="workspaceStore.workspaces.length === 0" class="empty-text">
+        Chưa có bảng nào. Hãy tạo mới!
+      </li>
+
+      <li 
+        v-for="space in workspaceStore.workspaces" 
+        :key="space.id" 
+        class="workspace-item"
+      >
+        <div class="color-box"></div> {{ space.name }}
+      </li>
+    </ul>
   </div> 
 </template>
   
@@ -53,7 +67,7 @@ const isShow = ref(false)
 .DetailOptionSpace {
   margin-left:30px;
   padding: 10px;
-  font-size: 17px;
+  font-size: 14px;
 }
 .DetailOptionSpace div{
   margin-top: 2px;
@@ -75,7 +89,7 @@ const isShow = ref(false)
     width: 100%;
     height: 100vh;
     margin-top:30px;
-    gap: 10px;
+    gap: 5px;
     font-size: 17px;
     cursor:pointer;
 }
@@ -116,5 +130,8 @@ div.Sidebar_items{
   text-align: center;
   align-content: center;
   justify-content: center;
+}
+.label{
+  font-weight: 500;
 }
 </style >
