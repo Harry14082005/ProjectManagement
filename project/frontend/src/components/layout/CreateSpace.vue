@@ -23,7 +23,7 @@ const handleCreateSpace = async () => {
       return;
     }
     console.log("Đang gọi API tạo Space...");
-    const response = await axios.post("http://localhost:8080/api/workspaces",
+    const response = await axios.post("http://localhost:8080/api/spaces",
       { name: newSpaceName.value },
       { headers: { 'Authorization': `Bearer ${token}` } }
     );
