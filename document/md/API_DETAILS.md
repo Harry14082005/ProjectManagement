@@ -1,6 +1,6 @@
 # CT240 Backend API Documentation
 
-API backend cho hệ thống phân công công việc. Base URL: `http://localhost:8080`
+API backend cho hệ thống phân công công việc. Base URL: `http://localhost:8080//api`
 
 Tất cả các request (trừ `/auth/**`) đều yêu cầu header:
 ```
@@ -27,7 +27,7 @@ Authorization: Bearer <token>
 
 ## Auth
 
-### POST `/auth/register`
+### POST `/api/auth/register`
 
 Đăng ký tài khoản mới.
 
@@ -53,7 +53,7 @@ Authorization: Bearer <token>
 
 ---
 
-### POST `/auth/login`
+### POST `/api/auth/login`
 
 Đăng nhập và lấy JWT token.
 
@@ -77,7 +77,7 @@ Authorization: Bearer <token>
 
 ## User
 
-### GET `/api/user/profile`
+### GET `/api/users/profile`
 
 Lấy thông tin người dùng hiện tại (dựa theo token).
 
@@ -93,7 +93,7 @@ Lấy thông tin người dùng hiện tại (dựa theo token).
 
 ---
 
-### PUT `/api/user/update`
+### PUT `/api/users/update`
 
 Cập nhật thông tin người dùng.
 
@@ -104,6 +104,22 @@ Cập nhật thông tin người dùng.
   "avatarURL": "string (optional)",
   "password": "string (optional)"
 }
+```
+
+### GET `/api/users/search`
+
+Tìm kiếm người dùng với keyword `?keyword=`.
+
+**Response — `List<SpaceUserResponse>`**
+```json
+[
+    "user": {
+      "id": "string",
+      "username": "string",
+      "name": "string",
+      "avatarURL": "string"
+    }
+]
 ```
 
 ---
@@ -595,17 +611,20 @@ Xóa bình luận. Chỉ người tạo mới được xóa.
 | **1100** | `USER_EXISTED` | User Existed | 400 |
 | **1101** | `USER_NOT_FOUND` | User Not Found | 404 |
 | **12xx** | *(Space)* | | |
-| **1200** | `SPACE_NOT_FOUND` | Space Not Found | 404 |
+| **1201** | `SPACE_NOT_FOUND` | Space Not Found | 404 |
 | **1202** | `USER_EXISTED_IN_SPACE` | User Existed In The Space | 409 |
 | **1203** | `USER_NOT_EXIST_IN_SPACE` | User Not Exist In The Space | 404 |
 | **1204** | `OWNER_CANNOT_LEAVE_SPACE` | Owner Cannot Leave The Space | 403 |
 | **13xx** | *(Board)* | | |
-| **1300** | `BOARD_NOT_FOUND` | Board Not Found | 404 |
-| **1302** | `BOARD_ALREADY_EXISTS` | Board Already Exists | 409 |
-| **1303** | `USER_NOT_IN_BOARD` | User Not In Board | 403 |
+| **1301** | `BOARD_NOT_FOUND` | Board Not Found | 404 |
+| **1302** | `USER_EXISTED_IN_BOARD` | User Existed In The Board | 409 |
+| **1303** | `USER_NOT_EXIST_IN_BOARD` | User Not Exist In The Board | 404 |
 | **1304** | `OWNER_CANNOT_LEAVE_BOARD` | Owner Cannot Leave The Board | 403 |
 | **14xx** | *(Card)* | | |
-| **1400** | `CARD_NOT_FOUND` | Card Not Found | 404 |
+| **1401** | `CARD_NOT_FOUND` | Card Not Found | 404 |
 | **15xx** | *(Task)* | | |
-| **1500** | `TASK_NOT_FOUND` | Task Not Found | 404 |
+| **1501** | `TASK_NOT_FOUND` | Task Not Found | 404 |
+| **1503** | `USER_NOT_ASSIGNED_TO_TASK` | User Not Assigned To The Task | 404 |
+| **16xx** | *(Comment)* | | |
+| **1601** | `COMMENT_NOT_FOUND` | Comment Not Found | 404 |
 
