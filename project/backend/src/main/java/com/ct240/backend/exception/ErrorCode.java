@@ -26,7 +26,9 @@ public enum ErrorCode {
     USER_NOT_EXIST_IN_BOARD(1303, "User Not Exist In The Board" , HttpStatus.NOT_FOUND),
 
     CARD_NOT_FOUND(1401, "Card Not Found", HttpStatus.NOT_FOUND),
-    TASK_NOT_FOUND(1501, "Task Not Found", HttpStatus.NOT_FOUND);
+    TASK_NOT_FOUND(1501, "Task Not Found", HttpStatus.NOT_FOUND),
+    COMMENT_NOT_FOUND(1501, "Comment Not Found", HttpStatus.NOT_FOUND);
+
 
     private int code;
     private String message;

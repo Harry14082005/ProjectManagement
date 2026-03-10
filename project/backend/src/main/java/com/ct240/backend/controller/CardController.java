@@ -18,7 +18,7 @@ public class CardController {
     CardService cardService;
 
     @PostMapping ("/boards/{boardId}/cards")
-    ApiResponse<CardResponse> createCard(
+    public ApiResponse<CardResponse> createCard(
             @PathVariable String boardId,
             @RequestBody CardCreationRequest request,
             Authentication authentication){
@@ -28,7 +28,7 @@ public class CardController {
         return apiResponse;
     }
     @GetMapping ("/boards/{boardId}/cards")
-    ApiResponse<List<CardResponse>> getAllCards(
+    public ApiResponse<List<CardResponse>> getAllCards(
             @PathVariable String boardId,
             Authentication authentication){
         ApiResponse<List<CardResponse>> apiResponse = new ApiResponse<>();
@@ -37,7 +37,7 @@ public class CardController {
         return apiResponse;
     }
     @PutMapping ("/cards/{cardId}")
-    ApiResponse<CardResponse> updateCard(
+    public ApiResponse<CardResponse> updateCard(
             @PathVariable String cardId,
             @RequestBody CardUpdateRequest request,
             Authentication authentication){
@@ -49,7 +49,7 @@ public class CardController {
     }
 
     @DeleteMapping ("/cards/{cardId}")
-    ApiResponse<Void> deleteCard(@PathVariable String cardId, Authentication authentication){
+    public ApiResponse<Void> deleteCard(@PathVariable String cardId, Authentication authentication){
         ApiResponse<Void> apiResponse = new ApiResponse();
 
         cardService.deleteCard(cardId, authentication);
