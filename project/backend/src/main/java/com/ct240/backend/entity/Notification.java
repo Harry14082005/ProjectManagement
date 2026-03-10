@@ -1,0 +1,26 @@
+package com.ct240.backend.entity;
+
+import com.ct240.backend.enums.Type;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Entity
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE )
+public class Notification {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    String id;
+    String content;
+    boolean readStatus;
+    Type type;
+    String referenceId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
+}
