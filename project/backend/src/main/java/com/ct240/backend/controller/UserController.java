@@ -50,6 +50,15 @@ public class UserController {
         return apiResponse;
     }
 
+    @GetMapping("/search")
+    ApiResponse<List<UserResponse>> searchUsers(@RequestParam String keyword){
+        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
+
+        apiResponse.setData(userService.searchUsers(keyword));
+
+        return apiResponse;
+    }
+
 
 
     /// tạo người dùng đem qua AuthService ///

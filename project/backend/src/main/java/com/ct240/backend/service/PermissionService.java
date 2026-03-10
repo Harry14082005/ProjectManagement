@@ -1,10 +1,7 @@
 package com.ct240.backend.service;
 
 
-import com.ct240.backend.entity.BoardUser;
-import com.ct240.backend.entity.Space;
-import com.ct240.backend.entity.SpaceUser;
-import com.ct240.backend.entity.User;
+import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.repository.*;
@@ -25,6 +22,9 @@ public class PermissionService {
 
     @Autowired
     BoardRepository boardRepository;
+
+    @Autowired
+    TaskRepository taskRepository;
 
     @Autowired
     BoardUserRepository boardUserRepository;
@@ -53,6 +53,12 @@ public class PermissionService {
         return getRoleInSpace(userId, space.getId());
     }
 
+    public Role getRoleInSpaceByTaskId(String userId, String taskId){
+        Board board = taskRepository.findBoardByTaskId(taskId);
+
+        return getRoleInSpaceByBoardId(userId, board.getId());
+    }
+
     public boolean isOwnerOfBoard(String userId, String boarId){
         BoardUser bu = boardUserRepository.findByUserIdAndBoardId(userId, boarId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD)
@@ -63,5 +69,11 @@ public class PermissionService {
 
     public boolean isMemberInBoard(String userId, String boardId){
         return boardUserRepository.existsByUserIdAndBoardId(userId, boardId);
+    }
+
+    public boolean isMemberInBoardByTaskId(String userId, String taskId){
+        Board board = taskRepository.findBoardByTaskId(taskId);
+
+        return boardUserRepository.existsByUserIdAndBoardId(userId, board.getId());
     }
 }

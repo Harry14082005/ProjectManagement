@@ -108,4 +108,48 @@ public class BoardUserService {
                 .map(u -> userMapper.toUserResponse(u))
                 .collect(Collectors.toList());
     }
+
+    //người khác xoá ra khỏi board
+    ///         NGƯỜI CÓ QUYỀN XOÁ MEMBER KHỎI BOARD       ///
+    /// 1. OWNER, ADMIN của SPACE                          ///
+    /// 2. OWNER của BOARD                                 ///
+    public void deleteUserFromBoard(String boardId, String userId, Authentication authentication){
+        User currentUser = permissionService.getUserAuth(authentication);
+
+        // - CHECK 1 - //
+        Role role = permissionService.getRoleInSpaceByBoardId(currentUser.getId(), boardId);
+        // - CHECK 2 - //
+        boolean isBoardOwner = permissionService.isOwnerOfBoard(currentUser.getId(), boardId);
+        if(! (
+                role == Role.OWNER || role == Role.ADMIN // - CHECK 1 - //
+                        || isBoardOwner ))// - CHECK 2 - //
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+
+        //cái này sẽ check luôn có trong board đó hay không
+        BoardUser boardUser = boardUserRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD)
+        );
+
+        boardUserRepository.delete(boardUser);
+
+    }
+
+    //tự rời
+    /// OWNER của BOARD hông được tự rời khỏi BOARD
+    public void deleteUserFromBoard(String boardId, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
+
+        boolean isOwner = permissionService.isOwnerOfBoard(user.getId(), boardId);
+        if(isOwner){
+            throw new AppException(ErrorCode.OWNER_CANNOT_LEAVE_BOARD);
+        }
+
+        BoardUser boardUser = boardUserRepository.findByUserIdAndBoardId(user.getId(), boardId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD)
+        );
+
+        boardUserRepository.delete(boardUser);
+
+    }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -52,7 +53,7 @@ public class UserService {
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
-        user = userMapper.toUser(user, request);
+        userMapper.updateUser(user, request);
 
         userRepository.save(user);
 
@@ -62,6 +63,14 @@ public class UserService {
                 .username(user.getUsername())
                 .avatarURL(user.getAvatarURL())
                 .build();
+    }
+
+    public List<UserResponse> searchUsers(String keyword){
+        var listUsers = userRepository.findByUsernameContaining(keyword);
+
+        return listUsers.stream()
+                .map(user -> userMapper.toUserResponse(user))
+                .collect(Collectors.toList());
     }
 
 }
