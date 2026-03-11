@@ -49,7 +49,7 @@ onMounted(() => {
 <template>
   <div class="sidebar">
   
-  <div class="Sidebar_items">
+  <div class="Sidebar_items" id="current-page">
     <IconBoard></IconBoard>
     <div>Bảng</div>
   </div> 
@@ -95,6 +95,12 @@ onMounted(() => {
 
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
+#current-page{
+  background-color:#d4ecf8;
+  color:#1a5270;
+  border-radius: 1.25rem;
+}
 .icon_setting{
   width: 10px;
   height: 10px;
@@ -116,7 +122,6 @@ onMounted(() => {
   margin-left: 10px;
   
 } 
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
 .sidebar{
     padding: 30px 10%;
     display: flex;
@@ -134,7 +139,12 @@ div.Sidebar_items{
   align-items: center;
   flex-direction: row;
   color:#2c3e50;
+  padding: 5px 15px;
 
+}
+div.Sidebar_items:hover{
+  background-color:#e7e8eb;
+  border-radius: 1.25rem;
 }
 .Sidebar_items div{
   align-self:center;

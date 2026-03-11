@@ -2,7 +2,7 @@
 import IconList from '../icons/IconList.vue';
 import IconSetting from '../icons/IconSetting.vue';
 import IconCreate from '../icons/IconCreate.vue';
-const emit = defineEmits(['open-modal']);
+const emit = defineEmits(['open-modal'],['toggle-profile']);
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const emit = defineEmits(['open-modal']);
     
     <div class="right_navbar">
       <div><i id="icon1" class="fa-solid fa-bell"></i></div>
-      <div id="icon2" class="avatar">A</div>
+      <div id="icon2" class="avatar" @click="emit('toggle-profile')">A</div>
       <div id="icon3"><IconSetting/></div>
     </div>
   </div>
@@ -32,8 +32,8 @@ const emit = defineEmits(['open-modal']);
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
   #logo{
     margin-left: 5px;
-    width: 35px;
-    height: 35px;
+    width: 23px;
+    height: 23px;
   }
   .list_icon div{
     font-size: 22px;
@@ -86,7 +86,7 @@ const emit = defineEmits(['open-modal']);
     justify-content: center;
   }
   .navbar{
-    background-color: #1a5270;
+    background-color: #3d5875;
     display: flex;
     width: 100%;
     height: 60px;
@@ -98,7 +98,7 @@ const emit = defineEmits(['open-modal']);
     display: flex;
     align-items: center;
     margin-right: 0px;
-
+    cursor: pointer;
   }
   .right_navbar div{
     width: 35px;
@@ -114,6 +114,9 @@ const emit = defineEmits(['open-modal']);
     margin-right: 5px;
     align-items: center;
     justify-items: center;
+  }
+  .right_navbar div:active{
+    transform: scale(0.95);
   }
   .create{
     cursor: pointer;
@@ -134,5 +137,7 @@ const emit = defineEmits(['open-modal']);
     margin-right: 10px;
     background-color: #ffffff;
   }
-  
+  .create:active {
+  transform: scale(0.95); 
+}
 </style >

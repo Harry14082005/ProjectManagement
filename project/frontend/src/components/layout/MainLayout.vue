@@ -12,11 +12,18 @@ const openModal = () => {
 const closeModal = () => {
   isModalOpen.value = false;
 }
+
+const isShowSummaryProfile = ref(false);
+
+const SummaryProfile=()=>{
+    isShowSummaryProfile.value= isShowSummaryProfile.value ===false ? true:false;
+}
+
 </script>
 
 <template>
     <div class="wrapper">
-  <Navbar @open-modal="openModal"></Navbar>
+  <Navbar @open-modal="openModal" @toggle-profile="SummaryProfile"></Navbar>
     <div class="main-container">
     <Sidebar></Sidebar>
     <div class="maincontent">
@@ -28,11 +35,9 @@ const closeModal = () => {
   </div>
       <CreateSpace v-if="isModalOpen" @close-modal="closeModal"></CreateSpace>
     </div>
-    <div class="overview_profile">
-        <div class="main_inf">
+    <div class="overview_profile" v-if="isShowSummaryProfile">
             <div class="avatar">A</div>
-            <div class="name_user"></div>
-        </div>
+            <div class="name_user">User Name</div>
         <div>Hồ sơ và hiển thị</div>
         <div>Trợ giúp</div>
         <div>Đăng xuất</div>
@@ -42,21 +47,7 @@ const closeModal = () => {
 
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
-.overview_profile{
-    visibility: hidden;
-}
-.avatar{
-    display: flex;
-    width: 30%;
-    height: 20%;
-    background-color: aliceblue;
-    align-items: center;
-    justify-items: center;
-    justify-content: center;
-    align-content: center;
-    
-}
+
 .main-container{
     background-color: #f0f7ff;
     width: 100%;
@@ -89,14 +80,36 @@ Sidebar{
     font-family: "Quicksand", sans-serif;
 }
 .overview_profile{
+    font-family: "Quicksand", sans-serif;
     position:absolute;
-    color: black;
+    color:#2c3e50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:7px;
     top:63px;
-    right: 20px;;
-    width: 240px;
-    height: 35%;
+    right: 17px;;
+    width: 260px;
+    height: 240px;
     border-radius: 1.25rem;
-    border: 0.5px solid #c9d4e0 ;
+    border: 0.5px solid #d4ecf8;
     background-color: rgb(255, 255, 255);
+}
+.avatar{
+    font-weight: 700;
+    margin-top: 16px;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    background-color: aliceblue;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    border: 0.5px solid #2c3e50;
+}
+.name_user{
+    font-weight: 700;
+    font-size: larger;
+    margin-bottom: 10px;
 }
 </style >
