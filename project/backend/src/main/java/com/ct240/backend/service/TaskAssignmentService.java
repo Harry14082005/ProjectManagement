@@ -53,10 +53,17 @@ public class TaskAssignmentService {
         User addedUser = userRepository.findById(request.getUserId()).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
+
+        boolean addedUserIsMemberOfBoard = permissionService.isMemberInBoardByTaskId(addedUser.getId(), taskId);
+        if (!addedUserIsMemberOfBoard){
+            throw  new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD);
+        }
+
         //người thực thi phải có trong board thì mới được?
         boolean currentUserIsMemberOfBoard = permissionService.isMemberInBoardByTaskId(currentUser.getId(), taskId);
 
         //lấy role người thực thi
+
         Role role = permissionService.getRoleInSpaceByTaskId(currentUser.getId(), taskId);
 
 //        if(!currentUserIsMemberOfBoard){

@@ -5,6 +5,7 @@ import com.ct240.backend.dto.request.CardUpdateRequest;
 import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.CardResponse;
 import com.ct240.backend.service.CardService;
+import jakarta.validation.Valid;
 import org.hibernate.validator.internal.constraintvalidators.bv.time.past.AbstractPastInstantBasedValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,7 @@ public class CardController {
     @PostMapping ("/boards/{boardId}/cards")
     public ApiResponse<CardResponse> createCard(
             @PathVariable String boardId,
-            @RequestBody CardCreationRequest request,
+            @RequestBody @Valid CardCreationRequest request,
             Authentication authentication){
         ApiResponse<CardResponse> apiResponse = new ApiResponse<>();
 
@@ -39,7 +40,7 @@ public class CardController {
     @PutMapping ("/cards/{cardId}")
     public ApiResponse<CardResponse> updateCard(
             @PathVariable String cardId,
-            @RequestBody CardUpdateRequest request,
+            @RequestBody @Valid CardUpdateRequest request,
             Authentication authentication){
         ApiResponse<CardResponse> apiResponse = new ApiResponse<>();
 
@@ -50,7 +51,7 @@ public class CardController {
 
     @DeleteMapping ("/cards/{cardId}")
     public ApiResponse<Void> deleteCard(@PathVariable String cardId, Authentication authentication){
-        ApiResponse<Void> apiResponse = new ApiResponse();
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
 
         cardService.deleteCard(cardId, authentication);
         apiResponse.setMessage("Card and its Tasks are deleted successfully");

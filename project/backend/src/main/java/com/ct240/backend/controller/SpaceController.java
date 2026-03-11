@@ -5,6 +5,7 @@ import com.ct240.backend.dto.request.SpaceUpdateRequest;
 import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.SpaceResponse;
 import com.ct240.backend.service.SpaceService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class SpaceController {
     SpaceService spaceService;
 
     @PostMapping
-    ApiResponse<SpaceResponse> createSpace(@RequestBody SpaceCreationRequest request, Authentication authentication){
+    ApiResponse<SpaceResponse> createSpace(@RequestBody @Valid SpaceCreationRequest request, Authentication authentication){
         ApiResponse<SpaceResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setData(spaceService.createSpace(request, authentication));
@@ -46,7 +47,7 @@ public class SpaceController {
     }
 
     @PutMapping("/{spaceId}")
-    ApiResponse<SpaceResponse> updateSpace(@PathVariable String spaceId, @RequestBody SpaceUpdateRequest request, Authentication authentication){
+    ApiResponse<SpaceResponse> updateSpace(@PathVariable String spaceId, @RequestBody @Valid SpaceUpdateRequest request, Authentication authentication){
         ApiResponse<SpaceResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setData(spaceService.updateSpace(spaceId, request, authentication));

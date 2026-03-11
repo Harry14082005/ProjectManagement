@@ -4,6 +4,7 @@ import com.ct240.backend.dto.response.NotificationResponse;
 import com.ct240.backend.entity.Notification;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Type;
+import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.NotificationMapper;
 import com.ct240.backend.repository.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class NotificationService {
     @Autowired
     SseEmitterService sseEmitterService;
 
+    ///lấy danh sách thông báo
     public List<NotificationResponse> getAllNotifications(Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
 
@@ -51,5 +53,19 @@ public class NotificationService {
 
         // push realtime
         sseEmitterService.sendToUser(user.getId(), notificationMapper.toResponse(notification));
+    }
+
+    public void deleteNotification(String notificationId, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
+
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(
+                () -> new AppException(ErrorCode.NOTIFICATION_NOT_FOUND)
+        );
+
+        if(!notificationRepository.existsByIdAndUserId(user.getId(), notificationId)){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
+        notificationRepository.delete(notification);
     }
 }

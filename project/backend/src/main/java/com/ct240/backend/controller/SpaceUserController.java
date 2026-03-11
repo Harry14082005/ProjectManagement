@@ -8,6 +8,7 @@ import com.ct240.backend.dto.response.SpaceUserResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.SpaceUser;
 import com.ct240.backend.service.SpaceUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class SpaceUserController {
 
 
     @PostMapping("/{spaceId}/members")
-    public ApiResponse<SpaceUserResponse> addMember(@PathVariable String spaceId, @RequestBody SpaceUserRequest request, Authentication authentication){
+    public ApiResponse<SpaceUserResponse> addMember(@PathVariable String spaceId, @RequestBody @Valid SpaceUserRequest request, Authentication authentication){
         ApiResponse<SpaceUserResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setData(spaceUserService.addMember(spaceId, request, authentication));
@@ -42,7 +43,7 @@ public class SpaceUserController {
     }
 
     @PutMapping("/{spaceId}/members/{userId}")
-    public ApiResponse<SpaceUserResponse> updateRole(@PathVariable String spaceId, @PathVariable String userId, @RequestBody SpaceUserUpdateRequest request, Authentication authentication){
+    public ApiResponse<SpaceUserResponse> updateRole(@PathVariable String spaceId, @PathVariable String userId, @RequestBody @Valid SpaceUserUpdateRequest request, Authentication authentication){
         ApiResponse<SpaceUserResponse> apiResponse = new ApiResponse<>();
 
         var data = spaceUserService.updateRole(spaceId, userId, request, authentication);

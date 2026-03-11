@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    ApiResponse<UserResponse> updateUser(@RequestBody UserUpdateRequest request, Authentication authentication){
+    ApiResponse<UserResponse> updateUser(@RequestBody @Valid UserUpdateRequest request, Authentication authentication){
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
         String username = authentication.getName();

@@ -5,6 +5,7 @@ import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.BoardUserResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.service.BoardUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class BoardUserController {
     BoardUserService boardUserService;
 
     @PostMapping("/boards/{boardId}/members")
-    ApiResponse<BoardUserResponse> addMember(@PathVariable String boardId, @RequestBody BoardUserRequest request, Authentication authentication){
+    ApiResponse<BoardUserResponse> addMember(@PathVariable String boardId, @RequestBody @Valid BoardUserRequest request, Authentication authentication){
         ApiResponse<BoardUserResponse> apiResponse = new ApiResponse<>();
 
         var data = boardUserService.addMember(boardId, request, authentication);

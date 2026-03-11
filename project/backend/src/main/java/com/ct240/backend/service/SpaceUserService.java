@@ -57,11 +57,6 @@ public class SpaceUserService {
         );  //----> đã được kiểm tra ở bước kiểm tra role sau
 
         /// chỉ có owner với admin mới thêm được người
-//        Role roleAuth = permissionService.getRoleInSpace(currentUser.getId(), spaceId);
-//
-//        if(roleAuth != Role.OWNER && roleAuth != Role.ADMIN){ //Role là OWNER với ADMIN thì được
-//            throw new AppException(ErrorCode.UNAUTHORIZED);
-//        }
         permissionService.requireSpaceAdmin(currentUser.getId(), spaceId);
 
         /// hướng xử lý nếu người dùng đã ở trong đây rồi
@@ -85,8 +80,8 @@ public class SpaceUserService {
         //lưu
         SpaceUser spaceUser = new SpaceUser();
         spaceUser.setId(spaceUserId);
-//        spaceUser.setSpace(space);
-//        spaceUser.setUser(addedUser);
+        spaceUser.setSpace(space);
+        spaceUser.setUser(addedUser);
         /// không cho set role là OWNER (mặc dù trên front end cũng hông có hiện để mà chọn)
         if(request.getRole() == Role.OWNER){
             throw new AppException(ErrorCode.UNAUTHORIZED);
@@ -99,11 +94,6 @@ public class SpaceUserService {
     }
 
     public List<UserResponse> getAllMembersInSpace(String spaceId, Authentication authentication){
-//        String username = authentication.getName();
-//
-//        User user = userRepository.findByUsername(username).orElseThrow(
-//                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-//        );
         User user = permissionService.getUserAuth(authentication);
 
         if(!spaceRepository.existsById(spaceId)) {

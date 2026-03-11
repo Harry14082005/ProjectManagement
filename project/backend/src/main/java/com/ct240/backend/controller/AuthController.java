@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    ApiResponse<AuthResponse> login(@RequestBody AuthRequest request){
+    ApiResponse<AuthResponse> login(@RequestBody @Valid AuthRequest request){
         var result = authService.login(request);
 
         return ApiResponse.<AuthResponse>builder()
@@ -42,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> login(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
+    ApiResponse<IntrospectResponse> login(@RequestBody @Valid IntrospectRequest request) throws ParseException, JOSEException {
         var result = authService.introspect(request);
 
         return ApiResponse.<IntrospectResponse>builder()
