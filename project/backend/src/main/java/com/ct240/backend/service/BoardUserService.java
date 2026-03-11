@@ -62,6 +62,12 @@ public class BoardUserService {
         boolean isBoardOwner = permissionService.isOwnerOfBoard(currentUser.getId(), boardId);
         // - CHECK 3 - //
         boolean isPrivate = boardRepository.isPrivate(boardId);
+        // - CHECK * - //
+
+        boolean addedUserIsMemberOfSpace = permissionService.isMemberInSpaceByBoardId(addedUser.getId(), boardId);
+        if(!addedUserIsMemberOfSpace){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
 
         if(! (
                 role == Role.OWNER || role == Role.ADMIN // - CHECK 1 - //
