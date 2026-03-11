@@ -17,7 +17,7 @@ const emit = defineEmits(['open-modal']);
       <IconCreate></IconCreate>
     </div>
     
-    <div class="left_navbar">
+    <div class="right_navbar">
       <div><i id="icon1" class="fa-solid fa-bell"></i></div>
       <div id="icon2" class="avatar">A</div>
       <div id="icon3"><IconSetting/></div>
@@ -80,13 +80,13 @@ const emit = defineEmits(['open-modal']);
     justify-content: space-between;
     font-family: "Quicksand", sans-serif;
   }
-  .left_navbar{
+  .right_navbar{
     display: flex;
     align-items: center;
     margin-right: 0px;
 
   }
-  .left_navbar div{
+  .right_navbar div{
     width: 35px;
     height: 35px;
     background-color: #dddee3;
@@ -111,13 +111,14 @@ const emit = defineEmits(['open-modal']);
     font-size: 16px;
     border-radius: 1.25rem;
     align-self: center;
-    margin-left: 0;
     align-content: center;
     justify-content: center;
     padding: 5px;
     color:#2c3e50;
     align-items: center;
     font-weight: 500;
+    margin-left: auto;
+    margin-right: 10px;
   }
   
 </style >

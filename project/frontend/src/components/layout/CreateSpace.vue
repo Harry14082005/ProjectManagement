@@ -6,16 +6,26 @@ import axios from 'axios';
 const emit=defineEmits(['close-modal']);
 //Cac trang thai cua Modal
 const newSpaceName = ref('');
+const newSpaceDesc = ref('');
 
 const closeModal = () => {
   emit('close-modal'); // Bắn tín hiệu kêu Layout tắt Modal đi
 }
 
 const handleCreateSpace = async () => {
-  if (newSpaceName.value.trim() === '') {
+  if (newSpaceName.value.trim() === ''&&newSpaceDesc.value.trim()==='') {
+    alert("Vui lòng nhập tên Space và mô tả!");
+    return;
+  }
+  else if(newSpaceDesc.value.trim()===''){
+    alert("Vui lòng nhập mô tả!");
+    return;
+  }
+  else if(newSpaceName.value.trim() === ''){
     alert("Vui lòng nhập tên Space!");
     return;
   }
+
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -23,8 +33,10 @@ const handleCreateSpace = async () => {
       return;
     }
     console.log("Đang gọi API tạo Space...");
-    const response = await axios.post("http://localhost:8080/api/workspaces",
-      { name: newSpaceName.value },
+    const response = await axios.post("http://localhost:8080/api/spaces",
+      { name: newSpaceName.value,
+        description: newSpaceDesc.value
+       },
       { headers: { 'Authorization': `Bearer ${token}` } }
     );
     // const newWorkspace = response.data.data;
@@ -51,6 +63,16 @@ const handleCreateSpace = async () => {
           v-model="newSpaceName" 
           type="text" 
           placeholder="Ví dụ: Dự án Website..." 
+          class="modal-input"
+          @keyup.enter="handleCreateSpace" 
+        />
+        </div>
+        <div class="modal-body">
+        <label>Mô tả <span style="color: red;">*</span></label>
+        <input 
+          v-model="newSpaceDesc" 
+          type="text" 
+          placeholder="...." 
           class="modal-input"
           @keyup.enter="handleCreateSpace" 
         />
@@ -90,7 +112,7 @@ const handleCreateSpace = async () => {
 .modal-content {
   background: white;
   width: 400px;
-  border-radius: 12px;
+  border-radius: 1.25rem;
   padding: 24px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
@@ -102,11 +124,15 @@ const handleCreateSpace = async () => {
   font-size: 1.2rem;
 }
 
+
 .modal-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.modal-body:nth-last-child(2){
+  margin-bottom: 30px;
 }
 
 .modal-body label {
@@ -119,7 +145,7 @@ const handleCreateSpace = async () => {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 1.2rem;
   font-size: 1rem;
   outline: none;
   font-family: "Quicksand", sans-serif;
@@ -138,7 +164,7 @@ const handleCreateSpace = async () => {
 
 .modal-footer button {
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 1.25rem;
   font-size: 0.95rem;
   cursor: pointer;
   font-family: "Quicksand", sans-serif;
