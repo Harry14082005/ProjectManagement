@@ -5,6 +5,7 @@ import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.TaskAssignmentResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.service.TaskAssignmentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class TaskAssignmentController {
     TaskAssignmentService taskAssignmentService;
 
     @PostMapping("/tasks/{taskId}/assign")
-    ApiResponse<TaskAssignmentResponse> assignTask(@PathVariable String taskId, @RequestBody TaskAssignmentRequest request, Authentication authentication){
+    ApiResponse<TaskAssignmentResponse> assignTask(@PathVariable String taskId, @RequestBody @Valid TaskAssignmentRequest request, Authentication authentication){
         ApiResponse<TaskAssignmentResponse> apiResponse = new ApiResponse<>();
 
         var data = taskAssignmentService.assignTask(taskId, request, authentication);

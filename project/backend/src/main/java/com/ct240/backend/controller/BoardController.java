@@ -6,6 +6,7 @@ import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.BoardResponse;
 import com.ct240.backend.entity.BoardUser;
 import com.ct240.backend.service.BoardService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,7 @@ public class BoardController {
     BoardService boardService;
 
     @PostMapping ("/spaces/{spaceId}/boards")
-    ApiResponse<BoardResponse> createBoard(@PathVariable String spaceId,@RequestBody BoardCreationRequest request, Authentication authentication){
+    ApiResponse<BoardResponse> createBoard(@PathVariable String spaceId, @RequestBody @Valid BoardCreationRequest request, Authentication authentication){
         ApiResponse<BoardResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setData(boardService.createBoard(spaceId, request, authentication));
@@ -48,7 +49,7 @@ public class BoardController {
 
     @PutMapping ("/boards/{boardId}")
     ApiResponse<BoardResponse> updateBoard(@PathVariable String boardId,
-                                           @RequestBody BoardUpdateRequest request,
+                                           @RequestBody @Valid BoardUpdateRequest request,
                                            Authentication authentication){
         ApiResponse<BoardResponse> apiResponse = new ApiResponse<>();
 

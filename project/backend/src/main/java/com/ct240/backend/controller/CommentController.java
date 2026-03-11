@@ -4,6 +4,7 @@ import com.ct240.backend.dto.request.CommentCreationRequest;
 import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.CommentResponse;
 import com.ct240.backend.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
@@ -21,7 +22,7 @@ public class CommentController {
     @PostMapping ("/tasks/{taskId}/comments")
     public ApiResponse<CommentResponse> createComment(
             @PathVariable String taskId,
-            @RequestBody CommentCreationRequest request,
+            @RequestBody @Valid CommentCreationRequest request,
             Authentication authentication){
         ApiResponse<CommentResponse> apiResponse = new ApiResponse<>();
         apiResponse.setData(commentService.createComment(taskId, request, authentication));

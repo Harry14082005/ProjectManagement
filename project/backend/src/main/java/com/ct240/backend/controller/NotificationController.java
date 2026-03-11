@@ -39,4 +39,20 @@ public class NotificationController {
 
         return apiResponse;
     }
+
+    @DeleteMapping("/notifications/{notificationId}")
+    public ApiResponse<Void> deleteNotification(@PathVariable String notificationId, Authentication authentication){
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+
+        notificationService.deleteNotification(notificationId, authentication);
+
+        apiResponse.setMessage("Delete Notification Successfully");
+
+        return apiResponse;
+    }
+
+    /// --- NOTE --- ///
+    /// Có thể bổ sung xử lý người dùng xoá thông báo (tại quá nhiều)
+    /// Xử lý đã đọc readStatus = true --> hoặc có thể bỏ này luôn
+
 }
