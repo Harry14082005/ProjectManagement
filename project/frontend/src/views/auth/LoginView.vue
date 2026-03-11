@@ -46,7 +46,7 @@ const handleLogin = async () => {
       localStorage.setItem("token", token)
     }
 
-    router.push("/")
+    router.push("/home")
 
   } catch (error) {
 
