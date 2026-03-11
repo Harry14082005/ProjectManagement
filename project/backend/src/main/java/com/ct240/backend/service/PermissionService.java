@@ -68,11 +68,18 @@ public class PermissionService {
     public boolean isMemberInBoard(String userId, String boardId) {
         return boardUserRepository.existsByUserIdAndBoardId(userId, boardId);
     }
-
+    //get anything
     public Task getTask (String taskId){
         return taskRepository.findById(taskId).orElseThrow(
                 () -> new AppException(ErrorCode.TASK_NOT_FOUND)
         );
+    }
+
+    public Board getBoard (String boardId){
+        return boardRepository.findById(boardId).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
     }
 
     public Task requireTaskMember(String userId, String taskId){
@@ -95,6 +102,20 @@ public class PermissionService {
         Role role = getRoleInSpace(userId, spaceId);
         if (role != Role.OWNER && role != Role.ADMIN)
             throw new AppException(ErrorCode.UNAUTHORIZED);
+    }
+
+    public void requireAddBoardMember (String userId, String boardId){
+        // - CHECK 1 - //
+        Role role = getRoleInSpaceByBoardId(userId, boardId);
+        // - CHECK 2 - //
+        boolean isBoardOwner = isOwnerOfBoard(userId, boardId);
+        // - CHECK 3 - //
+        boolean isPrivate = boardRepository.isPrivate(boardId);
+    // Space OWNER or Space ADMIN or Board OWNER or Space MEMBER + board public
+        if (! (role == Role.OWNER || role == Role.ADMIN || isBoardOwner || role == Role.MEMBER && !isPrivate)){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+
+        }
     }
 
     public void requireSpaceMember (String userId, String spaceId){

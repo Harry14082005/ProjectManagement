@@ -85,8 +85,8 @@ public class SpaceUserService {
         //lưu
         SpaceUser spaceUser = new SpaceUser();
         spaceUser.setId(spaceUserId);
-//        spaceUser.setSpace(space);
-//        spaceUser.setUser(addedUser);
+        spaceUser.setSpace(space);
+        spaceUser.setUser(addedUser);
         /// không cho set role là OWNER (mặc dù trên front end cũng hông có hiện để mà chọn)
         if(request.getRole() == Role.OWNER){
             throw new AppException(ErrorCode.UNAUTHORIZED);
@@ -149,11 +149,6 @@ public class SpaceUserService {
     }
 
     public void deleteUserFromSpace(String spaceId, String userId, Authentication authentication){
-//        String username = authentication.getName();
-//
-//        User currentUser = userRepository.findByUsername(username).orElseThrow(
-//                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-//        );
         User currentUser = permissionService.getUserAuth(authentication);
         User deletedUser = userRepository.findById(userId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
