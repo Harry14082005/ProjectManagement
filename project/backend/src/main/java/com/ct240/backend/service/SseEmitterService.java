@@ -1,0 +1,50 @@
+package com.ct240.backend.service;
+
+import com.ct240.backend.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Service
+public class SseEmitterService {
+
+    // Lưu emitter của từng user theo userId
+    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+
+    @Autowired
+    PermissionService permissionService;
+
+    public SseEmitter createEmitter(Authentication authentication) {
+        User user = permissionService.getUserAuth(authentication);
+
+        String userId = user.getId();
+
+        /// tham số truyền vào SseEmitter là timeout nên truyền MAX_VALUE có nghĩa là vĩnh viễn
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE); // giữ kết nối lâu dài
+
+        emitters.put(userId, emitter);
+
+        // Khi client disconnect thì xóa khỏi map
+        emitter.onCompletion(() -> emitters.remove(userId));
+        emitter.onTimeout(() -> emitters.remove(userId));
+        emitter.onError(e -> emitters.remove(userId));
+
+        return emitter;
+    }
+
+    ///đẩy dữ liệu xuống người dùng
+    public void sendToUser(String userId, Object data) {
+        SseEmitter emitter = emitters.get(userId); // kiểm tra user đó có đang giữ kết nối hay không
+        if (emitter != null) {
+            try {
+                emitter.send(SseEmitter.event().data(data)); // truyền cái object data vô
+            } catch (Exception e) {
+                emitters.remove(userId); // gửi lỗi thì xóa luôn
+            }
+        }
+    }
+}

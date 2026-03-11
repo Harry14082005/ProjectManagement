@@ -8,9 +8,10 @@ const emit = defineEmits(['open-modal']);
 <template>
   <div class="navbar">
     <div class="list_icon">
-      <IconList/>
+      <img id="logo" src="../../assets/logo.png"></img>
+      <div>Kabala</div>
     </div>
-    <input class="search" placeholder="Search"></input>
+    <!-- <input class="search" placeholder="Search"></input> -->
     
     <div class="create" @click="emit('open-modal')">
       <div>Tạo mới</div>
@@ -29,15 +30,26 @@ const emit = defineEmits(['open-modal']);
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
+  #logo{
+    margin-left: 5px;
+    width: 35px;
+    height: 35px;
+  }
+  .list_icon div{
+    font-size: 22px;
+    margin-left: 7px;
+    font-weight: 500;
+  }
   .list_icon{
+    display: flex;
     font-size: 30px;
-    color:black;
-    text-justify: auto;
+    color:rgb(255, 255, 255);
+    align-content: center;
     align-items: center;
     justify-items: center;
     margin-right: 10px;
   }
-  .search{
+  /*.search{
     border:1px solid grey;
     width: 50vw;
     height: 35px;
@@ -52,13 +64,13 @@ const emit = defineEmits(['open-modal']);
     color:#5a5a5a7e;
     text-align: center;
   }
-  
+  */
   i{
     font-size: 15px;
     color:#2c3e50;
   }
   #icon2{
-    background-color: #dddee3;
+    background-color: #ffffff;
     border-radius: 20px;
     color:#2c3e50;
     justify-content: center;
@@ -74,9 +86,11 @@ const emit = defineEmits(['open-modal']);
     justify-content: center;
   }
   .navbar{
+    background-color: #1a5270;
     display: flex;
     width: 100%;
-    padding: 0 5px;
+    height: 60px;
+    padding: 0 20px;
     justify-content: space-between;
     font-family: "Quicksand", sans-serif;
   }
@@ -89,7 +103,7 @@ const emit = defineEmits(['open-modal']);
   .right_navbar div{
     width: 35px;
     height: 35px;
-    background-color: #dddee3;
+    background-color: #ffffff;
     color:#2c3e50;
     border-radius: 20px;
     justify-content: center;
@@ -105,7 +119,6 @@ const emit = defineEmits(['open-modal']);
     cursor: pointer;
     display: flex;
     gap:5px;
-    border:1px solid grey;
     width: 100px;
     height: 35px;
     font-size: 16px;
@@ -119,6 +132,7 @@ const emit = defineEmits(['open-modal']);
     font-weight: 500;
     margin-left: auto;
     margin-right: 10px;
+    background-color: #ffffff;
   }
   
 </style >

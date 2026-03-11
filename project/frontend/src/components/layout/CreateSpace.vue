@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-// import { workspaceStore } from '@/stores/workspaceStore.js'; 
+import { workspaceStore } from '@/stores/workspaceStore.js'; 
 import axios from 'axios';
+import { useRouter } from 'vue-router'
 
 const emit=defineEmits(['close-modal']);
 //Cac trang thai cua Modal
@@ -30,6 +31,7 @@ const handleCreateSpace = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
       alert("Phiên đăng nhập đã hết hạn!");
+      router.push("/");
       return;
     }
     console.log("Đang gọi API tạo Space...");
@@ -39,8 +41,8 @@ const handleCreateSpace = async () => {
        },
       { headers: { 'Authorization': `Bearer ${token}` } }
     );
-    // const newWorkspace = response.data.data;
-    // workspaceStore.addWorkspace(newWorkspace);
+    const newWorkspace = response.data.data;
+    workspaceStore.addWorkspace(newWorkspace);
     console.log("Tạo thành công:", response.data);
     closeModal();
     alert("Tạo bảng thành công");

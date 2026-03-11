@@ -5,6 +5,7 @@ import com.ct240.backend.dto.response.TaskAssignmentResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.enums.Type;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.TaskAssignmentMapper;
 import com.ct240.backend.mapper.UserMapper;
@@ -35,6 +36,9 @@ public class TaskAssignmentService {
 
     @Autowired
     PermissionService permissionService;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Autowired
     TaskAssignmentMapper taskAssignmentMapper;
@@ -86,6 +90,14 @@ public class TaskAssignmentService {
         taskAssignment.setUser(addedUser);
 
         taskAssignmentRepository.save(taskAssignment);
+
+        /// -- thêm hiển thị thông báo -- ///
+        notificationService.createNotification(
+                addedUser,
+                "Bạn được giao task mới",
+                Type.TASK_ASSIGNMENT,
+                taskId
+                );
 
         return TaskAssignmentResponse.builder()
                 .taskId(taskId)
