@@ -42,6 +42,13 @@ public class PermissionService {
         return spaceUserRepository.existsByUserIdAndSpaceId(userId, spaceId);
     }
 
+    public boolean isMemberInSpaceByBoardId(String userId, String boardId){
+        Space space = boardRepository.findSpaceByBoardId(boardId);
+
+        return spaceUserRepository.existsByUserIdAndSpaceId(userId, space.getId());
+
+    }
+
     public Role getRoleInSpace(String userId, String spaceId) {
         SpaceUser su = spaceUserRepository.findByUserIdAndSpaceId(userId, spaceId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXIST_IN_SPACE)
