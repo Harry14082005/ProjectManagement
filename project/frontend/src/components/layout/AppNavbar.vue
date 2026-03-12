@@ -32,15 +32,16 @@ const emit = defineEmits(['open-modal']);
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
   #logo{
     margin-left: 5px;
-    width: 35px;
-    height: 35px;
+    width: 20px;
+    height: 20px;
   }
   .list_icon div{
     font-size: 22px;
     margin-left: 7px;
-    font-weight: 500;
+    font-weight: 550;
   }
   .list_icon{
+    
     display: flex;
     font-size: 30px;
     color:rgb(255, 255, 255);
@@ -86,7 +87,7 @@ const emit = defineEmits(['open-modal']);
     justify-content: center;
   }
   .navbar{
-    background-color: #1a5270;
+    background-color: #3d5875;
     display: flex;
     width: 100%;
     height: 60px;

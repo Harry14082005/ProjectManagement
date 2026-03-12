@@ -112,7 +112,7 @@ public class AuthService {
                 //thời gian đăng nhập vô
                 .issueTime(new Date())
                 //hết hạn trong 1 giờ
-                .expirationTime(new Date(System.currentTimeMillis() + 3600000))
+                .expirationTime(new Date(System.currentTimeMillis() + 3 * 60 * 60 * 1000))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

@@ -5,6 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import com.ct240.backend.exception.ErrorCode;
+import com.ct240.backend.service.AppException;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.SignedJWT;
@@ -23,6 +25,7 @@ import jakarta.servlet.ServletException;
 
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Date;
 
@@ -52,7 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-
             JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
             if (!signedJWT.verify(verifier)) {
@@ -65,7 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 throw new RuntimeException("Token expired");
             }
 
-
             String username = signedJWT.getJWTClaimsSet().getSubject();
 
             UsernamePasswordAuthenticationToken authentication =
@@ -77,11 +78,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+
+            response.getWriter().write("""
+                        {
+                            "code": 1003,
+                            "message": "Unauthenticated"
+                        }
+                    """);
             System.out.println("JWT Error: " + e.getClass().getName() + ": " + e.getMessage());
 
             SecurityContextHolder.clearContext();
+            
+            return;
         }
+
 
         filterChain.doFilter(request, response);
     }
