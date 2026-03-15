@@ -19,6 +19,11 @@ const router = createRouter({
       name: 'register',
       component: () => import('../views/auth/RegisterView.vue'),
     },
+    {
+      path:'/space',
+      name:'space',
+      component: () =>import('../views/space/SpaceView.vue'),
+    }
   ],
 })
 

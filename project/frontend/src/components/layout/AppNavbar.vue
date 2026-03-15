@@ -2,7 +2,8 @@
 import IconList from '../icons/IconList.vue';
 import IconSetting from '../icons/IconSetting.vue';
 import IconCreate from '../icons/IconCreate.vue';
-const emit = defineEmits(['open-modal'],['toggle-profile']);
+import IconUser from '../icons/IconUser.vue';
+const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
 </script>
 
 <template>
@@ -19,8 +20,8 @@ const emit = defineEmits(['open-modal'],['toggle-profile']);
     </div>
     
     <div class="right_navbar">
-      <div><i id="icon1" class="fa-solid fa-bell"></i></div>
-      <div id="icon2" class="avatar" @click="emit('toggle-profile')">A</div>
+      <div @click="emit('toggle-notification')"><i id="icon1" class="fa-solid fa-bell"></i></div>
+      <div id="icon2" class="avatar" @click="emit('toggle-profile')"><IconUser></IconUser></div>
       <div id="icon3"><IconSetting/></div>
     </div>
   </div>
@@ -70,6 +71,7 @@ const emit = defineEmits(['open-modal'],['toggle-profile']);
     color:#2c3e50;
   }
   #icon2{
+    display: flex;
     background-color: #ffffff;
     border-radius: 20px;
     color:#2c3e50;

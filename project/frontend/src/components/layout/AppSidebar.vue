@@ -63,16 +63,15 @@ onMounted(() => {
       <div v-if="workspaceStore.workspaces.length === 0" class="empty-text">
         Chưa có bảng nào. Hãy tạo mới!
       </div>
-
       <div 
         v-for="space in workspaceStore.workspaces" 
         :key="space.id" 
         class="workspace-item"
       >
-        <div class="space" @click="toggleSpace(space.id)">
-    <div class="space_avatar">{{deburr(space.name ? space.name.charAt(0).toUpperCase():'W') }}</div>
-    <div class="space_name">{{ space.name}}</div>
-  </div>
+      <div class="space" @click="toggleSpace(space.id)">
+          <div class="space_avatar">{{deburr(space.name ? space.name.charAt(0).toUpperCase():'W') }}</div>
+          <div class="space_name">{{ space.name}}</div>
+      </div>
   <div v-if="openSpaceId ===space.id" class="DetailOptionSpace">
       <div>
         <IconBoard></IconBoard>

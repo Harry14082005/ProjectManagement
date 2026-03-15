@@ -1,8 +1,8 @@
 <script setup>
 defineProps({
-  text: {
+  title: {
     type: String,
-    default:'Xóa'
+    default:'Tên bảng'
   },
   type:{
     type: String,
@@ -11,6 +11,10 @@ defineProps({
   status_text:{
     type: String,
     default:'Public'
+  },
+  content:{
+    type:String,
+    default:'Các task frontend cần hoàn thành trong sprint đầu tiên.'
   }
 })
 </script>
@@ -18,10 +22,10 @@ defineProps({
 <template>
   <div class="card">
     <div class="Title">
-        <div class="Title_content">Sprint 1 — FE</div>
+        <div class="Title_content">{{ title }}</div>
         <div class="status">{{ status_text }}</div>
     </div>
-    <div class="content">Các task frontend cần hoàn thành trong sprint đầu tiên.</div>
+    <div class="content">{{ content }}</div>
     <div class="RowMember">
     <div class="member_card">
         <div class="avatar_1">A</div>
@@ -35,6 +39,25 @@ defineProps({
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
+.card:hover .Title .status{
+  background-color: #ffffff;
+  border: 1.5px solid #3d5875;
+}
+.card:hover{
+  background-color:#d4ecf8;
+  border: 1.5px solid #3d5875;
+}
+.card:hover .member_card .avatar_2{
+  background-color: #ffffff;
+  border: 1.5px solid #d4ecf8;
+}
+.card:hover .member_card .avatar_1{
+  background-color: #ffffff;
+  border: 1.5px solid #d4ecf8;
+}
+.card:active{
+  transform: scale(0.95);
+}
 .card{
   font-family:"Quicksand", sans-serif;
   font-optical-sizing: auto;
@@ -45,11 +68,13 @@ defineProps({
   justify-items: left;
   border-radius: 1.25rem;
   border-width: 0;
-  width: 350px;
+  width: 25%;
   height: 180px;
   border: 1px solid #bce3f5;
   background-color: white;
   color:#2f4562;
+  margin-top: 10px;
+  cursor: pointer;
 }
 .Title_content{
     display: flex;
@@ -97,6 +122,9 @@ defineProps({
     margin-left: 20px;
 }
 .avatar_1{
+    display: flex;
+    align-content: center;
+    justify-content: center;
     width: 30px;
     height: 30px;
     border: 1.5px solid #ffffff;

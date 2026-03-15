@@ -74,7 +74,7 @@ const handleCreateSpace = async () => {
         <input 
           v-model="newSpaceDesc" 
           type="text" 
-          placeholder="...." 
+          placeholder="" 
           class="modal-input"
           @keyup.enter="handleCreateSpace" 
         />
