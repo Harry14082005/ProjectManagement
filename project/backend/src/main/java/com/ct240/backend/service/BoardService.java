@@ -84,9 +84,13 @@ public class BoardService {
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
+        //1.ADMIN & OWNER của SPACE coi được bất kì
+        //2.MEMBER coi được cái BOARD công khai và các BOARD riêng tư nếu là thành viên
+
+        boolean isPrivate = boardRepository.isPrivate(boardId);
         boolean isMember = boardUserRepository.existsByUserIdAndBoardId(user.getId(), boardId);
 
-        if (!isMember){
+        if (!isMember && isPrivate){
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 

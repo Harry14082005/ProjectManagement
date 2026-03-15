@@ -6,7 +6,7 @@ import IconHome from '../icons/IconHome.vue'
 import IconMember from '../icons/IconMember.vue'
 import IconGears from '../icons/IconGears.vue'
 import { workspaceStore } from '@/stores/workspaceStore.js'
-import { deburr } from 'lodash';
+import { deburr } from 'lodash'
 import { ref, onMounted } from 'vue' 
 import axios from 'axios'; // ĐÃ THÊM: axios để gọi API
 

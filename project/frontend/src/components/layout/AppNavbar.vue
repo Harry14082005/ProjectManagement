@@ -39,9 +39,10 @@ const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
   .list_icon div{
     font-size: 22px;
     margin-left: 7px;
-    font-weight: 500;
+    font-weight: 550;
   }
   .list_icon{
+    
     display: flex;
     font-size: 30px;
     color:rgb(255, 255, 255);
