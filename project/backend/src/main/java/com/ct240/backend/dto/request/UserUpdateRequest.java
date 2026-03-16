@@ -15,6 +15,8 @@ public class UserUpdateRequest {
     @NotBlank
     String name;
     String avatarURL;
-    @Size(min = 8)
-    String password;
+
+    // chuyển qua updatePassword nếu có thay đổi mật khẩu
+//    @Size(min = 8)
+//    String password;
 }

@@ -1,8 +1,16 @@
 <script setup>
 import Navbar from '../layout/AppNavbar.vue'
 import Sidebar from '../layout/AppSidebar.vue'
+import Card from '../base/BaseCard.vue'
 import CreateSpace from './CreateSpace.vue';
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
+
+ 
+const router = useRouter();
+const username=ref('');
+
 const isModalOpen = ref(false);
 //Ham mo hop thoai
 const openModal = () => {
@@ -19,35 +27,65 @@ const SummaryProfile=()=>{
     isShowSummaryProfile.value= isShowSummaryProfile.value ===false ? true:false;
 }
 
+const isShowNotification = ref(false);
+
+const toggleNotification=()=>{
+    isShowNotification.value = isShowNotification.value ===false ? true:false;
+}
+
+const fetchUserProfile=async()=>{
+    try{
+        const token=localStorage.getItem('token');
+        const response = await axios.get("http://localhost:8080/api/users/profile",{
+            headers:{
+                'Authorization':`Bearer ${token}`
+            }
+        });
+        username.value=response.data.data.name;
+    }
+    catch(error){
+        console.error("Lỗi khi lấy dữ liệu");
+        if (error.response && error.response.status === 401) {
+       console.log("Token không hợp lệ hoặc đã hết hạn!");
+       router.push('/');
+    }
+    username.value='Guest';
+    }
+    
+}
+onMounted(()=>{
+    fetchUserProfile();
+})
+
 </script>
 
 <template>
     <div class="wrapper">
-  <Navbar @open-modal="openModal" @toggle-profile="SummaryProfile"></Navbar>
+  <Navbar @open-modal="openModal" @toggle-profile="SummaryProfile" @toggle-notification="toggleNotification"></Navbar>
     <div class="main-container">
     <Sidebar></Sidebar>
     <div class="maincontent">
-        <div class="label_maincontent">
-             <div>Đã xem gần đây</div>
-        </div>
-        <div>CÁC KHÔNG GIAN LÀM VIỆC CỦA BẠN</div>
+        <slot></slot>
     </div>
   </div>
       <CreateSpace v-if="isModalOpen" @close-modal="closeModal"></CreateSpace>
     </div>
     <div class="overview_profile" v-if="isShowSummaryProfile">
-            <div class="avatar">A</div>
-            <div class="name_user">User Name</div>
+            <div class="avatar">{{username.charAt(0).toUpperCase()}}</div>
+            <div class="name_user">{{ username }}</div>
         <div>Hồ sơ và hiển thị</div>
         <div>Trợ giúp</div>
         <div>Đăng xuất</div>
+    </div>
+    <div class="notifications" v-if="isShowNotification">
+        <div>Thông báo</div>
+        <div class="separator"></div>
     </div>
 </template>
   
 
 
 <style scoped>
-
 .main-container{
     background-color: #f0f7ff;
     width: 100%;
@@ -94,6 +132,24 @@ Sidebar{
     border-radius: 1.25rem;
     border: 0.5px solid #d4ecf8;
     background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+.notifications{
+    display: flex;
+    font-family: "Quicksand", sans-serif;
+    position:absolute;
+    color:#2c3e50;
+    flex-direction: column;
+    align-items: center;
+    gap:7px;
+    top:63px;
+    right: 17px;;
+    width: 260px;
+    height: 240px;
+    border-radius: 1.25rem;
+    border: 0.5px solid #d4ecf8;
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
 }
 .avatar{
     font-weight: 700;

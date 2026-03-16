@@ -1,5 +1,7 @@
 package com.ct240.backend.config;
 
+import com.ct240.backend.exception.ErrorCode;
+import com.ct240.backend.service.AppException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -45,6 +47,7 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
+
 
         return http.build();
     }

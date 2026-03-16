@@ -1,5 +1,6 @@
 package com.ct240.backend.controller;
 
+import com.ct240.backend.dto.request.ChangePasswordRequest;
 import com.ct240.backend.dto.request.UserCreationRequest;
 import com.ct240.backend.dto.request.UserUpdateRequest;
 import com.ct240.backend.dto.response.ApiResponse;
@@ -57,6 +58,26 @@ public class UserController {
         apiResponse.setData(userService.searchUsers(keyword));
 
         return apiResponse;
+    }
+
+    @GetMapping("/{userId}")
+    ApiResponse<UserResponse> getUser(@PathVariable String userId){
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setData(userService.getUser(userId));
+
+        return apiResponse;
+    }
+
+    @PutMapping("/update/password")
+    ApiResponse<Void> updatePassword(@RequestBody @Valid ChangePasswordRequest request, Authentication authentication){
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+
+        userService.updatePassword(request, authentication);
+
+        apiResponse.setMessage("Change Successfully");
+
+        return  apiResponse;
     }
 
 
