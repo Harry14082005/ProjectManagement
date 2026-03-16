@@ -48,13 +48,28 @@ public class BoardUserService {
     public BoardUserResponse addMember(String boardId, BoardUserRequest request, Authentication authentication){
         User currentUser = permissionService.getUserAuth(authentication);
 
-        Board board = permissionService.getBoard(boardId);
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
 
         User addedUser = userRepository.findById(request.getUserId()).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
-        permissionService.requireAddBoardMember(currentUser.getId(), boardId);
+        // - CHECK 1 - //
+        Role role = permissionService.getRoleInSpaceByBoardId(currentUser.getId(), boardId);
+        // - CHECK 2 - //
+        boolean isBoardOwner = permissionService.isOwnerOfBoard(currentUser.getId(), boardId);
+        // - CHECK 3 - //
+        boolean isPrivate = boardRepository.isPrivate(boardId);
+
+        if(! (
+                role == Role.OWNER || role == Role.ADMIN // - CHECK 1 - //
+                || isBoardOwner // - CHECK 2 - //
+                || (role == Role.MEMBER && !isPrivate))){ // - CHECK 3 - //
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
         //nếu người đó trong board rồi thì cũng hông được
         boolean isMember = permissionService.isMemberInBoard(request.getUserId(), boardId);
         if(isMember){

@@ -24,11 +24,17 @@ public enum ErrorCode {
     BOARD_NOT_FOUND(1301, "Board Not Found", HttpStatus.NOT_FOUND),
     USER_EXISTED_IN_BOARD(1302, "User Existed In The Board", HttpStatus.CONFLICT),
     USER_NOT_EXIST_IN_BOARD(1303, "User Not Exist In The Board" , HttpStatus.NOT_FOUND),
+    OWNER_CANNOT_LEAVE_BOARD(1304, "Owner Cannot Leave The Board", HttpStatus.FORBIDDEN),
 
     CARD_NOT_FOUND(1401, "Card Not Found", HttpStatus.NOT_FOUND),
-    TASK_NOT_FOUND(1501, "Task Not Found", HttpStatus.NOT_FOUND),
-    COMMENT_NOT_FOUND(1501, "Comment Not Found", HttpStatus.NOT_FOUND);
 
+
+    TASK_NOT_FOUND(1501, "Task Not Found", HttpStatus.NOT_FOUND),
+    USER_NOT_ASSIGNED_TO_TASK(1503, "User Not Assigned To The Task", HttpStatus.NOT_FOUND),
+
+    COMMENT_NOT_FOUND(1601, "Comment Not Found", HttpStatus.NOT_FOUND),
+
+    NOTIFICATION_NOT_FOUND(1701,  "Notification Not Found", HttpStatus.NOT_FOUND);
 
     private int code;
     private String message;

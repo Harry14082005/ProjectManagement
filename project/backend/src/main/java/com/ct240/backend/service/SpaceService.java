@@ -35,6 +35,9 @@ public class SpaceService {
     @Autowired
     SpaceMapper spaceMapper;
 
+    @Autowired
+    PermissionService permissionService;
+
 
 //    public SpaceResponse getAllSpaces(String userId){
 //        SpaceResponse spaceResponse = new SpaceResponse();
@@ -43,12 +46,7 @@ public class SpaceService {
     public SpaceResponse createSpace(SpaceCreationRequest request, Authentication authentication){
 
         //lấy người dùng
-        String username = authentication.getName();
-
-        //nếu người dùng hông có thì chạy ngoại lệ
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = permissionService.getUserAuth(authentication);
 
         //tạo space trước
         Space space = spaceMapper.toSpace(request);
@@ -75,10 +73,7 @@ public class SpaceService {
         return spaceMapper.toSpaceResponse(space);
     }
     public SpaceResponse getSpace(String spaceId, Authentication authentication){
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () ->new AppException(ErrorCode.USER_NOT_FOUND));
+        User user = permissionService.getUserAuth(authentication);
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
 
@@ -93,11 +88,7 @@ public class SpaceService {
     }
 
     public List<SpaceResponse> getAllSpaces(Authentication authentication){
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = permissionService.getUserAuth(authentication);
 
         var spaceList = spaceRepository.findAllByUserId(user.getId());
 
@@ -107,11 +98,8 @@ public class SpaceService {
     }
 
     public SpaceResponse updateSpace(String spaceId, SpaceUpdateRequest request, Authentication authentication){
-        String username = authentication.getName();
+        User user = permissionService.getUserAuth(authentication);
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
 
         /// Chỉ có quyền OWNER mới được SỬA thông tin Space ///
 
@@ -135,11 +123,7 @@ public class SpaceService {
     }
 
     public void deleteSpace(String spaceId, Authentication authentication){
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = permissionService.getUserAuth(authentication);
 
         /// Chỉ có quyền OWNER mới được XOÁ thông tin Space ///
 

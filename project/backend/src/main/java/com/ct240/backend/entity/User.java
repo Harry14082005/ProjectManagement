@@ -34,4 +34,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     List<BoardUser> boardUsersList;
+
+    @OneToMany(mappedBy = "user")
+    List<Notification> notificationList;
 }

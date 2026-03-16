@@ -6,6 +6,7 @@ import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.TaskResponse;
 import com.ct240.backend.entity.Task;
 import com.ct240.backend.service.TaskService;
+import jakarta.validation.Valid;
 import org.hibernate.query.sqm.mutation.internal.TableKeyExpressionCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ public class TaskController {
     @PostMapping ("/cards/{cardId}/tasks")
     ApiResponse<TaskResponse> createTask (
             @PathVariable String cardId,
-            @RequestBody TaskCreationRequest request,
+            @RequestBody @Valid TaskCreationRequest request,
             Authentication authentication){
         ApiResponse<TaskResponse> apiResponse = new ApiResponse<>();
 
@@ -43,7 +44,7 @@ public class TaskController {
     @PutMapping ("/tasks/{taskId}")
     ApiResponse<TaskResponse> updateTask(
             @PathVariable String taskId,
-            @RequestBody TaskUpdateRequest request,
+            @RequestBody @Valid TaskUpdateRequest request,
             Authentication authentication){
         ApiResponse<TaskResponse> apiResponse = new ApiResponse<>();
         apiResponse.setData(taskService.updateTask(taskId, request, authentication));

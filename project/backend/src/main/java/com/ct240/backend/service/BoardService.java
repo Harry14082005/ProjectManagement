@@ -38,6 +38,9 @@ public class BoardService {
     @Autowired
     BoardMapper boardMapper;
 
+    @Autowired
+    PermissionService permissionService;
+
     public BoardResponse createBoard(String spaceId, BoardCreationRequest request, Authentication authentication){
 
         String username = authentication.getName();
@@ -100,18 +103,33 @@ public class BoardService {
     }
 
     public List<BoardResponse> getAllBoards(String spaceId, Authentication authentication){
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = permissionService.getUserAuth(authentication);
 
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
         if (!isMember){
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         // xuly private
-        var boardList = boardRepository.findBySpaceIdAndIsPrivateFalse(spaceId);
+        ///1. OWNER và ADMIN của SPACE coi được hết BOARD
+        ///2. MEMBER chỉ coi được Board công khai
+        ///3. Thành viên của Board mới coi được Board riêng tư
+
+        List<Board> boardList;
+        //chỉ hiện những board công khai
+        //else
+        Role role = permissionService.getRoleInSpace(user.getId(), spaceId);
+        if(role == Role.OWNER || role == Role.ADMIN){
+            boardList = boardRepository.findBySpaceId(spaceId);
+        }
+        else{
+            //lấy tất cả những Board công khai trước
+            boardList = boardRepository.findBySpaceIdAndIsPrivateFalse(spaceId);
+
+            //lấy tất cả những Board riêng tư mà là thành viên Board
+            boardList.addAll(boardRepository.findBySpaceIdAndIsPrivateTrue(spaceId, user.getId()));
+            // boardList +=  boardRepository.findBySpaceIdAndIsPrivateTrue(spaceId, userId)
+        }
+
 
         return boardList.stream()
                 .map(board -> boardMapper.toBoardResponse(board))

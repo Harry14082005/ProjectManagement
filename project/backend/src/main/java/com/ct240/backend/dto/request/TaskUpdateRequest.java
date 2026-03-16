@@ -1,6 +1,7 @@
 package com.ct240.backend.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TaskUpdateRequest {
+    @NotBlank
     String name;
     String description;
     @JsonProperty("isCompleted")

@@ -18,5 +18,8 @@ import javax.crypto.spec.PSource;
 public interface CommentMapper {
     Comment toComment (CommentCreationRequest request);
 
+    @Mapping(source = "task.id", target = "taskId")
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "createAt", target = "createAt")
     CommentResponse toCommentResponse (Comment comment);
 }

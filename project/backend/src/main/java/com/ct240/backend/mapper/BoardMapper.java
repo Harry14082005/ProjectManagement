@@ -16,7 +16,7 @@ public interface BoardMapper {
     Board toBoard(BoardCreationRequest request);
     //spaceID : String, phai dung @Mapping de covert qua
     @Mapping(source = "space.id", target = "spaceId")
-
+    @Mapping(source = "private", target = "isPrivate")
     BoardResponse toBoardResponse (Board board);
     void updateBoard(@MappingTarget Board board, BoardUpdateRequest request);
 
