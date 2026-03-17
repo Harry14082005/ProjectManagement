@@ -243,18 +243,18 @@ Thêm thành viên vào Space.
 
 Lấy danh sách thành viên trong Space.
 
-**Response — `List<SpaceUserResponse>`**
+**Response — `List<SpaceMemberResponse>`**
 ```json
 [
   {
-    "userId": "string",
-    "spaceId": "string",
-    "role": "OWNER | ADMIN | MEMBER",
-    "user": {
+    "userResponse": {
       "id": "string",
       "username": "string",
       "name": "string",
       "avatarURL": "string"
+    }
+    {
+      "role": "OWNER | ADMIN | MEMBER",
     }
   }
 ]
