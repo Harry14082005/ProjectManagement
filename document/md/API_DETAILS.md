@@ -243,19 +243,17 @@ Thêm thành viên vào Space.
 
 Lấy danh sách thành viên trong Space.
 
-**Response — `List<SpaceUserResponse>`**
+**Response — `List<SpaceMemberResponse>`**
 ```json
 [
   {
-    "userId": "string",
-    "spaceId": "string",
-    "role": "OWNER | ADMIN | MEMBER",
-    "user": {
+    "userResponse": {
       "id": "string",
       "username": "string",
       "name": "string",
       "avatarURL": "string"
     }
+    "role": "OWNER | ADMIN | MEMBER",
   }
 ]
 ```
@@ -457,7 +455,8 @@ Tạo Task mới trong Card.
 ```json
 {
   "name": "string",
-  "deadLine": "2024-12-31T00:00:00Z (optional)"
+  "deadline": "2024-12-31T00:00:00Z (optional)"
+  ...
 }
 ```
 
@@ -468,7 +467,8 @@ Tạo Task mới trong Card.
   "cardId": "string",
   "name": "string",
   "isCompleted": false,
-  "deadLine": "2024-12-31T00:00:00Z",
+  "description": "string",
+  "deadline": "2024-12-31T00:00:00Z",
   "createdAt": "2024-01-01T00:00:00Z"
 }
 ```
@@ -492,7 +492,7 @@ Cập nhật Task.
 {
   "name": "string (optional)",
   "isCompleted": "boolean (optional)",
-  "deadLine": "date (optional)"
+  "deadline": "date (optional)"
 }
 ```
 
