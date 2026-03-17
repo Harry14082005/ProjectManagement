@@ -253,9 +253,7 @@ Lấy danh sách thành viên trong Space.
       "name": "string",
       "avatarURL": "string"
     }
-    {
-      "role": "OWNER | ADMIN | MEMBER",
-    }
+    "role": "OWNER | ADMIN | MEMBER",
   }
 ]
 ```
