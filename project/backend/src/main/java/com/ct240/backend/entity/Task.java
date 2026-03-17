@@ -19,7 +19,7 @@ public class Task {
     String id;
     String name;
     String description;
-    boolean isCompleted;
+    boolean completed;
     Date deadline;
     Date createAt;
 

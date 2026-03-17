@@ -24,6 +24,6 @@ public class Card {
     @JoinColumn(name = "board_id")
     Board board;
 
-    @OneToMany(mappedBy = "card")
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Task> tasks;
 }

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,12 +38,11 @@ public class TaskService {
     @Autowired
     TaskMapper taskMapper;
 
-    public TaskResponse createTask (String cardId, TaskCreationRequest request, Authentication authentication){
-        String username = authentication.getName();
+    @Autowired
+    PermissionService permissionService;
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+    public TaskResponse createTask (String cardId, TaskCreationRequest request, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
 
         Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new AppException(ErrorCode.CARD_NOT_FOUND)
@@ -54,8 +54,10 @@ public class TaskService {
         if (!isMember){
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
+
         //Tao task
         Task task = taskMapper.toTask(request);
+        task.setCreateAt(new Date());
         task.setCard(card);
 
         taskRepository.save(task);
@@ -65,11 +67,8 @@ public class TaskService {
     }
 
     public List<TaskResponse> getAllTasks(String cardId, Authentication authentication) {
-        String username = authentication.getName();
+        User user = permissionService.getUserAuth(authentication);
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
         Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new AppException(ErrorCode.CARD_NOT_FOUND)
         );
@@ -88,11 +87,8 @@ public class TaskService {
     }
 
     public TaskResponse updateTask (String taskId, TaskUpdateRequest request,  Authentication authentication){
-        String username = authentication.getName();
+        User user = permissionService.getUserAuth(authentication);
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
         Task task = taskRepository.findById(taskId).orElseThrow(
                 () -> new AppException(ErrorCode.TASK_NOT_FOUND)
         );
@@ -110,11 +106,8 @@ public class TaskService {
     }
 
     public void deleteTask(String taskId, Authentication authentication){
-        String username = authentication.getName();
+        User user = permissionService.getUserAuth(authentication);
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
         Task task = taskRepository.findById(taskId).orElseThrow(
                 () -> new AppException(ErrorCode.TASK_NOT_FOUND)
         );

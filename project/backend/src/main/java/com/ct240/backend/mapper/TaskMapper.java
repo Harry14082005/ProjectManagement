@@ -4,16 +4,14 @@ import com.ct240.backend.dto.request.TaskCreationRequest;
 import com.ct240.backend.dto.request.TaskUpdateRequest;
 import com.ct240.backend.dto.response.TaskResponse;
 import com.ct240.backend.entity.Task;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
     Task toTask(TaskCreationRequest request);
     @Mapping(source = "card.id", target = "cardId")
-    @Mapping(source = "completed", target = "isCompleted")
     TaskResponse toTaskResponse (Task task);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateTask (@MappingTarget Task task, TaskUpdateRequest request);
 }

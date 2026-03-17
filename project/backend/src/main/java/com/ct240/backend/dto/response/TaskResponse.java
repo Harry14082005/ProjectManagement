@@ -16,8 +16,8 @@ public class TaskResponse {
     String cardId;
     String name;
     String description;
-    boolean isCompleted;
+    boolean completed;
     Date deadline;
-    Date createdAt;
+    Date createAt;
 
 }

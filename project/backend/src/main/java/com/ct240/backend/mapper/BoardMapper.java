@@ -5,9 +5,7 @@ import com.ct240.backend.dto.request.BoardUpdateRequest;
 import com.ct240.backend.dto.response.BoardResponse;
 import com.ct240.backend.entity.Board;
 import org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidatorForArray;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import javax.crypto.spec.PSource;
 
@@ -18,6 +16,8 @@ public interface BoardMapper {
     @Mapping(source = "space.id", target = "spaceId")
     @Mapping(source = "private", target = "isPrivate")
     BoardResponse toBoardResponse (Board board);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBoard(@MappingTarget Board board, BoardUpdateRequest request);
 
 
