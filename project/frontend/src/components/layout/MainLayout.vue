@@ -1,7 +1,6 @@
 <script setup>
 import Navbar from '../layout/AppNavbar.vue'
 import Sidebar from '../layout/AppSidebar.vue'
-import Card from '../base/BaseCard.vue'
 import CreateSpace from './CreateSpace.vue';
 import { onMounted, ref } from 'vue'
 import axios from 'axios'

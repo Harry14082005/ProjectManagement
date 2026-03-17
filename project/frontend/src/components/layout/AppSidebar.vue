@@ -1,6 +1,4 @@
 <script setup>
-import IconList from '../icons/IconList.vue'
-import IconSetting from '../icons/IconSetting.vue'
 import IconBoard from '../icons/IconBoard.vue'
 import IconHome from '../icons/IconHome.vue'
 import IconMember from '../icons/IconMember.vue'
@@ -46,9 +44,13 @@ const fetchWorkspaces = async () => {
 onMounted(() => {
   fetchWorkspaces();
 });
+
 const goToSpace = (id) => {
-  // Đẩy ID lên thanh địa chỉ (URL)
   router.push(`/space/${id}`);
+}
+
+const gotoSpaceMember =(id)=>{
+  router.push(`/space/${id}/members`);
 }
       
 </script>
@@ -84,7 +86,7 @@ const goToSpace = (id) => {
         <IconBoard></IconBoard>
         <div>Bảng</div>
       </div>
-      <div class="Option">
+      <div class="Option" @click="gotoSpaceMember(space.id)">
         <IconMember></IconMember>
         <div>Thành viên</div>
       </div>
