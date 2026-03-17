@@ -2,10 +2,7 @@ package com.ct240.backend.controller;
 
 import com.ct240.backend.dto.request.SpaceUserRequest;
 import com.ct240.backend.dto.request.SpaceUserUpdateRequest;
-import com.ct240.backend.dto.response.ApiResponse;
-import com.ct240.backend.dto.response.SpaceResponse;
-import com.ct240.backend.dto.response.SpaceUserResponse;
-import com.ct240.backend.dto.response.UserResponse;
+import com.ct240.backend.dto.response.*;
 import com.ct240.backend.entity.SpaceUser;
 import com.ct240.backend.service.SpaceUserService;
 import jakarta.validation.Valid;
@@ -32,8 +29,8 @@ public class SpaceUserController {
     }
 
     @GetMapping("/{spaceId}/members")
-    public ApiResponse<List<UserResponse>> getAllMembersInSpace(@PathVariable String spaceId, Authentication authentication){
-        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
+    public ApiResponse<List<SpaceMemberResponse>> getAllMembersInSpace(@PathVariable String spaceId, Authentication authentication){
+        ApiResponse<List<SpaceMemberResponse>> apiResponse = new ApiResponse<>();
 
         var data = spaceUserService.getAllMembersInSpace(spaceId, authentication);
 

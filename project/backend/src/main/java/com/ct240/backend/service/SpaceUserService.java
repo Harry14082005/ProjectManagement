@@ -2,6 +2,7 @@ package com.ct240.backend.service;
 
 import com.ct240.backend.dto.request.SpaceUserRequest;
 import com.ct240.backend.dto.request.SpaceUserUpdateRequest;
+import com.ct240.backend.dto.response.SpaceMemberResponse;
 import com.ct240.backend.dto.response.SpaceUserResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.Space;
@@ -93,7 +94,7 @@ public class SpaceUserService {
         return spaceUserMapper.toSpaceUserResponse(spaceUser);
     }
 
-    public List<UserResponse> getAllMembersInSpace(String spaceId, Authentication authentication){
+    public List<SpaceMemberResponse> getAllMembersInSpace(String spaceId, Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
 
         if(!spaceRepository.existsById(spaceId)) {
@@ -109,7 +110,12 @@ public class SpaceUserService {
         var listUsers = spaceUserRepository.findUsersBySpaceId(spaceId);
 
         return listUsers.stream()
-                .map(u -> userMapper.toUserResponse(u))
+                .map(u -> {
+                    SpaceMemberResponse spaceMemberResponse = new SpaceMemberResponse();
+                    spaceMemberResponse.setUserResponse(userMapper.toUserResponse(u));
+                    spaceMemberResponse.setRole(permissionService.getRoleInSpace(u.getId(), spaceId));
+                    return spaceMemberResponse;
+                })
                 .collect(Collectors.toList());
     }
 
