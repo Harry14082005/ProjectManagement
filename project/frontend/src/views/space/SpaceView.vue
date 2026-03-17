@@ -3,9 +3,10 @@ import { ref,onMounted,watch } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import MainLayout from '@/components/layout/MainLayout.vue'
-import Card from '@/components/base/BaseCard.vue'
+import Card from '@/components/base/BaseBoard.vue'
 import Button from '@/components/base/BaseButton.vue'
 import CreateBoardModal from '@/components/layout/CreateBoardModal.vue'; 
+import router from '@/router'
 
 const route=useRoute();
 // 2. Thêm biến để điều khiển ẩn/hiện Modal
@@ -101,6 +102,11 @@ watch(
     if(newId) fetchSpaceBoard(newId)
   }
 )
+
+const goTo_BoardCardView=(boardId)=>{
+  const spaceId = route.params.id;
+  router.push(`/spaces/${spaceId}/boards/${boardId}/cards`);
+}
 </script>
 <template>
   <MainLayout>
@@ -124,7 +130,8 @@ watch(
           :key="board.id"
           :title="board.name"
           :status_text="(board.isPrivate === true || board.private === true) ? 'Private' : 'Public'"
-          :content="board.description||'Chưa có mô tả'"></Card>
+          :content="board.description||'Chưa có mô tả'"
+          @click="goTo_BoardCardView(board.id)"></Card>
           </div>
   </MainLayout>
 </template>

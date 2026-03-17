@@ -3,6 +3,7 @@ import LoginView from '../views/auth/LoginView.vue'
 import HomeView from '../components/layout/MainLayout.vue'
 import SpaceView from '../views/space/SpaceView.vue'
 import SpaceMemberView from '../views/space/SpaceMember.vue'
+import Board_CardView from '@/views/board_card/Board_CardView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -30,9 +31,13 @@ const router = createRouter({
       name: 'space-detail',
       component: SpaceView
     },
-    {path:'/space/:id/members',
+    { path:'/space/:id/members',
       name:'space-members',
       component:SpaceMemberView
+    },
+    { path:'/spaces/:idSpace/boards/:idBoard/cards',
+      name: 'board-card',
+      component: Board_CardView
     }
   ],
 })
