@@ -68,12 +68,12 @@ defineProps({
   justify-items: left;
   border-radius: 1.25rem;
   border-width: 0;
-  width: 25%;
+  width: 100%;
   height: 180px;
   border: 1px solid #bce3f5;
   background-color: white;
   color:#2f4562;
-  margin-top: 10px;
+  margin-top: 18px;
   cursor: pointer;
 }
 .Title_content{
@@ -147,6 +147,8 @@ defineProps({
 }
 .RowMember{
     display: flex;
+    margin-top: auto; 
+    padding-bottom: 15px;
 }
 .memberCount{
     margin-top: 2px;
