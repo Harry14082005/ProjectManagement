@@ -455,7 +455,8 @@ Tạo Task mới trong Card.
 ```json
 {
   "name": "string",
-  "deadLine": "2024-12-31T00:00:00Z (optional)"
+  "deadline": "2024-12-31T00:00:00Z (optional)"
+  ...
 }
 ```
 
@@ -466,7 +467,8 @@ Tạo Task mới trong Card.
   "cardId": "string",
   "name": "string",
   "isCompleted": false,
-  "deadLine": "2024-12-31T00:00:00Z",
+  "description": "string",
+  "deadline": "2024-12-31T00:00:00Z",
   "createdAt": "2024-01-01T00:00:00Z"
 }
 ```
@@ -490,7 +492,7 @@ Cập nhật Task.
 {
   "name": "string (optional)",
   "isCompleted": "boolean (optional)",
-  "deadLine": "date (optional)"
+  "deadline": "date (optional)"
 }
 ```
 
