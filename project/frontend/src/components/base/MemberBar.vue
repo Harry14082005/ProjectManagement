@@ -70,7 +70,7 @@ const roleLabel = (r) => {
   // Label tiếng Việt để hiển thị trong combobox
   if (r === 'OWNER') return 'Người tạo'
   if (r === 'ADMIN') return 'Admin'
-  return 'Member'
+  return 'Thành viên'
 }
 
 /**
@@ -250,12 +250,14 @@ onBeforeUnmount(() => {
 }
 
 .role-trigger {
+  position: relative; /* để đặt icon ▾ cố định bên phải */
   font-family: 'Quicksand', sans-serif;
   font-size: 13px;
   font-weight: 700;
 
   height: 34px;
-  padding: 0 12px 0 14px;
+  width: 120px; /* cố định chiều dài để đồng bộ giữa các dòng */
+  padding: 0 34px 0 14px; /* chừa chỗ cho icon ▾ bên phải */
   border-radius: 999px;
 
   background: #e8f4fa; /* muted */
@@ -265,7 +267,7 @@ onBeforeUnmount(() => {
   outline: none;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: flex-start;
 }
 
 .role-trigger:disabled {
@@ -279,6 +281,8 @@ onBeforeUnmount(() => {
 }
 
 .chev {
+  position: absolute;
+  right: 12px; /* cố định sát phải */
   font-size: 12px;
   color: #6b8799;
 }
