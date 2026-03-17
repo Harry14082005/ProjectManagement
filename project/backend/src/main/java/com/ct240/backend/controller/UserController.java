@@ -44,9 +44,8 @@ public class UserController {
     ApiResponse<UserResponse> updateUser(@RequestBody @Valid UserUpdateRequest request, Authentication authentication){
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
-        String username = authentication.getName();
 
-        apiResponse.setData(userService.updateUser(username, request));
+        apiResponse.setData(userService.updateUser(request, authentication));
 
         return apiResponse;
     }

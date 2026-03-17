@@ -9,6 +9,7 @@ import com.ct240.backend.entity.User;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.UserMapper;
 import com.ct240.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,10 +58,8 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    public UserResponse updateUser(String username, UserUpdateRequest request){
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+    public UserResponse updateUser(UserUpdateRequest request, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
 
         userMapper.updateUser(user, request);
 
