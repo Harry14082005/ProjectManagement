@@ -1,10 +1,9 @@
 package com.ct240.backend.service;
 
-import com.ct240.backend.controller.CommentController;
 import com.ct240.backend.dto.request.CommentCreationRequest;
 import com.ct240.backend.dto.response.CommentResponse;
-import com.ct240.backend.dto.response.TaskResponse;
 import com.ct240.backend.entity.*;
+import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.CommentMapper;
 import com.ct240.backend.repository.CommentRepository;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -5,15 +5,14 @@ import com.ct240.backend.dto.request.BoardUpdateRequest;
 import com.ct240.backend.dto.response.BoardResponse;
 import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.BoardMapper;
 import com.ct240.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
-import org.w3c.dom.stylesheets.LinkStyle;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -14,11 +14,12 @@ import javax.crypto.spec.PSource;
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
     Board toBoard(BoardCreationRequest request);
+    void updateBoard(@MappingTarget Board board, BoardUpdateRequest request);
     //spaceID : String, phai dung @Mapping de covert qua
-    @Mapping(source = "space.id", target = "spaceId")
+    @Mapping(source = "space.id", target = "spaceId") //target + ignore (khong hien thi)
     @Mapping(source = "private", target = "isPrivate")
     BoardResponse toBoardResponse (Board board);
-    void updateBoard(@MappingTarget Board board, BoardUpdateRequest request);
+
 
 
 }

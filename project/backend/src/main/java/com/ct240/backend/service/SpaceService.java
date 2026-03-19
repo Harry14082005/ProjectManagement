@@ -8,6 +8,7 @@ import com.ct240.backend.entity.SpaceUser;
 import com.ct240.backend.entity.SpaceUserId;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.SpaceMapper;
 import com.ct240.backend.repository.SpaceRepository;

@@ -1,6 +1,5 @@
-package com.ct240.backend.service;
+package com.ct240.backend.exception;
 
-import com.ct240.backend.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

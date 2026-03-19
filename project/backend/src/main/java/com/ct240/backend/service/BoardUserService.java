@@ -8,6 +8,7 @@ import com.ct240.backend.entity.BoardUser;
 import com.ct240.backend.entity.BoardUserId;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.BoardUserMapper;
 import com.ct240.backend.mapper.UserMapper;

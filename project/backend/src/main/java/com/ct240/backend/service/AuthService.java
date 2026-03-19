@@ -7,14 +7,13 @@ import com.ct240.backend.dto.response.AuthResponse;
 import com.ct240.backend.dto.response.IntrospectResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.User;
+import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.UserMapper;
 import com.ct240.backend.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jose.jca.JCAContext;
-import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.experimental.NonFinal;
@@ -24,9 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.util.Date;
-import java.util.Set;
 
 @Service
 public class AuthService {

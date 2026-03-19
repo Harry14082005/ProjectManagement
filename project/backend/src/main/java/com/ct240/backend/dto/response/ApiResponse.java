@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)//generate qua JS, truong nao null => khong hien thi
 public class ApiResponse<T> {
     private int code = 1000;
     private String message;

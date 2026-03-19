@@ -3,6 +3,7 @@ package com.ct240.backend.service;
 
 import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;

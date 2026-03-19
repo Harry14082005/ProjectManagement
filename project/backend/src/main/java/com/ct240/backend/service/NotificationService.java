@@ -4,6 +4,7 @@ import com.ct240.backend.dto.response.NotificationResponse;
 import com.ct240.backend.entity.Notification;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Type;
+import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.NotificationMapper;
 import com.ct240.backend.repository.NotificationRepository;
