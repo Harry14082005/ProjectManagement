@@ -41,11 +41,7 @@ public class BoardService {
     PermissionService permissionService;
 
     public BoardResponse createBoard(String spaceId, BoardCreationRequest request, Authentication authentication){
-
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user = permissionService.getUserAuth(authentication);
 
         Space space = spaceRepository.findById(spaceId).orElseThrow(
                 () -> new AppException(ErrorCode.SPACE_NOT_FOUND));
@@ -77,17 +73,14 @@ public class BoardService {
         return boardMapper.toBoardResponse(board);
     }
     public BoardResponse getBoard (String boardId, Authentication authentication){
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = permissionService.getUserAuth(authentication);
 
         //1.ADMIN & OWNER của SPACE coi được bất kì
         //2.MEMBER coi được cái BOARD công khai và các BOARD riêng tư nếu là thành viên
 
         boolean isPrivate = boardRepository.isPrivate(boardId);
         boolean isMember = boardUserRepository.existsByUserIdAndBoardId(user.getId(), boardId);
+        //Role roleAuthInSpace = permissionService.getRoleInSpaceByBoardId(user.getId(), boardId);
 
         if (!isMember && isPrivate){
             throw new AppException(ErrorCode.UNAUTHORIZED);
@@ -96,10 +89,10 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
         );
-        // xuly private
-        if(board.isPrivate()){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+//        // xuly private
+//        if(board.isPrivate()){
+//            throw new AppException(ErrorCode.UNAUTHORIZED);
+//        }
 
         return boardMapper.toBoardResponse(board);
         // muon dung Mapper o day phai code ben BoardMapper
@@ -140,11 +133,7 @@ public class BoardService {
     }
 
     public BoardResponse updateBoard( String boardId, BoardUpdateRequest request, Authentication authentication){
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = permissionService.getUserAuth(authentication);
         //tim board
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
@@ -167,11 +156,7 @@ public class BoardService {
     }
 
         public void deleteBoard (String boardId, Authentication authentication){
-            String username = authentication.getName();
-
-            User user = userRepository.findByUsername(username).orElseThrow(
-                    ()-> new AppException(ErrorCode.USER_NOT_FOUND)
-            );
+            User user = permissionService.getUserAuth(authentication);
 
             Board board = boardRepository.findById(boardId).orElseThrow(
                     () -> new AppException(ErrorCode.BOARD_NOT_FOUND)

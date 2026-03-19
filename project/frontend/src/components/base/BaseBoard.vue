@@ -23,7 +23,7 @@ defineProps({
   <div class="card">
     <div class="Title">
         <div class="Title_content">{{ title }}</div>
-        <div class="status">{{ status_text }}</div>
+        <div :class="['status',`status-${status_text}`]">{{ status_text }}</div>
     </div>
     <div class="content">{{ content }}</div>
     <div class="RowMember">
@@ -40,6 +40,11 @@ defineProps({
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
 .card:hover .Title .status{
+  background-color: #ffffff;
+  border: 1.5px solid #3d5875;
+}
+.card:hover .Title .status-Private{
+  color:#2f4562;
   background-color: #ffffff;
   border: 1.5px solid #3d5875;
 }
@@ -68,12 +73,12 @@ defineProps({
   justify-items: left;
   border-radius: 1.25rem;
   border-width: 0;
-  width: 25%;
+  width: 100%;
   height: 180px;
   border: 1px solid #bce3f5;
   background-color: white;
   color:#2f4562;
-  margin-top: 10px;
+  margin-top: 18px;
   cursor: pointer;
 }
 .Title_content{
@@ -111,6 +116,11 @@ defineProps({
   color:#3d5875;
   margin-top: 15px;
 }
+.status-Private{
+  border: 0px;
+  background-color: #3d5875;
+  color:#ffffff;
+}
 .Title{
     display: flex;
     justify-content: space-between;
@@ -147,6 +157,8 @@ defineProps({
 }
 .RowMember{
     display: flex;
+    margin-top: auto; 
+    padding-bottom: 15px;
 }
 .memberCount{
     margin-top: 2px;

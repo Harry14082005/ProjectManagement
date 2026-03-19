@@ -15,5 +15,6 @@ public interface SpaceUserMapper {
     @Mapping(source = "id.userId", target = "userId")
     SpaceUserResponse toSpaceUserResponse(SpaceUser spaceUser);
 
+
     void updateSpaceUser(@MappingTarget SpaceUser spaceUser, SpaceUserUpdateRequest request);
 }

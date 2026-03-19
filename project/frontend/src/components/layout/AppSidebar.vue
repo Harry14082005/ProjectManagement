@@ -1,6 +1,4 @@
 <script setup>
-import IconList from '../icons/IconList.vue'
-import IconSetting from '../icons/IconSetting.vue'
 import IconBoard from '../icons/IconBoard.vue'
 import IconHome from '../icons/IconHome.vue'
 import IconMember from '../icons/IconMember.vue'
@@ -8,6 +6,9 @@ import IconGears from '../icons/IconGears.vue'
 import { workspaceStore } from '@/stores/workspaceStore.js'
 import { deburr } from 'lodash'
 import { ref, onMounted } from 'vue' 
+import { useRouter } from 'vue-router'
+const router=useRouter();
+
 import axios from 'axios'; // ĐÃ THÊM: axios để gọi API
 
 const openSpaceId=ref(null);
@@ -43,6 +44,14 @@ const fetchWorkspaces = async () => {
 onMounted(() => {
   fetchWorkspaces();
 });
+
+const goToSpace = (id) => {
+  router.push(`/space/${id}`);
+}
+
+const gotoSpaceMember =(id)=>{
+  router.push(`/space/${id}/members`);
+}
       
 </script>
 
@@ -73,15 +82,15 @@ onMounted(() => {
           <div class="space_name">{{ space.name}}</div>
       </div>
   <div v-if="openSpaceId ===space.id" class="DetailOptionSpace">
-      <div>
+      <div @click="goToSpace(space.id)" class="Option">
         <IconBoard></IconBoard>
         <div>Bảng</div>
       </div>
-      <div>
+      <div class="Option" @click="gotoSpaceMember(space.id)">
         <IconMember></IconMember>
         <div>Thành viên</div>
       </div>
-      <div>
+      <div class="Option">
         <IconGears></IconGears>
         <div>Cài đặt</div>
       </div>
@@ -119,7 +128,6 @@ onMounted(() => {
 }
 .DetailOptionSpace div div{ 
   margin-left: 10px;
-  
 } 
 .sidebar{
     padding: 30px 10%;
@@ -139,7 +147,6 @@ div.Sidebar_items{
   flex-direction: row;
   color:#2c3e50;
   padding: 5px 15px;
-
 }
 div.Sidebar_items:hover{
   background-color:#e7e8eb;
@@ -150,8 +157,6 @@ div.Sidebar_items:hover{
   margin-left: 6%;
   font-size: 18px;
   font-weight: 400;
-  
-
 }
 .separator{
   width: 100%;
@@ -163,8 +168,14 @@ div.Sidebar_items:hover{
   flex-direction: row;
   gap:10px;
   align-items: center;
-  font-size: 15px;
+  font-size: 13px;
   margin-top: 10px;
+}
+.space:hover{
+  background-color:#e7e8eb;
+  border-radius: 1.25rem;
+  padding:5px;
+
 }
 .space_avatar{
   width: 30px;
@@ -185,5 +196,13 @@ div.Sidebar_items:hover{
 }
 .workspace-list{
   margin-left:3%;
+}
+.Option{
+  font-size: 13px;
+  padding-left: 20px;
+}
+.Option:hover{
+  background-color:#e7e8eb;
+  border-radius: 1.25rem;
 }
 </style >

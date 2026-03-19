@@ -82,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("JWT Error: " + e.getClass().getName() + ": " + e.getMessage());
 
             SecurityContextHolder.clearContext();
-            
+
             return;
         }
 

@@ -1,9 +1,8 @@
 package com.ct240.backend.dto.response;
 
+import com.ct240.backend.enums.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 @Getter
 @Setter
@@ -11,13 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TaskResponse {
-    String id;
-    String cardId;
-    String name;
-    String description;
-    boolean completed;
-    Date deadline;
-    Date createAt;
-
+public class SpaceMemberResponse {
+    UserResponse userResponse;
+    Role role;
 }

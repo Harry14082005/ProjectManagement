@@ -79,7 +79,7 @@ public class SpaceService {
         boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
 
         if (!isMember){
-            throw  new AppException(ErrorCode.UNAUTHENTICATED);
+            throw  new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         Space space = spaceRepository.findById(spaceId).orElseThrow(
@@ -112,7 +112,7 @@ public class SpaceService {
                 .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
 
         if(!isOwner){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         spaceMapper.updateSpace(space, request);
@@ -136,7 +136,7 @@ public class SpaceService {
                 .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
 
         if(!isOwner){
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
+            throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         ///thiết lập xoá cascade cho Entity Space

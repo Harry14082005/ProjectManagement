@@ -29,8 +29,8 @@ defineProps({
   justify-content: center;
   border-radius: 1.25rem;
   border-width: 0;
-  width: 200px;
-  height: 40px;
+  width: 135px;
+  height: 35px;
 }
 
 .btn-primary{
@@ -46,6 +46,12 @@ defineProps({
   border: 1px solid #bce3f5;
   background-color: white;
   color:#2f4562;
+}
+.btn-ghost:hover{
+  cursor: pointer;
+}
+.btn-ghost:active{
+  transform: scale(0.95);
 }
 .btn-delete{
   color:#7d1f3a;

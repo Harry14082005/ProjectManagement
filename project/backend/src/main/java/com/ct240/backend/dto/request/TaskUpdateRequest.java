@@ -17,7 +17,6 @@ public class TaskUpdateRequest {
     @NotBlank
     String name;
     String description;
-    @JsonProperty("isCompleted")
-    boolean isCompleted;
+    boolean completed;
     Date deadline;
 }
