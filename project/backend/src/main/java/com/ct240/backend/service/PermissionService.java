@@ -125,7 +125,7 @@ public class PermissionService {
 
     public Role getRoleInSpaceByTaskId(String userId, String taskId){
         Board board = taskRepository.findBoardByTaskId(taskId);
-        
+
         return getRoleInSpaceByBoardId(userId, board.getId());
     }
 

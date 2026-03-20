@@ -8,6 +8,7 @@ import com.ct240.backend.entity.BoardUser;
 import com.ct240.backend.entity.BoardUserId;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.enums.Type;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.BoardUserMapper;
@@ -40,6 +41,9 @@ public class BoardUserService {
     BoardUserMapper boardUserMapper;
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    NotificationService notificationService;
 
     ///         NGƯỜI CÓ QUYỀN THÊM MEMBER VÀO BOARD       ///
     /// 1. OWNER, ADMIN của SPACE                          ///
@@ -89,6 +93,13 @@ public class BoardUserService {
         boardUser.setBoard(board);
         boardUser.setOwner(false);  // - CHECK * -  KHÔNG KHÔNG ĐƯỢC THAY ĐỔI
 
+        notificationService.createNotification(
+                addedUser,
+                "Bạn được đã thêm vào bảng",
+                Type.ADDED_BOARD,
+                boardId
+        );
+
         boardUserRepository.save(boardUser);
 
         return boardUserMapper.toSpaceUserResponse(boardUser);
@@ -129,6 +140,17 @@ public class BoardUserService {
         //cái này sẽ check luôn có trong board đó hay không
         BoardUser boardUser = boardUserRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD)
+        );
+
+        User deletedUser = userRepository.findById(userId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        notificationService.createNotification(
+                deletedUser,
+                "Bạn được đã bị xoá khỏi bảng",
+                Type.ADDED_BOARD,
+                boardId
         );
 
         boardUserRepository.delete(boardUser);

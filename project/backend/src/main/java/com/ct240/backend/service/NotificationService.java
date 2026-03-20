@@ -56,6 +56,12 @@ public class NotificationService {
         sseEmitterService.sendToUser(user.getId(), notificationMapper.toResponse(notification));
     }
 
+    public void createNotificationForUsers(List<User> users, String content, Type type, String referenceId){
+        for (User user : users) {
+            createNotification(user, content, type, referenceId);
+        }
+    }
+
     public void deleteNotification(String notificationId, Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
 

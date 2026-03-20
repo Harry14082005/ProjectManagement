@@ -3,10 +3,12 @@ package com.ct240.backend.service;
 import com.ct240.backend.dto.request.CommentCreationRequest;
 import com.ct240.backend.dto.response.CommentResponse;
 import com.ct240.backend.entity.*;
+import com.ct240.backend.enums.Type;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.CommentMapper;
 import com.ct240.backend.repository.CommentRepository;
+import com.ct240.backend.repository.TaskAssignmentRepository;
 import com.ct240.backend.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,12 @@ public class CommentService {
     @Autowired
     CommentMapper commentMapper;
 
+    @Autowired
+    TaskAssignmentRepository taskAssignmentRepository;
+
+    @Autowired
+    NotificationService notificationService;
+
     public CommentResponse createComment(
             String taskId, CommentCreationRequest request, Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
@@ -40,6 +48,14 @@ public class CommentService {
         comment.setTask(task);
         comment.setUser(user);
         comment.setCreateAt(new Date());
+
+        List<User> users = taskAssignmentRepository.findAllUsersByTaskId(taskId);
+        notificationService.createNotificationForUsers(
+                users,
+                "Bạn có bình luận mới trong task được giao",
+                Type.TASK_ASSIGNMENT,
+                taskId
+        );
 
         commentRepository.save(comment);
         return commentMapper.toCommentResponse(comment);

@@ -100,12 +100,14 @@ public class TaskAssignmentService {
         taskAssignmentRepository.save(taskAssignment);
 
         /// -- thêm hiển thị thông báo -- ///
-        notificationService.createNotification(
-                addedUser,
-                "Bạn được giao task mới",
-                Type.TASK_ASSIGNMENT,
-                taskId
-                );
+        if(!addedUser.getId().equals(currentUser.getId())) { //nếu khác thì mới tạo thông báo
+            notificationService.createNotification(
+                    addedUser,
+                    "Bạn được giao task mới",
+                    Type.TASK_ASSIGNMENT,
+                    taskId
+            );
+        }
 
         return TaskAssignmentResponse.builder()
                 .taskId(taskId)

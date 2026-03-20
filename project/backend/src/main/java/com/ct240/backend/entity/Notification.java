@@ -17,6 +17,7 @@ public class Notification {
     String id;
     String content;
     boolean readStatus;
+    @Enumerated(EnumType.STRING)
     Type type;
     String referenceId;
 

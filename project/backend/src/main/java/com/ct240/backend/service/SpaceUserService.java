@@ -10,6 +10,7 @@ import com.ct240.backend.entity.SpaceUser;
 import com.ct240.backend.entity.SpaceUserId;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.enums.Type;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.SpaceUserMapper;
@@ -44,6 +45,9 @@ public class SpaceUserService {
     @Autowired
     PermissionService permissionService;
 
+    @Autowired
+    NotificationService notificationService;
+
     public SpaceUserResponse addMember(String spaceId, SpaceUserRequest request, Authentication authentication){
 //        String username = authentication.getName();
           //lấy người đang thực hiện công việc này là ai để kiểm tra quyền
@@ -55,7 +59,6 @@ public class SpaceUserService {
 
         Space space = spaceRepository.findById(spaceId).orElseThrow(
                 () -> new AppException(ErrorCode.SPACE_NOT_FOUND)
-
         );  //----> đã được kiểm tra ở bước kiểm tra role sau
 
         /// chỉ có owner với admin mới thêm được người
@@ -90,6 +93,13 @@ public class SpaceUserService {
         }
         spaceUser.setRole(request.getRole());
 
+        notificationService.createNotification(
+                addedUser,
+                "Bạn được đã thêm vào space: " + space.getName(),
+                Type.ADDED_SPACE,
+                spaceId
+        );
+
         spaceUserRepository.save(spaceUser);
 
         return spaceUserMapper.toSpaceUserResponse(spaceUser);
@@ -121,11 +131,6 @@ public class SpaceUserService {
     }
 
     public SpaceUserResponse updateRole(String spaceId, String userId, SpaceUserUpdateRequest request, Authentication authentication){
-//        String username = authentication.getName();
-//
-//        User currentUser = userRepository.findByUsername(username).orElseThrow(
-//                () -> new AppException(ErrorCode.USER_NOT_FOUND)
-//        );
         User currentUser = permissionService.getUserAuth(authentication);
 
         permissionService.requireSpaceAdmin(currentUser.getId(), spaceId);
@@ -138,7 +143,18 @@ public class SpaceUserService {
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
+        User changedRoleUser = userRepository.findById(userId).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
         spaceUserMapper.updateSpaceUser(spaceUser, request);
+
+        notificationService.createNotification(
+                changedRoleUser,
+                "Bạn được đã được đổi vai trò trong space: " + spaceUser.getSpace().getName(),
+                Type.CHANGE_ROLE_SPACE,
+                spaceId
+        );
 
         spaceUserRepository.save(spaceUser);
 
@@ -165,6 +181,13 @@ public class SpaceUserService {
 
         SpaceUser spaceUser = spaceUserRepository.findByUserIdAndSpaceId(userId, spaceId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXIST_IN_SPACE)
+        );
+
+        notificationService.createNotification(
+                deletedUser,
+                "Bạn được đã bị xoá khỏi space: " + spaceUser.getSpace().getName(),
+                Type.DELETED_SPACE,
+                spaceId
         );
 
         spaceUserRepository.delete(spaceUser);

@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,6 +46,12 @@ public class SseEmitterService {
             } catch (Exception e) {
                 emitters.remove(userId); // gửi lỗi thì xóa luôn
             }
+        }
+    }
+
+    public void senToUsers(List<String> userIds, Object data){
+        for (String userId : userIds) {
+            sendToUser(userId, data);
         }
     }
 }
