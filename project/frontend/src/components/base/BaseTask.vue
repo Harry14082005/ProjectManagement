@@ -1,11 +1,20 @@
-<script>
-
+<script setup>
+const props=defineProps({
+    task_name:{
+        type:String,
+        default:'Task Name'
+    },
+    deadline:{
+        type:String,
+        default:''
+    }
+})
 </script>
 <template>
     <div class="task">
         <input type="checkbox" id="checkbox">
-        <label for="checkbox">Task name</label>
-        <div class="deadline">25/10</div>
+        <label for="checkbox">{{ task_name }}</label>
+        <div class="deadline">{{ deadline }}</div>
     </div>
 </template>
 <style scoped>
@@ -34,6 +43,8 @@ label{
     border-radius: 1.25rem;
     height: 30px;
     padding: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
 }
 #checkbox{
     align-self: center;
