@@ -29,7 +29,8 @@ defineProps({
   justify-content: center;
   border-radius: 1.25rem;
   border-width: 0;
-  width: 135px;
+  width: fit-content;
+  padding: 0 15px;
   height: 35px;
 }
 

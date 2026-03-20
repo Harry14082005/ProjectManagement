@@ -117,6 +117,7 @@ const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
     margin-right: 5px;
     align-items: center;
     justify-items: center;
+    transition: all 0.2s ease;
   }
   .right_navbar div:active{
     transform: scale(0.95);
@@ -139,6 +140,7 @@ const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
     margin-left: auto;
     margin-right: 10px;
     background-color: #ffffff;
+    transition: all 0.2s ease;
   }
   .create:active {
   transform: scale(0.95); 

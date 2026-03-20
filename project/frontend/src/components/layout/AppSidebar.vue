@@ -147,6 +147,7 @@ div.Sidebar_items{
   flex-direction: row;
   color:#2c3e50;
   padding: 5px 15px;
+  transition: all 0.2s ease;
 }
 div.Sidebar_items:hover{
   background-color:#e7e8eb;
@@ -170,6 +171,7 @@ div.Sidebar_items:hover{
   align-items: center;
   font-size: 13px;
   margin-top: 10px;
+  transition: all 0.2s ease;
 }
 .space:hover{
   background-color:#e7e8eb;
@@ -200,6 +202,7 @@ div.Sidebar_items:hover{
 .Option{
   font-size: 13px;
   padding-left: 20px;
+  transition: all 0.2s ease;
 }
 .Option:hover{
   background-color:#e7e8eb;
