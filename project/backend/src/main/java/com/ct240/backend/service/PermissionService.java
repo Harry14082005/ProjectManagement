@@ -117,4 +117,16 @@ public class PermissionService {
             throw new AppException(ErrorCode.UNAUTHORIZED);
     }
 
+    public boolean isMemberInBoardByTaskId(String userId, String taskId){
+        Board board = taskRepository.findBoardByTaskId(taskId);
+
+        return boardUserRepository.existsByUserIdAndBoardId(userId, board.getId());
+    }
+
+    public Role getRoleInSpaceByTaskId(String userId, String taskId){
+        Board board = taskRepository.findBoardByTaskId(taskId);
+        
+        return getRoleInSpaceByBoardId(userId, board.getId());
+    }
+
 }
