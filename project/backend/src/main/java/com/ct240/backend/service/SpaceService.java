@@ -8,6 +8,7 @@ import com.ct240.backend.entity.SpaceUser;
 import com.ct240.backend.entity.SpaceUserId;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.enums.Type;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.SpaceMapper;
@@ -38,6 +39,9 @@ public class SpaceService {
 
     @Autowired
     PermissionService permissionService;
+
+    @Autowired
+    NotificationService notificationService;
 
 
 //    public SpaceResponse getAllSpaces(String userId){
@@ -138,6 +142,14 @@ public class SpaceService {
         if(!isOwner){
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
+
+        List<User> users = spaceUserRepository.findUsersBySpaceId(spaceId);
+        notificationService.createNotificationForUsers(
+                users,
+                space.getName() + " đã bị xoá",
+                Type.DELETE_SPACE,
+                spaceId
+        );
 
         ///thiết lập xoá cascade cho Entity Space
         ///             để khi xoá space tự động xoá trong bảng SpaceUser///

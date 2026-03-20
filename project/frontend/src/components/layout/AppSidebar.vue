@@ -7,6 +7,7 @@ import { workspaceStore } from '@/stores/workspaceStore.js'
 import { deburr } from 'lodash'
 import { ref, onMounted } from 'vue' 
 import { useRouter } from 'vue-router'
+import EditSpaceModal from './EditSpaceModal.vue'
 const router=useRouter();
 
 import axios from 'axios'; // ĐÃ THÊM: axios để gọi API
@@ -52,6 +53,21 @@ const goToSpace = (id) => {
 const gotoSpaceMember =(id)=>{
   router.push(`/space/${id}/members`);
 }
+
+//Modal chỉnh sửa Space
+const isEditSpaceModalOpen = ref(false)
+const editSpaceId = ref(null)
+
+// Mở popup chỉnh sửa space theo spaceId
+const openEditSpace = (spaceId) => {
+  editSpaceId.value = spaceId
+  isEditSpaceModalOpen.value = true
+}
+
+const closeEditSpaceModal = () => {
+  isEditSpaceModalOpen.value = false
+  editSpaceId.value = null
+}
       
 </script>
 
@@ -90,14 +106,21 @@ const gotoSpaceMember =(id)=>{
         <IconMember></IconMember>
         <div>Thành viên</div>
       </div>
-      <div class="Option">
+      <div class="Option" @click.stop="openEditSpace(space.id)">
         <IconGears></IconGears>
         <div>Cài đặt</div>
       </div>
     </div>
   </div>
 </div>
-  </div> 
+  </div>
+
+  <!-- Popup chỉnh sửa Space -->
+  <EditSpaceModal
+    v-if="isEditSpaceModalOpen"
+    :spaceId="editSpaceId"
+    @close-modal="closeEditSpaceModal"
+  />
 </template>
   
 
