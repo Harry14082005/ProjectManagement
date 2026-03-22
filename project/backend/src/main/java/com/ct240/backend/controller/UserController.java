@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -77,6 +78,24 @@ public class UserController {
         apiResponse.setMessage("Change Successfully");
 
         return  apiResponse;
+    }
+
+    @PostMapping("/avatar")
+    ApiResponse<UserResponse> uploadAvatar(@RequestParam("file") MultipartFile file, Authentication authentication){
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setData(userService.uploadAvatar(file, authentication));
+        apiResponse.setMessage("Changing avatar is successful");
+        return apiResponse;
+    }
+
+    @DeleteMapping("/avatar")
+    ApiResponse<UserResponse> deleteAvatar (Authentication authentication){
+        ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setData(userService.deleteAvatar(authentication));
+        apiResponse.setMessage("Delete current avatar");
+        return apiResponse;
     }
 
 

@@ -34,8 +34,13 @@ public enum ErrorCode {
 
     COMMENT_NOT_FOUND(1601, "Comment Not Found", HttpStatus.NOT_FOUND),
 
-    NOTIFICATION_NOT_FOUND(1701,  "Notification Not Found", HttpStatus.NOT_FOUND);
+    NOTIFICATION_NOT_FOUND(1701,  "Notification Not Found", HttpStatus.NOT_FOUND),
 
+    FILE_EMPTY(1801, "File must not be empty", HttpStatus.BAD_REQUEST),
+    INVALID_FILE_TYPE(1802, "Fill is invalid", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
+    FILE_TOO_LARGE(1803, "File loaded is too large", HttpStatus.PAYLOAD_TOO_LARGE),
+    UPLOAD_FAILED(1804, "The file is not uploaded", HttpStatus.INTERNAL_SERVER_ERROR),
+    CANNOT_DELETE_DEFAULT_AVATAR(1805, "Cannot delete default avatar", HttpStatus.BAD_REQUEST);
     private int code;
     private String message;
     private HttpStatusCode statusCode;

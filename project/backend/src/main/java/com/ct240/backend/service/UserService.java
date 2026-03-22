@@ -15,8 +15,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -103,5 +107,122 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+//    user upload anh → luu theo userId.png
+//    upload lan sau → ghi de (khong tao file moi)
+//    khong xoa default
+//    khong xoa nham file vua upload
+    @Transactional
+    public UserResponse uploadAvatar(MultipartFile file, Authentication authentication) {
+
+        // lay user dang dang nhap
+        User user = permissionService.getUserAuth(authentication);
+
+        // kiem tra file rong
+        if (file == null || file.isEmpty()) {
+            throw new AppException(ErrorCode.FILE_EMPTY);
+        }
+
+        // kiem tra dinh dang file
+        String contentType = file.getContentType();
+        if (contentType == null ||
+                (!contentType.equals("image/png")
+                        && !contentType.equals("image/jpeg")
+                        && !contentType.equals("image/jpg"))) {
+            throw new AppException(ErrorCode.INVALID_FILE_TYPE);
+        }
+
+        // kiem tra kich thuoc file (toi da 2MB)
+        if (file.getSize() > 2 * 1024 * 1024) {
+            throw new AppException(ErrorCode.FILE_TOO_LARGE);
+        }
+
+        try {
+            // lay ten file goc
+            String originalName = file.getOriginalFilename();
+
+            // kiem tra ten file hop le
+            if (originalName == null || !originalName.contains(".")) {
+                throw new AppException(ErrorCode.INVALID_FILE_TYPE);
+            }
+
+            // lay duoi file (.png, .jpg)
+            String extension = originalName.substring(originalName.lastIndexOf("."));
+
+            // dat ten file theo userId de tranh tao nhieu file
+            String fileName = user.getId() + extension;
+
+            // lay duong dan thu muc goc cua project
+            String baseDir = new File(System.getProperty("user.dir")).getParent();
+            String uploadDir = baseDir + "/uploads/avatars/";
+
+            // neu chua co thu muc thi tao moi
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+
+            // tao file dich de luu
+            File dest = new File(uploadDir + fileName);
+
+            // luu file vao he thong (se ghi de neu da ton tai)
+            file.transferTo(dest);
+
+            // duong dan avatar mac dinh
+            String DEFAULT_AVATAR = "/uploads/avatars/default.png";
+
+            // lay avatar hien tai cua user
+            String currentAvatar = user.getAvatarURL();
+
+            // duong dan avatar moi
+            String newAvatarUrl = "/uploads/avatars/" + fileName;
+
+            // chi xoa file cu neu:
+            // - khong phai avatar mac dinh
+            // - va khong trung voi file moi (tranh xoa nham file vua upload)
+            if (!DEFAULT_AVATAR.equals(currentAvatar)
+                    && !currentAvatar.equals(newAvatarUrl)) {
+
+                // chuyen url -> duong dan vat ly
+                String relativePath = currentAvatar.replace("/uploads/", "");
+                String oldPath = baseDir + "/uploads/" + relativePath;
+
+                File oldFile = new File(oldPath);
+
+                // neu file ton tai thi xoa
+                if (oldFile.exists()) oldFile.delete();
+            }
+
+            // cap nhat avatar moi vao database
+            user.setAvatarURL(newAvatarUrl);
+            userRepository.save(user);
+
+            // tra ve thong tin user
+            return userMapper.toUserResponse(user);
+
+        } catch (IOException e) {
+            throw new AppException(ErrorCode.UPLOAD_FAILED);
+        }
+    }
+
+    @Transactional
+    public UserResponse deleteAvatar(Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
+
+        String baseDir = new File(System.getProperty("user.dir")).getParent();
+
+        String avatarUrl = user.getAvatarURL();
+        String DEFAULT_AVATAR = "/uploads/avatars/default.png";
+
+        if (DEFAULT_AVATAR.equals(avatarUrl)){
+            throw new AppException(ErrorCode.CANNOT_DELETE_DEFAULT_AVATAR);
+        }
+
+        String oldPath = baseDir + avatarUrl;
+        File oldFile = new File(oldPath);
+
+        user.setAvatarURL(DEFAULT_AVATAR);
+        userRepository.save(user);
+        return userMapper.toUserResponse(user);
+    }
+
 
 }
