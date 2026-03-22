@@ -136,6 +136,13 @@ onUnmounted(()=>{
     }
 })
 
+const handleLogOut=()=>{
+    const isConfirm = window.confirm("Bạn có chắc chắn muốn đăng xuất không?");
+  if (isConfirm) {
+    localStorage.removeItem('token');
+    router.push('/');
+  }
+}
 </script>
 
 <template>
@@ -154,7 +161,7 @@ onUnmounted(()=>{
             <div class="name_user">{{ username }}</div>
         <div>Hồ sơ và hiển thị</div>
         <div>Trợ giúp</div>
-        <div>Đăng xuất</div>
+        <div @click="handleLogOut">Đăng xuất</div>
     </div>
     <div class="notifications" v-if="isShowNotification" ref="notificationRef">
         <div class="notifications-header">Thông báo</div>
@@ -189,12 +196,6 @@ onUnmounted(()=>{
     font-family: "Quicksand", sans-serif;
     display:flex;
     flex-direction: column;
-}
-Navbar{
-    grid-area: navbar;
-}
-Sidebar{
-    grid-area: sidebar;
 }
 .maincontent{
     
@@ -278,5 +279,8 @@ Sidebar{
     font-weight: 700;
     font-size: larger;
     margin-bottom: 10px;
+}
+.overview_profile div:hover{
+    color:#74c5e1;
 }
 </style >

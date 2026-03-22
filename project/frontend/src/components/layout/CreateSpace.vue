@@ -14,15 +14,7 @@ const closeModal = () => {
 }
 
 const handleCreateSpace = async () => {
-  if (newSpaceName.value.trim() === ''&&newSpaceDesc.value.trim()==='') {
-    alert("Vui lòng nhập tên Space và mô tả!");
-    return;
-  }
-  else if(newSpaceDesc.value.trim()===''){
-    alert("Vui lòng nhập mô tả!");
-    return;
-  }
-  else if(newSpaceName.value.trim() === ''){
+   if(newSpaceName.value.trim() === ''){
     alert("Vui lòng nhập tên Space!");
     return;
   }
@@ -70,7 +62,7 @@ const handleCreateSpace = async () => {
         />
         </div>
         <div class="modal-body">
-        <label>Mô tả <span style="color: red;">*</span></label>
+        <label>Mô tả</label>
         <input 
           v-model="newSpaceDesc" 
           type="text" 

@@ -2,58 +2,16 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-// 1. Khai báo Props (nhận dữ liệu từ cha)
-const props = defineProps({
-  boardId: {
-    type: [String, Number],
-    required: true
-  }
-})
 
-// 2. Khai báo Emits (gửi sự kiện lên cha)
 const emit = defineEmits(['close', 'created'])
 
-const newCardName = ref('')
-const isCreating = ref(false)
-
-const closeModal = () => {
-  newCardName.value = ''; // Reset input
-  emit('close'); // Báo cho cha biết để đóng modal
-}
-
-const handleCreateCard = async () => {
-  if (!newCardName.value.trim()) return;
-
-  isCreating.value = true;
-  try {
-    const token = localStorage.getItem('token');
-    const headers = { 'Authorization': `Bearer ${token}` };
-
-    // Body request (nhớ map đúng field với CardCreationRequest của backend)
-    const requestBody = {
-      name: newCardName.value 
-    };
-
-    await axios.post(`http://localhost:8080/api/boards/${props.boardId}/cards`, requestBody, { headers });
-
-    // Thành công: báo cho cha biết để tải lại danh sách, rồi đóng modal
-    emit('created');
-    closeModal();
-    
-  } catch (error) {
-    console.error("Lỗi khi tạo thẻ mới:", error);
-    alert("Có lỗi xảy ra khi tạo thẻ!");
-  } finally {
-    isCreating.value = false;
-  }
-}
 </script>
 
 <template>
   <Teleport to="body">
     <div class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
-        <h2>Tạo thẻ mới</h2>
+        <h2>Task ABC</h2>
         
         <input 
           v-model="newCardName" 
@@ -84,7 +42,7 @@ const handleCreateCard = async () => {
 }
 .modal-content {
   background: white; padding: 24px; border-radius: 1.25rem;
-  width: 400px; max-width: 90%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  width: 800px; max-width: 90%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   font-family: "Quicksand", sans-serif;
 }
 .modal-content h2 { margin-top: 0; margin-bottom: 16px; font-size: 20px; }

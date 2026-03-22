@@ -1,4 +1,5 @@
 <script setup>
+import IconEdit from '../icons/IconEdit.vue';
 const props=defineProps({
     task_name:{
         type:String,
@@ -15,9 +16,17 @@ const props=defineProps({
         <input type="checkbox" id="checkbox">
         <label for="checkbox">{{ task_name }}</label>
         <div class="deadline">{{ deadline }}</div>
+        <IconEdit class="edit_task"></IconEdit>
     </div>
 </template>
 <style scoped>
+.edit_task{
+    display: none;
+}
+.task:hover .edit_task{
+    display: block;
+    transition: all 0.2s ease;
+}
 label{
     font-size: 14px;
     color: #1a5270;
@@ -33,6 +42,7 @@ label{
     line-height: 1;
 }
 .task{
+    color: #1a5270;
     display: flex;
     align-items: center;
     justify-items: center;

@@ -1,5 +1,4 @@
 <script setup>
-import IconList from '../icons/IconList.vue';
 import IconSetting from '../icons/IconSetting.vue';
 import IconCreate from '../icons/IconCreate.vue';
 import IconUser from '../icons/IconUser.vue';
@@ -138,7 +137,7 @@ const props = defineProps({
     right: 0px;
     width: 10px;
     height: 10px;
-    background-color: #22c55e;
+    background-color: #a0d8f1;
     border-radius: 50%;
     /* Optionally you can add a small padding or border if you want, but this is simple enough */
   }

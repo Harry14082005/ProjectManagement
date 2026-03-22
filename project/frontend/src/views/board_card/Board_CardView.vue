@@ -2,11 +2,14 @@
 import { ref,onMounted,watch } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import draggable from 'vuedraggable'
+
 import MainLayout from '@/components/layout/MainLayout.vue'
 import Button from '@/components/base/BaseButton.vue'
 import Card from '@/components/base/BaseCard.vue'
 import Task from '@/components/base/BaseTask.vue'
 import ModalCreateCard from '@/components/layout/CreateCard.vue' 
+import TaskInfo from '@/components/layout/TaskInfo.vue'
 
 const route=useRoute();
 const isLoading = ref(true);
@@ -118,19 +121,40 @@ watch(
           :type="'ghost'"
           @click="isModalOpen = true">
       </Button>
-        <div class="border_card">
-          <Card v-for="card in cards" 
-                :key="card.id"
+          <draggable 
+         v-model="cards" 
+          item-key="id" 
+          class="border_card" 
+          animation="200"
+          handle=".drag-handle-card" 
+          ghost-class="ghost-card"
+        >
+      <template #item="{ element: card }">
+        <div class="drag-handle-card">
+          <Card :key="card.id"
                 :cardId="card.id"
                 :name_card="card.name"
                 @add-new-task="handleCreateTask"
           >
+            <draggable 
+            v-model="card.tasks" 
+            item-key="id"
+            group="tasks" 
+            animation="200"
+            ghost-class="ghost-task"
+            class="task-list-container" 
+          >
+            <template #item="{ element: task }">
             <Task
-            v-for="task in card.tasks" 
                :key="task.id"
-               :task_name="task.name"></Task>
+               :task_name="task.name">
+            </Task>
+            </template>
+            </draggable>
           </Card>
           </div>
+      </template>
+      </draggable>
         <ModalCreateCard 
       v-if="isModalOpen"
       :boardId="route.params.idBoard"
@@ -179,5 +203,28 @@ watch(
 
 .border_card::-webkit-scrollbar-thumb:hover {
   background-color: #8bbcd6; 
+}
+
+/* Phần css cho hiệu ứng drag */
+.task-list-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:5px;
+}
+.ghost-card {
+  opacity: 0.9;
+}
+
+.ghost-task {
+  opacity: 0.9;
+}
+
+.drag-handle-card {
+  cursor: grab;
+}
+.drag-handle-card:active {
+  cursor: grabbing;
 }
 </style>
