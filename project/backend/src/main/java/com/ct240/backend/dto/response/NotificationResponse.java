@@ -4,6 +4,8 @@ import com.ct240.backend.enums.Type;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class NotificationResponse {
     boolean readStatus;
     Type type;
     String referenceId;
+    Date createAt;
 }

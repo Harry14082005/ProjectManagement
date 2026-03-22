@@ -8,6 +8,13 @@ spring:
     url: "jdbc:mysql://localhost:3306/ct240_db"
     username: root
     password: root
+    hikari:
+      maximum-pool-size: 20          # tăng từ 10 lên 20
+      minimum-idle: 5                # giữ sẵn 5 connection
+      connection-timeout: 10000      # chờ tối đa 10s để lấy connection
+      idle-timeout: 600000           # đóng connection idle sau 10 phút
+      max-lifetime: 1800000          # connection sống tối đa 30 phút
+      leak-detection-threshold: 5000 # cảnh báo nếu giữ connection > 5s
   jpa:
     hibernate:
       ddl-auto: update

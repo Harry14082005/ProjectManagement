@@ -4,6 +4,13 @@ import IconSetting from '../icons/IconSetting.vue';
 import IconCreate from '../icons/IconCreate.vue';
 import IconUser from '../icons/IconUser.vue';
 const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
+
+const props = defineProps({
+  hasUnread: {
+    type: Boolean,
+    default: false
+  }
+});
 </script>
 
 <template>
@@ -20,7 +27,10 @@ const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
     </div>
     
     <div class="right_navbar">
-      <div @click="emit('toggle-notification')"><i id="icon1" class="fa-solid fa-bell"></i></div>
+      <div class="notification-container" @click="emit('toggle-notification')">
+        <i id="icon1" class="fa-solid fa-bell"></i>
+        <span v-if="hasUnread" class="unread-dot"></span>
+      </div>
       <div id="icon2" class="avatar" @click="emit('toggle-profile')"><IconUser></IconUser></div>
       <div id="icon3"><IconSetting/></div>
     </div>
@@ -104,6 +114,7 @@ const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
     cursor: pointer;
   }
   .right_navbar div{
+    position: relative;
     width: 35px;
     height: 35px;
     background-color: #ffffff;
@@ -118,6 +129,18 @@ const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
     align-items: center;
     justify-items: center;
     transition: all 0.2s ease;
+  }
+  
+   /*dấu chấm*/
+  .unread-dot {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    /* Optionally you can add a small padding or border if you want, but this is simple enough */
   }
   .right_navbar div:active{
     transform: scale(0.95);

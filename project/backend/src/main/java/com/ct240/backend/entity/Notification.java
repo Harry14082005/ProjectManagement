@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Date;
+
 @Entity
 @Setter
 @Getter
@@ -20,6 +22,7 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     Type type;
     String referenceId;
+    Date createAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
