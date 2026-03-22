@@ -629,6 +629,47 @@ Xem toàn bộ thông báo.
 ]
 ```
 
+## AvatarURL
+### POST `/api/users/avatar`
+Cập nhật ảnh đại diện của người dùng.
+
+**Headers**
+| Key | Value |
+|---|---|
+| `Authorization` | `Bearer <token>` |
+
+**Body (form-data)**
+| Key | Type | Value | Description |
+|---|---|---|---|
+| 'file' | 'File' | 'avt.png' | 'File ảnh avatar (.png, .jpg, . jpeg)' |
+
+
+```json
+{
+    "code": 1000,
+    "message": "Changing avatar is successful",
+    "data": {
+        "avatarURL": "/uploads/avatars/7567b0f9-7251-4e4e-be1b-6f0908b0f00b.png",
+        "id": "7567b0f9-7251-4e4e-be1b-6f0908b0f00b",
+        "name": "KietTruong",
+        "username": "Kieta4"
+    }
+}
+```
+### DELETE `/api/users/avatar`
+
+```json
+{
+    "code": 1000,
+    "message": "Delete current avatar",
+    "data": {
+        "avatarURL": null,
+        "id": "7567b0f9-7251-4e4e-be1b-6f0908b0f00b",
+        "name": "KietTruong",
+        "username": "Kieta4"
+    }
+}
+```
 
 ## Type 
 
