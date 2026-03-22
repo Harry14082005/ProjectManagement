@@ -175,8 +175,6 @@ public class UserService {
             // duong dan avatar moi
             String newAvatarUrl = "/uploads/avatars/" + fileName;
 
-
-
             // chi xoa file cu neu:
             // - khong phai avatar mac dinh
             // - va khong trung voi file moi (tranh xoa nham file vua upload)
