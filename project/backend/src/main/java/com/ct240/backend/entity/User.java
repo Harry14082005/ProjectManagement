@@ -21,7 +21,7 @@ public class User {
     String password;
     String name;
     @Column(name = "avatar_url")
-    String avatarURL = "/uploads/avatars/default.png";
+    String avatarURL ;
 
 
     @OneToMany(mappedBy = "user")

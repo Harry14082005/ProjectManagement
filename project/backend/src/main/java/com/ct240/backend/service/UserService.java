@@ -167,7 +167,7 @@ public class UserService {
             file.transferTo(dest);
 
             // duong dan avatar mac dinh
-            String DEFAULT_AVATAR = "/uploads/avatars/default.png";
+//            String DEFAULT_AVATAR = "/uploads/avatars/default.png";
 
             // lay avatar hien tai cua user
             String currentAvatar = user.getAvatarURL();
@@ -175,11 +175,12 @@ public class UserService {
             // duong dan avatar moi
             String newAvatarUrl = "/uploads/avatars/" + fileName;
 
+
+
             // chi xoa file cu neu:
             // - khong phai avatar mac dinh
             // - va khong trung voi file moi (tranh xoa nham file vua upload)
-            if (!DEFAULT_AVATAR.equals(currentAvatar)
-                    && !currentAvatar.equals(newAvatarUrl)) {
+            if(currentAvatar != null && !currentAvatar.equals(newAvatarUrl)) {
 
                 // chuyen url -> duong dan vat ly
                 String relativePath = currentAvatar.replace("/uploads/", "");
@@ -210,11 +211,11 @@ public class UserService {
         String baseDir = new File(System.getProperty("user.dir")).getParent();
 
         String avatarUrl = user.getAvatarURL();
-        String DEFAULT_AVATAR = "/uploads/avatars/default.png";
+        String DEFAULT_AVATAR = null;
 
-        if (DEFAULT_AVATAR.equals(avatarUrl)){
-            throw new AppException(ErrorCode.CANNOT_DELETE_DEFAULT_AVATAR);
-        }
+//        if (DEFAULT_AVATAR.equals(avatarUrl)){
+//            throw new AppException(ErrorCode.CANNOT_DELETE_DEFAULT_AVATAR);
+//        }
 
         String oldPath = baseDir + avatarUrl;
         File oldFile = new File(oldPath);
