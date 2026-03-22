@@ -12,6 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class SseEmitterService {
+    //trạm phát sóng ->
+    // người dùng phải đăng ký tham gia vô trạm này
 
     // Lưu emitter của từng user theo userId
     private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
@@ -48,10 +50,9 @@ public class SseEmitterService {
             }
         }
     }
-
-    public void senToUsers(List<String> userIds, Object data){
-        for (String userId : userIds) {
-            sendToUser(userId, data);
-        }
-    }
+//    public void sendToUsers(List<String> userIds, Object data){
+//        for (String userId : userIds) {
+//            sendToUser(userId, data);
+//        }
+//    }
 }
