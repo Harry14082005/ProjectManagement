@@ -29,19 +29,65 @@ const fetchBoardCard = async (SpaceId, BoardId) => {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
 
+    // 1. Lấy thông tin Board
     const BoardRes = await axios.get(`http://localhost:8080/api/boards/${BoardId}`, { headers });
     boardData.value = BoardRes.data.data || BoardRes.data;
 
+    // 2. Lấy danh sách Cards
     const CardRes = await axios.get(`http://localhost:8080/api/boards/${BoardId}/cards`, { headers });
-    cards.value = CardRes.data.data || CardRes.data;
-    
+    let tempCards = CardRes.data.data || CardRes.data;
+
+    // 3. CHIÊU ĐỘC: Lặp qua từng Card để lấy Task tương ứng
+    // Dùng Promise.all để lấy tất cả Task của các Card cùng lúc cho nhanh
+    const cardsWithTasks = await Promise.all(tempCards.map(async (card) => {
+      try {
+        // Gọi API lấy task của từng card (Giả sử bạn có endpoint này)
+        const taskRes = await axios.get(`http://localhost:8080/api/cards/${card.id}/tasks`, { headers });
+        
+        // Trả về card có kèm thêm mảng tasks vừa lấy được
+        return {
+          ...card,
+          tasks: taskRes.data.data || taskRes.data // Nhét task vào đây
+        };
+      } catch (err) {
+        console.error(`Không lấy được task cho card ${card.id}`, err);
+        return { ...card, tasks: [] }; // Lỗi thì cho mảng rỗng
+      }
+    }));
+
+    // 4. Cập nhật lại biến cards xịn sò đã có đủ Task
+    cards.value = cardsWithTasks;
+
   } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu thẻ:", error);
+    console.error("Lỗi tổng thể:", error);
     cards.value = [];
   } finally {
     isLoading.value = false;
   }
 }
+
+const handleCreateTask = async (cardId, taskName) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = { 'Authorization': `Bearer ${token}` };
+
+    const payload = {
+      name: taskName,
+      is_completed: false 
+    };
+
+    await axios.post(`http://localhost:8080/api/cards/${cardId}/tasks`, payload, { headers });
+
+    console.log(`Đã thêm thành công thẻ: ${taskName} vào danh sách ${cardId}`);
+
+    const spaceId = route.params.idSpace;
+    const boardId = route.params.idBoard;
+    fetchBoardCard(spaceId, boardId);
+
+  } catch (error) {
+    console.error("Lỗi khi gọi API thêm thẻ:", error);
+  }
+};
 
 onMounted(() => {
   const spaceId = route.params.idSpace; 
@@ -75,9 +121,14 @@ watch(
         <div class="border_card">
           <Card v-for="card in cards" 
                 :key="card.id"
+                :cardId="card.id"
                 :name_card="card.name"
+                @add-new-task="handleCreateTask"
           >
-            <Task></Task>
+            <Task
+            v-for="task in card.tasks" 
+               :key="task.id"
+               :task_name="task.name"></Task>
           </Card>
           </div>
         <ModalCreateCard 
@@ -102,6 +153,7 @@ watch(
   gap:30px;
   background-color: #ffffff;
   padding:25px 25px;
+  cursor: pointer;
 }
 .NameSpace div{
   font-family:"Quicksand", sans-serif; 
@@ -109,29 +161,22 @@ watch(
   font-weight:600;
   margin-bottom: 5px;
 }
-/* Tùy chỉnh thanh cuộn (Scrollbar) cho khung danh sách */
 
-/* 1. Kích thước tổng thể của thanh cuộn ngang */
 .border_card::-webkit-scrollbar {
   height: 14px; 
 }
 
-/* 2. Phần rãnh trượt (Track) */
 .border_card::-webkit-scrollbar-track {
-  background: transparent; /* Để trong suốt cho đẹp */
-  /* Margin giúp rãnh trượt thụt vào ở 2 đầu, không đè lên góc bo tròn của viền */
+  background: transparent; 
   margin: 0 20px; 
 }
 
-/* 3. Cục lăn (Thumb) */
 .border_card::-webkit-scrollbar-thumb {
-  background-color: #bce3f5; /* Màu đồng điệu với viền của bạn */
-  border-radius: 20px; /* Bo tròn cục lăn */
-  /* Dùng viền trắng xung quanh cục lăn để tạo cảm giác nó đang "lơ lửng" cách xa mép dưới */
+  background-color: #bce3f5; 
+  border-radius: 20px; 
   border: 4px solid #ffffff; 
 }
 
-/* 4. Hiệu ứng khi di chuột vào cục lăn */
 .border_card::-webkit-scrollbar-thumb:hover {
   background-color: #8bbcd6; 
 }

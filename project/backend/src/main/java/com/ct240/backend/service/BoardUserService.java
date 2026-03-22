@@ -96,7 +96,7 @@ public class BoardUserService {
         notificationService.createNotification(
                 addedUser,
                 "Bạn được đã thêm vào bảng",
-                Type.ADDED_BOARD,
+                Type.ADD_USER_IN_BOARD,
                 boardId
         );
 
@@ -149,7 +149,7 @@ public class BoardUserService {
         notificationService.createNotification(
                 deletedUser,
                 "Bạn được đã bị xoá khỏi bảng",
-                Type.ADDED_BOARD,
+                Type.ADD_USER_IN_BOARD,
                 boardId
         );
 

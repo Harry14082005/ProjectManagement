@@ -4,7 +4,6 @@ import com.ct240.backend.dto.request.SpaceUserRequest;
 import com.ct240.backend.dto.request.SpaceUserUpdateRequest;
 import com.ct240.backend.dto.response.SpaceMemberResponse;
 import com.ct240.backend.dto.response.SpaceUserResponse;
-import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.Space;
 import com.ct240.backend.entity.SpaceUser;
 import com.ct240.backend.entity.SpaceUserId;
@@ -96,7 +95,7 @@ public class SpaceUserService {
         notificationService.createNotification(
                 addedUser,
                 "Bạn được đã thêm vào space: " + space.getName(),
-                Type.ADDED_SPACE,
+                Type.ADD_USER_IN_SPACE,
                 spaceId
         );
 
@@ -186,7 +185,7 @@ public class SpaceUserService {
         notificationService.createNotification(
                 deletedUser,
                 "Bạn được đã bị xoá khỏi space: " + spaceUser.getSpace().getName(),
-                Type.DELETED_SPACE,
+                Type.DELETE_USER_FROM_SPACE,
                 spaceId
         );
 

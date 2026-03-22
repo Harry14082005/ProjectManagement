@@ -5,6 +5,7 @@ import com.ct240.backend.dto.request.BoardUpdateRequest;
 import com.ct240.backend.dto.response.BoardResponse;
 import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
+import com.ct240.backend.enums.Type;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.BoardMapper;
@@ -39,6 +40,9 @@ public class BoardService {
 
     @Autowired
     PermissionService permissionService;
+
+    @Autowired
+    NotificationService notificationService;
 
     public BoardResponse createBoard(String spaceId, BoardCreationRequest request, Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
@@ -165,6 +169,15 @@ public class BoardService {
             if (!isOwner){
                 throw new AppException(ErrorCode.UNAUTHORIZED);
             }
+
+            List<User> users = boardUserRepository.findUsersByBoardId(boardId);
+            notificationService.createNotificationForUsers(
+                    users,
+                    board.getName() + "đã bị xoá",
+                    Type.DELETE_SPACE,
+                    boardId
+            );
+
             boardRepository.delete(board);
         }
 

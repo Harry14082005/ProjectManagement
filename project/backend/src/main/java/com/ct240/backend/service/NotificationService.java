@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,7 @@ public class NotificationService {
         notification.setReadStatus(false);
         notification.setType(type);
         notification.setReferenceId(referenceId);
+        notification.setCreateAt(new Date());
 
         notificationRepository.save(notification);
 
@@ -69,10 +71,25 @@ public class NotificationService {
                 () -> new AppException(ErrorCode.NOTIFICATION_NOT_FOUND)
         );
 
-        if(!notificationRepository.existsByIdAndUserId(user.getId(), notificationId)){
+        if(!notificationRepository.existsByIdAndUserId(notificationId, user.getId())){
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
         notificationRepository.delete(notification);
+    }
+
+    public void updateStatusRead(String notificationId, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
+
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(
+                () -> new AppException(ErrorCode.NOTIFICATION_NOT_FOUND)
+        );
+
+        if(!notificationRepository.existsByIdAndUserId(notificationId, user.getId())){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
+        notificationMapper.updateNotification(notification, true);
+        notificationRepository.save(notification);
     }
 }

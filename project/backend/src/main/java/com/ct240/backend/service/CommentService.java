@@ -53,7 +53,7 @@ public class CommentService {
         notificationService.createNotificationForUsers(
                 users,
                 "Bạn có bình luận mới trong task được giao",
-                Type.TASK_ASSIGNMENT,
+                Type.COMMENT,
                 taskId
         );
 

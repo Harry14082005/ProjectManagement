@@ -80,6 +80,7 @@ defineProps({
   color:#2f4562;
   margin-top: 18px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 .Title_content{
     display: flex;

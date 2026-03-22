@@ -21,7 +21,9 @@ public class Space {
     String description;
     Date createAt;
 
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "space",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     List<Board> boards;
 
     @OneToMany(mappedBy = "space",

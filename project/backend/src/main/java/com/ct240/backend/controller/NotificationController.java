@@ -40,7 +40,7 @@ public class NotificationController {
         return apiResponse;
     }
 
-    @DeleteMapping("/notifications/{notificationId}")
+    @DeleteMapping("/{notificationId}")
     public ApiResponse<Void> deleteNotification(@PathVariable String notificationId, Authentication authentication){
         ApiResponse<Void> apiResponse = new ApiResponse<>();
 
@@ -51,8 +51,20 @@ public class NotificationController {
         return apiResponse;
     }
 
+    //thay đổi trạng thái thành đã đọc
+    @PutMapping("/{notificationId}")
+    public ApiResponse<Void> updateStatusRead(@PathVariable String notificationId, Authentication authentication){
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+
+        notificationService.updateStatusRead(notificationId, authentication);
+
+        apiResponse.setMessage("Marked As Read");
+
+        return apiResponse;
+    }
+
     /// --- NOTE --- ///
-    /// Có thể bổ sung xử lý người dùng xoá thông báo (tại quá nhiều)
-    /// Xử lý đã đọc readStatus = true --> hoặc có thể bỏ này luôn
+    /// Có thể bổ sung xử lý người dùng xoá thông báo (tại quá nhiều) --> OK
+    /// Xử lý đã đọc readStatus = true --> hoặc có thể bỏ này luôn --> OK
 
 }
