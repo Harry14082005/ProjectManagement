@@ -2,7 +2,6 @@ package com.ct240.backend.enums;
 
 public enum Type {
     TASK_ASSIGNMENT,
-    DEADLINE,
     COMMENT,
     ADD_USER_IN_SPACE,
     DELETE_USER_FROM_SPACE,

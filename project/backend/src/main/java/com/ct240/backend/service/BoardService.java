@@ -174,7 +174,7 @@ public class BoardService {
             notificationService.createNotificationForUsers(
                     users,
                     board.getName() + "đã bị xoá",
-                    Type.DELETE_SPACE,
+                    Type.DELETE_BOARD,
                     boardId
             );
 
