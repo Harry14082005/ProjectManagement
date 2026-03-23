@@ -62,7 +62,7 @@ public class CardService {
 
 
         Integer maxPosition = cardRepository.findMaxPositionByBoardId(boardId);
-        int newPosition = (maxPosition == null) ? 0 : maxPosition + 1;
+        int newPosition = (maxPosition == null) ? 0 : maxPosition + 1000; //số lowns có gì chen giữa
 
         Card card = cardMapper.toCard(request);
         card.setBoard(board);

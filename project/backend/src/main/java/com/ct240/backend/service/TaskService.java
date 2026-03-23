@@ -58,7 +58,7 @@ public class TaskService {
 
         //lấy position có vị cao nhất
         Integer maxPosition = taskRepository.findMaxPositionByCardId(cardId);
-        int newPosition = (maxPosition == null) ? 0 : maxPosition + 1; //lỡ mới tạo là chưa có maxPosition
+        int newPosition = (maxPosition == null) ? 0 : maxPosition + 1000; //lỡ mới tạo là chưa có maxPosition
         //Tao task
         Task task = taskMapper.toTask(request);
         task.setCreateAt(new Date());
