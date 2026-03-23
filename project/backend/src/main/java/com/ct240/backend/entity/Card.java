@@ -19,6 +19,7 @@ public class Card {
     String id;
     String name;
     Date createAt;
+    int position;
 
     @ManyToOne
     @JoinColumn(name = "board_id")

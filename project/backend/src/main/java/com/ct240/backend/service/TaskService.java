@@ -1,22 +1,23 @@
 package com.ct240.backend.service;
 
+import com.ct240.backend.dto.request.MoveTaskRequest;
 import com.ct240.backend.dto.request.TaskCreationRequest;
 import com.ct240.backend.dto.request.TaskUpdateRequest;
+import com.ct240.backend.dto.response.CardResponse;
 import com.ct240.backend.dto.response.TaskResponse;
+import com.ct240.backend.entity.Board;
 import com.ct240.backend.entity.Card;
 import com.ct240.backend.entity.Task;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.TaskMapper;
-import com.ct240.backend.repository.CardRepository;
-import com.ct240.backend.repository.SpaceUserRepository;
-import com.ct240.backend.repository.TaskRepository;
-import com.ct240.backend.repository.UserRepository;
+import com.ct240.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class TaskService {
     TaskRepository taskRepository;
 
     @Autowired
-    UserRepository userRepository;
+    BoardRepository boardRepository;
 
     @Autowired
     CardRepository cardRepository;
@@ -55,9 +56,13 @@ public class TaskService {
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
 
+        //lấy position có vị cao nhất
+        Integer maxPosition = taskRepository.findMaxPositionByCardId(cardId);
+        int newPosition = (maxPosition == null) ? 0 : maxPosition + 1; //lỡ mới tạo là chưa có maxPosition
         //Tao task
         Task task = taskMapper.toTask(request);
         task.setCreateAt(new Date());
+        task.setPosition(newPosition);
         task.setCard(card);
 
         taskRepository.save(task);
@@ -83,6 +88,7 @@ public class TaskService {
 
         return taskList.stream()
                 .map(task -> taskMapper.toTaskResponse(task))
+                .sorted(Comparator.comparing(TaskResponse::getPosition))
                 .collect(Collectors.toList());
     }
 
@@ -103,6 +109,35 @@ public class TaskService {
         taskMapper.updateTask(task, request);
         taskRepository.save(task);
         return taskMapper.toTaskResponse(task);
+    }
+
+    public TaskResponse moveTask(String taskId, MoveTaskRequest request, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
+
+        Task task = taskRepository.findById(taskId).orElseThrow(
+                () -> new AppException(ErrorCode.TASK_NOT_FOUND)
+        );
+
+        Card card = cardRepository.findById(task.getCard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.CARD_NOT_FOUND)
+        );
+
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
+
+        Card moveToCard = cardRepository.findById(request.getCardId()).orElseThrow(
+                () -> new AppException(ErrorCode.CARD_NOT_FOUND)
+        );
+        taskMapper.updateTask(task, request);
+        task.setCard(moveToCard);
+
+        taskRepository.save(task);
+        return taskMapper.toTaskResponse(task);
+
     }
 
     public void deleteTask(String taskId, Authentication authentication){

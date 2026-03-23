@@ -18,6 +18,7 @@ public class TaskResponse {
     String description;
     boolean completed;
     Date deadline;
+    int position;
     Date createAt;
 
 }

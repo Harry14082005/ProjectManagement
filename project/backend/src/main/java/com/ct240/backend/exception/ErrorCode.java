@@ -27,10 +27,11 @@ public enum ErrorCode {
     OWNER_CANNOT_LEAVE_BOARD(1304, "Owner Cannot Leave The Board", HttpStatus.FORBIDDEN),
 
     CARD_NOT_FOUND(1401, "Card Not Found", HttpStatus.NOT_FOUND),
-
+    CARD_POSITION_CONFLICT(1405, "Position Card Conflict Detected", HttpStatus.BAD_REQUEST),
 
     TASK_NOT_FOUND(1501, "Task Not Found", HttpStatus.NOT_FOUND),
     USER_NOT_ASSIGNED_TO_TASK(1503, "User Not Assigned To The Task", HttpStatus.NOT_FOUND),
+    TASK_POSITION_CONFLICT(1405, "Position Task Conflict Detected", HttpStatus.BAD_REQUEST),
 
     COMMENT_NOT_FOUND(1601, "Comment Not Found", HttpStatus.NOT_FOUND),
 
@@ -41,6 +42,7 @@ public enum ErrorCode {
     FILE_TOO_LARGE(1803, "File loaded is too large", HttpStatus.PAYLOAD_TOO_LARGE),
     UPLOAD_FAILED(1804, "The file is not uploaded", HttpStatus.INTERNAL_SERVER_ERROR),
     CANNOT_DELETE_DEFAULT_AVATAR(1805, "Cannot delete default avatar", HttpStatus.BAD_REQUEST);
+
     private int code;
     private String message;
     private HttpStatusCode statusCode;

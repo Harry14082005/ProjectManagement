@@ -1,5 +1,6 @@
 package com.ct240.backend.mapper;
 
+import com.ct240.backend.dto.request.MoveTaskRequest;
 import com.ct240.backend.dto.request.TaskCreationRequest;
 import com.ct240.backend.dto.request.TaskUpdateRequest;
 import com.ct240.backend.dto.response.TaskResponse;
@@ -14,4 +15,7 @@ public interface TaskMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateTask (@MappingTarget Task task, TaskUpdateRequest request);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateTask (@MappingTarget Task task, MoveTaskRequest request);
 }

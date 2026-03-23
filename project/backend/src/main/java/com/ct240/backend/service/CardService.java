@@ -2,6 +2,7 @@ package com.ct240.backend.service;
 
 import com.ct240.backend.dto.request.CardCreationRequest;
 import com.ct240.backend.dto.request.CardUpdateRequest;
+import com.ct240.backend.dto.request.MoveCardRequest;
 import com.ct240.backend.dto.response.CardResponse;
 import com.ct240.backend.entity.Board;
 import com.ct240.backend.entity.Card;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +40,8 @@ public class CardService {
     @Autowired
     CardMapper cardMapper;
 
+    @Autowired PermissionService permissionService;
+
     public CardResponse createCard(String boardId, CardCreationRequest request, Authentication authentication){
         String username = authentication.getName();
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -55,8 +59,14 @@ public class CardService {
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
         //tao card
+
+
+        Integer maxPosition = cardRepository.findMaxPositionByBoardId(boardId);
+        int newPosition = (maxPosition == null) ? 0 : maxPosition + 1;
+
         Card card = cardMapper.toCard(request);
         card.setBoard(board);
+        card.setPosition(newPosition);
         card.setCreateAt(new Date());
 
         cardRepository.save(card);
@@ -86,6 +96,7 @@ public class CardService {
 
         return cardList.stream()
                 .map(card -> cardMapper.toCardResponse(card))
+                .sorted(Comparator.comparing(CardResponse::getPosition))
                 .collect(Collectors.toList());
     }
 
@@ -110,6 +121,26 @@ public class CardService {
         cardRepository.save(card);
         return cardMapper.toCardResponse(card);
     }
+
+    public CardResponse moveCard(String cardId, MoveCardRequest request, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
+
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new AppException(ErrorCode.CARD_NOT_FOUND)
+        );
+
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
+        //có quyền thao tác dưới board hay không
+        permissionService.requireInBoard(user.getId(), board.getId());
+
+        cardMapper.updateCard(card, request);
+        cardRepository.save(card);
+        return cardMapper.toCardResponse(card);
+    }
+
     public void deleteCard (String cardId, Authentication authentication){
         String username = authentication.getName();
 

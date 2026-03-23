@@ -19,4 +19,7 @@ public interface TaskRepository extends JpaRepository<Task, String> {
             "WHERE t.id = :taskId")
     Board findBoardByTaskId(@Param("taskId") String  taskId);
 
+    @Query("SELECT MAX(t.position) FROM Task t WHERE t.card.id = :cardId")
+    Integer findMaxPositionByCardId(@Param("cardId") String cardId);
+
 }

@@ -22,6 +22,7 @@ public class Task {
     boolean completed;
     Date deadline;
     Date createAt;
+    int position;
 
     @ManyToOne
     @JoinColumn(name = "cardId")

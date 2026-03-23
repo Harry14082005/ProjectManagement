@@ -2,6 +2,7 @@ package com.ct240.backend.controller;
 
 import com.ct240.backend.dto.request.CardCreationRequest;
 import com.ct240.backend.dto.request.CardUpdateRequest;
+import com.ct240.backend.dto.request.MoveCardRequest;
 import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.CardResponse;
 import com.ct240.backend.service.CardService;
@@ -49,6 +50,18 @@ public class CardController {
         return apiResponse;
     }
 
+    @PutMapping("/cards/{cardId}/move")
+    public ApiResponse<CardResponse> moveCard(
+            @PathVariable String cardId,
+            @RequestBody @Valid MoveCardRequest request,
+            Authentication authentication){
+        ApiResponse<CardResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setData(cardService.moveCard(cardId, request, authentication));
+
+        return apiResponse;
+    }
+
     @DeleteMapping ("/cards/{cardId}")
     public ApiResponse<Void> deleteCard(@PathVariable String cardId, Authentication authentication){
         ApiResponse<Void> apiResponse = new ApiResponse<>();
@@ -58,5 +71,7 @@ public class CardController {
 
         return apiResponse;
     }
+
+
 
 }

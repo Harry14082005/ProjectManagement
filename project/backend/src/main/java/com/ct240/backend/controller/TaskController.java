@@ -1,8 +1,11 @@
 package com.ct240.backend.controller;
 
+import com.ct240.backend.dto.request.MoveCardRequest;
+import com.ct240.backend.dto.request.MoveTaskRequest;
 import com.ct240.backend.dto.request.TaskCreationRequest;
 import com.ct240.backend.dto.request.TaskUpdateRequest;
 import com.ct240.backend.dto.response.ApiResponse;
+import com.ct240.backend.dto.response.CardResponse;
 import com.ct240.backend.dto.response.TaskResponse;
 import com.ct240.backend.entity.Task;
 import com.ct240.backend.service.TaskService;
@@ -48,6 +51,18 @@ public class TaskController {
             Authentication authentication){
         ApiResponse<TaskResponse> apiResponse = new ApiResponse<>();
         apiResponse.setData(taskService.updateTask(taskId, request, authentication));
+
+        return apiResponse;
+    }
+
+    @PutMapping("/tasks/{taskId}/move")
+    public ApiResponse<TaskResponse> moveCard(
+            @PathVariable String taskId,
+            @RequestBody @Valid MoveTaskRequest request,
+            Authentication authentication){
+        ApiResponse<TaskResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setData(taskService.moveTask(taskId, request, authentication));
 
         return apiResponse;
     }

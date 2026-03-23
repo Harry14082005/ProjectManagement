@@ -1,9 +1,7 @@
-package com.ct240.backend.dto.response;
+package com.ct240.backend.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 @Getter
 @Setter
@@ -11,10 +9,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CardResponse {
-    String id;
-    String boardId;
-    String name;
+public class MoveCardRequest {
     int position;
-    Date createAt;
 }
