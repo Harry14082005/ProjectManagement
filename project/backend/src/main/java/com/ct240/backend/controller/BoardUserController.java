@@ -2,6 +2,7 @@ package com.ct240.backend.controller;
 
 import com.ct240.backend.dto.request.BoardUserRequest;
 import com.ct240.backend.dto.response.ApiResponse;
+import com.ct240.backend.dto.response.BoardMemberResponse;
 import com.ct240.backend.dto.response.BoardUserResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.service.BoardUserService;
@@ -29,8 +30,8 @@ public class BoardUserController {
     }
 
     @GetMapping("/boards/{boardId}/members")
-    ApiResponse<List<UserResponse>> getAllUsersInBoard(@PathVariable String boardId, Authentication authentication){
-        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
+    ApiResponse<List<BoardMemberResponse>> getAllUsersInBoard(@PathVariable String boardId, Authentication authentication){
+        ApiResponse<List<BoardMemberResponse>> apiResponse = new ApiResponse<>();
 
         var data = boardUserService.getAllUsersInBoard(boardId, authentication);
 

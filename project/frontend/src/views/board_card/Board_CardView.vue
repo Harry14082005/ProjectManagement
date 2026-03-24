@@ -10,8 +10,10 @@ import Card from '@/components/base/BaseCard.vue'
 import Task from '@/components/base/BaseTask.vue'
 import ModalCreateCard from '@/components/layout/CreateCard.vue' 
 import TaskInfo from '@/components/layout/TaskInfo.vue'
+import EditBoardModal from '@/components/layout/EditBoardModal.vue'
 
 const isDetailTaskOpen=ref(false);
+const isEditBoardModalOpen = ref(false);
 const selectedTask=ref(null);
 const OpenDetailTask=(task)=>{
   selectedTask.value=task;
@@ -292,14 +294,23 @@ watch(
 </script>
 <template>
   <MainLayout>
-    <div class="NameSpace">
-        <div>{{ boardData?.name || 'Đang tải...' }}</div>
+    <div class="board-header">
+      <div class="NameSpace">
+          <div>{{ boardData?.name || 'Đang tải...' }}</div>
+      </div>
+      <div class="header-actions">
+        <Button 
+            :text="'Cài đặt'"
+            :type="'ghost'"
+            @click="isEditBoardModalOpen = true">
+        </Button>
+      </div>
     </div>
-      <Button 
-          :text="'+ Thêm thẻ mới'"
-          :type="'ghost'"
-          @click="isModalOpen = true">
-      </Button>
+    <Button 
+        :text="'+ Thêm thẻ mới'"
+        :type="'ghost'"
+        @click="isModalOpen = true">
+    </Button>
           <draggable 
           v-model="cards" 
           item-key="id" 
@@ -357,6 +368,12 @@ watch(
       @update-task="refreshListAfterCreate"
       @close="isDetailTaskOpen=false">
     </TaskInfo>
+    <EditBoardModal
+      v-if="isEditBoardModalOpen"
+      :boardId="route.params.idBoard"
+      @close-modal="isEditBoardModalOpen = false"
+      @board-updated="refreshListAfterCreate"
+    />
   </MainLayout>
 </template>
 <style scoped> 
@@ -380,6 +397,20 @@ watch(
   font-size: 25px;
   font-weight:600;
   margin-bottom: 5px;
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-right: 50px;
 }
 
 .border_card::-webkit-scrollbar {

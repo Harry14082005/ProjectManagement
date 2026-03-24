@@ -94,7 +94,7 @@ public class SpaceUserService {
 
         notificationService.createNotification(
                 addedUser,
-                "Bạn được đã thêm vào space: " + space.getName(),
+                "Bạn được đã thêm vào space " + space.getName(),
                 Type.ADD_USER_IN_SPACE,
                 spaceId
         );
@@ -150,7 +150,7 @@ public class SpaceUserService {
 
         notificationService.createNotification(
                 changedRoleUser,
-                "Bạn được đã được đổi vai trò trong space: " + spaceUser.getSpace().getName(),
+                "Bạn được đã được đổi vai trò trong space " + spaceUser.getSpace().getName() + "thành " + request.getRole(),
                 Type.CHANGE_ROLE_SPACE,
                 spaceId
         );
@@ -184,7 +184,7 @@ public class SpaceUserService {
 
         notificationService.createNotification(
                 deletedUser,
-                "Bạn được đã bị xoá khỏi space: " + spaceUser.getSpace().getName(),
+                "Bạn được đã bị xoá khỏi space " + spaceUser.getSpace().getName(),
                 Type.DELETE_USER_FROM_SPACE,
                 spaceId
         );

@@ -50,12 +50,12 @@ public class TaskService {
                 () -> new AppException(ErrorCode.CARD_NOT_FOUND)
         );
 
-        String spaceId = card.getBoard().getSpace().getId();
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
 
-        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
-        if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
 
         //lấy position có vị cao nhất
         Integer maxPosition = taskRepository.findMaxPositionByCardId(cardId);
@@ -79,12 +79,19 @@ public class TaskService {
                 () -> new AppException(ErrorCode.CARD_NOT_FOUND)
         );
 
-        String spaceId = card.getBoard().getSpace().getId();
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
 
-        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
-        if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+
+//        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
+//        if (!isMember){
+//            throw new AppException(ErrorCode.UNAUTHORIZED);
+//        }
+
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
+
         var taskList = taskRepository.findByCardId(cardId);
 
         return taskList.stream()
@@ -100,12 +107,23 @@ public class TaskService {
                 () -> new AppException(ErrorCode.TASK_NOT_FOUND)
         );
 
+        Card card = cardRepository.findById(task.getCard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.CARD_NOT_FOUND)
+        );
+
         String spaceId = task.getCard().getBoard().getSpace().getId();
 
-        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
-        if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
+
+//        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
+//        if (!isMember){
+//            throw new AppException(ErrorCode.UNAUTHORIZED);
+//        }
         // update task
         taskMapper.updateTask(task, request);
         taskRepository.save(task);

@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 const props = defineProps({
+  modelValue: [String, Number],
   type:{
     type: String,
     default:'text'
@@ -10,16 +11,23 @@ const props = defineProps({
     default:'Nhập tên task'
   }
 })
+const emit = defineEmits(['update:modelValue'])
+
 const displayPlaceholder = computed(() => {
   return props.type === 'text' ? props.placeholder : ''
 })
+
+const onInput = (e) => {
+  emit('update:modelValue', e.target.value)
+}
 </script>
 
 <template>
 <input :class="['input',`input-${type}`]" 
-       :type="[`${type}`]"
-       :placeholder="displayPlaceholder">
-</input>
+       :type="type"
+       :value="modelValue"
+       @input="onInput"
+       :placeholder="displayPlaceholder" />
 </template>
 
 <style scoped>

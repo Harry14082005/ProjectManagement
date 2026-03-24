@@ -53,11 +53,8 @@ public class CardService {
         );
         String spaceId = board.getSpace().getId();
 
-        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
-
-        if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
         //tao card
 
 
@@ -87,10 +84,8 @@ public class CardService {
 
         String spaceId = board.getSpace().getId();
 
-        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
-        if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
 
         var cardList = cardRepository.findByBoardId(boardId);
 
@@ -111,12 +106,13 @@ public class CardService {
                 () -> new AppException(ErrorCode.CARD_NOT_FOUND)
         );
 
-        String spaceId = card.getBoard().getSpace().getId();
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
 
-        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
-        if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
+
         cardMapper.updateCard(card, request);
         cardRepository.save(card);
         return cardMapper.toCardResponse(card);
@@ -151,12 +147,16 @@ public class CardService {
         Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new AppException(ErrorCode.CARD_NOT_FOUND)
         );
+
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
         String spaceId = card.getBoard().getSpace().getId();
 
-        boolean isMember = spaceUserRepository.existsByUserIdAndSpaceId(user.getId(), spaceId);
-        if (!isMember){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
+
         cardRepository.delete(card);
 
 

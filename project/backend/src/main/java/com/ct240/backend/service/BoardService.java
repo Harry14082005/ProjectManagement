@@ -82,13 +82,15 @@ public class BoardService {
         //1.ADMIN & OWNER của SPACE coi được bất kì
         //2.MEMBER coi được cái BOARD công khai và các BOARD riêng tư nếu là thành viên
 
-        boolean isPrivate = boardRepository.isPrivate(boardId);
-        boolean isMember = boardUserRepository.existsByUserIdAndBoardId(user.getId(), boardId);
-        //Role roleAuthInSpace = permissionService.getRoleInSpaceByBoardId(user.getId(), boardId);
+//        boolean isPrivate = boardRepository.isPrivate(boardId);
+//        boolean isMember = boardUserRepository.existsByUserIdAndBoardId(user.getId(), boardId);
+//        //Role roleAuthInSpace = permissionService.getRoleInSpaceByBoardId(user.getId(), boardId);
+//
+//        if (!isMember && isPrivate){
+//            throw new AppException(ErrorCode.UNAUTHORIZED);
+//        }
 
-        if (!isMember && isPrivate){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+        permissionService.requireInBoard(user.getId(), boardId);
 
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new AppException(ErrorCode.BOARD_NOT_FOUND)

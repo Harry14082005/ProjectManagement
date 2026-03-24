@@ -1,6 +1,7 @@
 package com.ct240.backend.service;
 
 import com.ct240.backend.dto.request.BoardUserRequest;
+import com.ct240.backend.dto.response.BoardMemberResponse;
 import com.ct240.backend.dto.response.BoardUserResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.Board;
@@ -95,7 +96,7 @@ public class BoardUserService {
 
         notificationService.createNotification(
                 addedUser,
-                "Bạn được đã thêm vào bảng",
+                "Bạn được đã thêm vào bảng " + board.getName() ,
                 Type.ADD_USER_IN_BOARD,
                 boardId
         );
@@ -105,7 +106,7 @@ public class BoardUserService {
         return boardUserMapper.toSpaceUserResponse(boardUser);
     }
 
-    public List<UserResponse> getAllUsersInBoard(String boardId, Authentication authentication){
+    public List<BoardMemberResponse> getAllUsersInBoard(String boardId, Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
 
         //kiểm tra phải thành viên board hông
@@ -116,8 +117,14 @@ public class BoardUserService {
 
         var listUsers = boardUserRepository.findUsersByBoardId(boardId);
 
+
         return listUsers.stream()
-                .map(u -> userMapper.toUserResponse(u))
+                .map(u -> {
+                    BoardMemberResponse boardMemberResponse = new BoardMemberResponse();
+                    boardMemberResponse.setUserResponse(userMapper.toUserResponse(u));
+                    boardMemberResponse.setOwner(permissionService.isOwnerOfBoard(u.getId(), boardId));
+                    return  boardMemberResponse;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -148,7 +155,7 @@ public class BoardUserService {
 
         notificationService.createNotification(
                 deletedUser,
-                "Bạn được đã bị xoá khỏi bảng",
+                "Bạn được đã bị xoá khỏi bảng " + boardUser.getBoard().getName() ,
                 Type.ADD_USER_IN_BOARD,
                 boardId
         );

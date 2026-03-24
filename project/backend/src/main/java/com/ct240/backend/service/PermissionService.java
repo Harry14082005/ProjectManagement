@@ -142,9 +142,10 @@ public class PermissionService {
 
     public void requireInBoard(String userId, String boardId){
         boolean isPrivate = boardRepository.isPrivate(boardId);
-        boolean isMember = boardUserRepository.existsByUserIdAndBoardId(userId, boardId);
+        boolean isMemberInBoard = boardUserRepository.existsByUserIdAndBoardId(userId, boardId);
+        Role roleInSpace = getRoleInSpaceByBoardId(userId, boardId);
 
-        if (!isMember && isPrivate){
+        if (roleInSpace != Role.OWNER && roleInSpace != Role.ADMIN && !isMemberInBoard && isPrivate){
             throw new AppException(ErrorCode.UNAUTHORIZED);
         }
     }
