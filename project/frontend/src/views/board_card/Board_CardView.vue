@@ -24,7 +24,27 @@ const handleTaskChange = async (event, targetCardId) => {
   
   if (action) {
     const task = action.element; // Dữ liệu của task vừa kéo
-    const newPosition = action.newIndex; // Vị trí mới 
+    const newIndex = action.newIndex; // Vị trí mới trên frontend
+
+    // Find the target card to calculate the average position
+    const targetCard = cards.value.find(c => c.id === targetCardId);
+    let newPosition = 1000;
+
+    if (targetCard && targetCard.tasks) {
+      const prevTask = targetCard.tasks[newIndex - 1];
+
+      const nextTask = targetCard.tasks[newIndex + 1];
+
+      if (!prevTask && !nextTask) {
+        newPosition = 1000;
+      } else if (!prevTask) {
+        newPosition = Math.round(nextTask.position / 2);
+      } else if (!nextTask) {
+        newPosition = prevTask.position + 1000;
+      } else {
+        newPosition = Math.round((prevTask.position + nextTask.position) / 2);
+      }
+    }
 
     try {
       const token = localStorage.getItem('token');
@@ -35,6 +55,10 @@ const handleTaskChange = async (event, targetCardId) => {
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+
+      // Quan trọng: Cập nhật lại position ở client để các lần thả sau không bị sai số
+      task.position = newPosition;
+
       console.log(`Đã lưu Task "${task.name}" vào vị trí ${newPosition} của cột ${targetCardId}`);
     } catch (error) {
       console.error("Lỗi cập nhật vị trí Task:", error);
@@ -45,19 +69,45 @@ const handleTaskChange = async (event, targetCardId) => {
 
 const handleCardChange = async (event) => {
   if (event.moved) {
-    const card = event.moved.element; 
-    const newPosition = event.moved.newIndex;
+    const card = event.moved.element;
+    const newIndex = event.moved.newIndex;
 
-    console.log(newPosition);
+    // Lấy danh sách cards hiện tại (đã được Vue cập nhật thứ tự sau khi kéo)
+    const prevCard = cards.value[newIndex - 1]; // card phía trên
+    const nextCard = cards.value[newIndex + 1]; // card phía dưới
+
+    console.log(cards)
+    console.log(prevCard)
+    console.log(nextCard)
+
+    let newPosition;
+
+    if (!prevCard && !nextCard) {
+      // Chỉ có 1 card
+      newPosition = 1000;
+    } else if (!prevCard) {
+      // Kéo lên đầu danh sách
+      newPosition = Math.round(nextCard.position / 2);
+    } else if (!nextCard) {
+      // Kéo xuống cuối danh sách
+      newPosition = prevCard.position + 1000;
+    } else {
+      // Xen giữa 2 card → công thức của bạn
+      newPosition = Math.round((prevCard.position + nextCard.position) / 2);
+    }
 
     try {
       const token = localStorage.getItem('token');
       await axios.put(`http://localhost:8080/api/cards/${card.id}/move`, {
-        position: newPosition 
+        position: newPosition
       }, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      console.log(`Đã chuyển Cột "${card.title}" sang vị trí ${newPosition}`);
+
+      // Quan trọng: Cập nhật lại position ở client để các lần thả sau không bị dùng dữ liệu cũ
+      card.position = newPosition;
+
+      console.log(`Đã chuyển Card "${card.name}" sang vị trí ${newPosition}`);
     } catch (error) {
       console.error("Lỗi cập nhật vị trí Card:", error);
     }
@@ -172,7 +222,7 @@ watch(
           @click="isModalOpen = true">
       </Button>
           <draggable 
-         v-model="cards" 
+          v-model="cards" 
           item-key="id" 
           class="border_card" 
           animation="200"
@@ -182,7 +232,7 @@ watch(
           @change="handleCardChange"
         >
       <template #item="{ element: card }">
-        <div class="drag-handle-card">
+        <div class="drag-handle-card"> <!-- bỏ cái này -->
           <Card :key="card.id"
                 :cardId="card.id"
                 :name_card="card.name"

@@ -1,9 +1,6 @@
 package com.ct240.backend.controller;
 
-import com.ct240.backend.dto.request.MoveCardRequest;
-import com.ct240.backend.dto.request.MoveTaskRequest;
-import com.ct240.backend.dto.request.TaskCreationRequest;
-import com.ct240.backend.dto.request.TaskUpdateRequest;
+import com.ct240.backend.dto.request.*;
 import com.ct240.backend.dto.response.ApiResponse;
 import com.ct240.backend.dto.response.CardResponse;
 import com.ct240.backend.dto.response.TaskResponse;
@@ -63,6 +60,19 @@ public class TaskController {
         ApiResponse<TaskResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setData(taskService.moveTask(taskId, request, authentication));
+
+        return apiResponse;
+    }
+
+    /// chỉnh completed của Task
+    @PutMapping("/tasks/{taskId}/complete")
+    public ApiResponse<TaskResponse> complete(
+            @PathVariable String taskId,
+            @RequestBody @Valid CompleteTaskRequest request,
+            Authentication authentication){
+        ApiResponse<TaskResponse> apiResponse = new ApiResponse<>();
+
+        apiResponse.setData(taskService.complete(taskId, request, authentication));
 
         return apiResponse;
     }
