@@ -6,9 +6,10 @@ import IconGears from '../icons/IconGears.vue'
 import { workspaceStore } from '@/stores/workspaceStore.js'
 import { deburr } from 'lodash'
 import { ref, onMounted } from 'vue' 
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import EditSpaceModal from './EditSpaceModal.vue'
 const router=useRouter();
+const route = useRoute();
 
 import axios from 'axios'; // ĐÃ THÊM: axios để gọi API
 
@@ -44,10 +45,17 @@ const fetchWorkspaces = async () => {
 // Chạy hàm fetchWorkspaces ngay khi Sidebar xuất hiện
 onMounted(() => {
   fetchWorkspaces();
+  if (route.params.idSpace) {
+    openSpaceId.value = parseInt(route.params.idSpace);
+  }
 });
 
 const goToSpace = (id) => {
   router.push(`/space/${id}`);
+}
+
+const goToAllBoards = () => {
+  router.push('/boards');
 }
 
 const gotoSpaceMember =(id)=>{
@@ -74,11 +82,11 @@ const closeEditSpaceModal = () => {
 <template>
   <div class="sidebar">
   
-  <div class="Sidebar_items" id="current-page">
+  <div class="Sidebar_items" @click="goToAllBoards" :class="{ 'current-page': route.path === '/boards' || route.path.startsWith('/space') }">
     <IconBoard></IconBoard>
     <div>Bảng</div>
   </div> 
-  <div class="Sidebar_items">
+  <div class="Sidebar_items" :class="{ 'current-page': route.path === '/home' || route.path === '/' }">
     <IconHome></IconHome>
     <div>Trang chủ</div>
   </div>
@@ -93,16 +101,16 @@ const closeEditSpaceModal = () => {
         :key="space.id" 
         class="workspace-item"
       >
-      <div class="space" @click="toggleSpace(space.id)">
+      <div class="space" :class="{ 'active': route.params.idSpace == space.id }" @click="toggleSpace(space.id)">
           <div class="space_avatar">{{deburr(space.name ? space.name.charAt(0).toUpperCase():'W') }}</div>
           <div class="space_name">{{ space.name}}</div>
       </div>
-  <div v-if="openSpaceId ===space.id" class="DetailOptionSpace">
-      <div @click="goToSpace(space.id)" class="Option">
+  <div v-if="openSpaceId === space.id" class="DetailOptionSpace">
+      <div @click="goToSpace(space.id)" class="Option" :class="{ 'active': route.params.idSpace == space.id && !route.path.includes('/members') }">
         <IconBoard></IconBoard>
         <div>Bảng</div>
       </div>
-      <div class="Option" @click="gotoSpaceMember(space.id)">
+      <div class="Option" :class="{ 'active': route.params.idSpace == space.id && route.path.includes('/members') }" @click="gotoSpaceMember(space.id)">
         <IconMember></IconMember>
         <div>Thành viên</div>
       </div>
@@ -127,11 +135,6 @@ const closeEditSpaceModal = () => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
-#current-page{
-  background-color:#d4ecf8;
-  color:#1a5270;
-  border-radius: 1.25rem;
-}
 .icon_setting{
   width: 10px;
   height: 10px;
@@ -154,11 +157,13 @@ const closeEditSpaceModal = () => {
 } 
 .sidebar{
     padding: 30px 10%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     font-family: "Quicksand", sans-serif;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    height: 100%;
     gap: 5px;
     font-size: 17px;
     cursor:pointer;
@@ -195,12 +200,15 @@ div.Sidebar_items:hover{
   font-size: 13px;
   margin-top: 10px;
   transition: all 0.2s ease;
+  padding: 5px;
+  margin-left: -5px;
+  border-radius: 1.25rem;
 }
 .space:hover{
   background-color:#e7e8eb;
-  border-radius: 1.25rem;
-  padding:5px;
-
+}
+.space.active{
+  background-color:#f0f7ff;
 }
 .space_avatar{
   width: 30px;
@@ -229,6 +237,10 @@ div.Sidebar_items:hover{
 }
 .Option:hover{
   background-color:#e7e8eb;
+  border-radius: 1.25rem;
+}
+.Option.active{
+  background-color:#f0f7ff;
   border-radius: 1.25rem;
 }
 </style >

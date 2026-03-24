@@ -23,10 +23,24 @@ const handleUpdateTaskStatus = async (taskId, isChecked) => {
   try {
     const token = localStorage.getItem('token');
     
-    // Gọi API PUT để cập nhật trạng thái
-    await axios.put(`http://localhost:8080/api/tasks/${taskId}`, {
+    let targetTask = null;
+    for (const card of cards.value) {
+      if (!card.tasks) continue;
+      const found = card.tasks.find(t => t.id === taskId);
+      if (found) {
+        targetTask = found;
+        break;
+      }
+    }
+    
+    const payload = targetTask ? {
+      name: targetTask.name,
+      deadline: targetTask.deadline,
       completed: isChecked
-    }, {
+    } : { completed: isChecked };
+
+    // Gọi API PUT để cập nhật trạng thái
+    await axios.put(`http://localhost:8080/api/tasks/${taskId}`, payload, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
@@ -282,7 +296,7 @@ watch(
         <div>{{ boardData?.name || 'Đang tải...' }}</div>
     </div>
       <Button 
-          :text="'+ Thêm danh sách mới'"
+          :text="'+ Thêm thẻ mới'"
           :type="'ghost'"
           @click="isModalOpen = true">
       </Button>
@@ -297,7 +311,7 @@ watch(
           @change="handleCardChange"
         >
       <template #item="{ element: card }">
-        <div class="drag-handle-card"> <!-- bỏ cái này -->
+        <div class="drag-handle-card"> 
           <Card :key="card.id"
                 :cardId="card.id"
                 :name_card="card.name"

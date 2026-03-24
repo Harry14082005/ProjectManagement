@@ -4,6 +4,7 @@ import HomeView from '../components/layout/MainLayout.vue'
 import SpaceView from '../views/space/SpaceView.vue'
 import SpaceMemberView from '../views/space/SpaceMember.vue'
 import Board_CardView from '@/views/board_card/Board_CardView.vue'
+import BoardView from '../views/board_card/BoardView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -38,6 +39,10 @@ const router = createRouter({
     { path:'/spaces/:idSpace/boards/:idBoard/cards',
       name: 'board-card',
       component: Board_CardView
+    },
+    { path: '/boards',
+      name: 'boards',
+      component: BoardView
     }
   ],
 })

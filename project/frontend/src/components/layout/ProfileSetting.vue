@@ -132,7 +132,7 @@ const handleSave = async () => {
         </div>
 
         <div class="switch-mode-text" @click="isEditingPassword = true">
-          đổi mật khẩu
+          Đổi mật khẩu
         </div>
       </div>
 

@@ -206,11 +206,11 @@ const handleLogOut=()=>{
     flex-direction: column;
 }
 .maincontent{
-    
     grid-area: maincontent;
     align-self: flex-start;
     margin-left: 3%;
     margin-top: 30px;
+    padding-bottom: 50px;
 }
 .maincontent div{
     font-weight: 700;

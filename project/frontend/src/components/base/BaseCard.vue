@@ -81,18 +81,18 @@ const closeForm=()=>{
       <div class="separator"></div>
       <input
       v-model="taskTitle" 
-        placeholder="Nhập tên thẻ" 
+        placeholder="Nhập tên task" 
         class="task-input"
         autofocus
         @keydown.enter="saveTask"></input>
       <div class="form-actions">
-        <button class="btn-save" @click="saveTask">Thêm thẻ</button> 
+        <button class="btn-save" @click="saveTask">Thêm task</button> 
         <button class="btn-cancel" @click="closeForm">✕</button>
       </div>
     </div>
     <div v-else class="add_task" @click="openForm" >
       <IconAdd></IconAdd>
-        <div>Thêm thẻ mới</div>
+        <div>Thêm task mới</div>
   </div>
   </div>
 </template>

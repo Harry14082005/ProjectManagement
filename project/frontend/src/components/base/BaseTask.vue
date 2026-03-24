@@ -1,6 +1,5 @@
 <script setup>
 import { computed } from 'vue';
-import IconEdit from '../icons/IconEdit.vue';
 const props=defineProps({
     taskId:{
         type:[String,Number],
@@ -54,20 +53,12 @@ const handleCheckboxChange = (event) => {
         :class="{ 'is-done': completed }">{{ task_name }}  
         </label>
         <div class="deadline" v-if="formattedDeadline">{{ formattedDeadline }}</div>
-        <IconEdit class="edit_task"></IconEdit>
     </div>
 </template>
 <style scoped>
 .is-done {
   text-decoration: line-through;
   color: #888;
-}
-.edit_task{
-    display: none;
-}
-.task:hover .edit_task{
-    display: block;
-    transition: all 0.2s ease;
 }
 label{
     font-size: 14px;
