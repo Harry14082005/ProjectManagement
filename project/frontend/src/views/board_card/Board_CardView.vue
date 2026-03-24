@@ -142,6 +142,25 @@ const handleCreateTask = async (cardId, taskName) => {
   }
 };
 
+const handleDeleteCard=async(cardId)=>{
+  try{
+    const token=localStorage.getItem('token');
+    await axios.delete(`http://localhost:8080/api/cards/${cardId}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    console.log(`Đã xóa thành công danh sách có ID: ${cardId}`);
+    const spaceId = route.params.idSpace;
+    const boardId = route.params.idBoard;
+    fetchBoardCard(spaceId, boardId);
+    
+  } catch (error) {
+    console.error("Lỗi khi xóa danh sách (Card):", error);
+    alert("Không thể xóa danh sách này, vui lòng thử lại!");
+  }
+
+}
+
 onMounted(() => {
   const spaceId = route.params.idSpace; 
   const boardId = route.params.idBoard;
@@ -187,6 +206,7 @@ watch(
                 :cardId="card.id"
                 :name_card="card.name"
                 @add-new-task="handleCreateTask"
+                @delete-card="handleDeleteCard"
           >
             <draggable 
             v-model="card.tasks" 
