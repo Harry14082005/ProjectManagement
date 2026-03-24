@@ -150,7 +150,7 @@ public class SpaceUserService {
 
         notificationService.createNotification(
                 changedRoleUser,
-                "Bạn được đã được đổi vai trò trong space " + spaceUser.getSpace().getName() + "thành " + request.getRole(),
+                "Bạn được đã được đổi vai trò trong space " + spaceUser.getSpace().getName() + " thành " + request.getRole(),
                 Type.CHANGE_ROLE_SPACE,
                 spaceId
         );
