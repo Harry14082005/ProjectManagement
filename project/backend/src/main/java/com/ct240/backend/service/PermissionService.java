@@ -9,6 +9,7 @@ import com.ct240.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PermissionService {
@@ -37,6 +38,16 @@ public class PermissionService {
         String username = authentication.getName();
 
         return userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public String getUserIdAuth(Authentication authentication){
+        String username = authentication.getName();
+
+        // Chỉ query id thôi, không load entity
+        return userRepository.findIdByUsername(username).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
     }

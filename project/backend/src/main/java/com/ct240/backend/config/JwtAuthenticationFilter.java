@@ -58,6 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             String username = signedJWT.getJWTClaimsSet().getSubject();
+            String userId = signedJWT.getJWTClaimsSet().getStringClaim("userId");
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -65,6 +66,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             null,
                             Collections.emptyList()
                     );
+
+            authentication.setDetails(userId);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

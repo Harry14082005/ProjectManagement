@@ -100,12 +100,16 @@ public class AuthService {
     }
 
     private String generateToken(String username){
+        String userId = userRepository.findIdByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 //sub thường là username
                 .subject(username)
+                .claim("userId", userId)
                 //thời gian đăng nhập vô
                 .issueTime(new Date())
                 //hết hạn trong 1 giờ

@@ -22,9 +22,7 @@ public class SseEmitterService {
     PermissionService permissionService;
 
     public SseEmitter createEmitter(Authentication authentication) {
-        User user = permissionService.getUserAuth(authentication);
-
-        String userId = user.getId();
+        String  userId = (String)authentication.getDetails();
 
         /// tham số truyền vào SseEmitter là timeout nên truyền MAX_VALUE có nghĩa là vĩnh viễn
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE); // giữ kết nối lâu dài
