@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import IconAdd from '../icons/IconAdd.vue';
 import IconDelete from '../icons/IconDelete.vue';
 const props = defineProps({
@@ -13,12 +13,34 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['add-new-task','delete-card']);
+const emit = defineEmits(['add-new-task','delete-card', 'update-card-name']);
 
 const handleDeleteCard=()=>{
   if(confirm(`Bạn có muốn xóa danh sách "${props.name_card}" không. Toàn bộ dữ liệu thẻ trong danh sách sẽ bị xóa cùng với danh sách`))
   emit('delete-card',props.cardId);
 }
+
+const isEditingName = ref(false);
+const editNameValue = ref(props.name_card);
+
+watch(() => props.name_card, (newVal) => {
+  editNameValue.value = newVal;
+});
+
+const startEditingName = () => {
+  isEditingName.value = true;
+};
+
+const saveCardName = () => {
+  if (!editNameValue.value.trim() || editNameValue.value.trim() === props.name_card) {
+    isEditingName.value = false;
+    editNameValue.value = props.name_card;
+    return;
+  }
+  emit('update-card-name', props.cardId, editNameValue.value.trim());
+  isEditingName.value = false;
+};
+
 const isAdding = ref(false);
 const taskTitle = ref('');
 
@@ -43,7 +65,15 @@ const closeForm=()=>{
 <template>
   <div class="card-wrapper">
     <div class="header_card">
-    <div class="card_name">{{ name_card }}</div>
+      <input 
+        v-if="isEditingName"
+        v-model="editNameValue"
+        class="card_name_input"
+        autofocus
+        @blur="saveCardName"
+        @keydown.enter="saveCardName"
+      />
+      <div v-else class="card_name" @click="startEditingName">{{ name_card }}</div>
     <div class="delete" @click="handleDeleteCard"><IconDelete></IconDelete></div>
     </div>
     <slot></slot>
@@ -70,6 +100,7 @@ const closeForm=()=>{
 
 <style scoped>
 .delete{
+  color: #1a5270;
   display: flex;
   padding-top: 10px;
   align-items: center;
@@ -152,7 +183,6 @@ const closeForm=()=>{
   color: #000;
 }
 
-
 .add_task{
   color:#1a5270;
   display: flex;
@@ -175,11 +205,26 @@ const closeForm=()=>{
 .add_task:active{
   transform: scale(0.95);
 }
+.card_name_input {
+  font-size: 17px;
+  color: #1a5270;
+  font-weight: 500;
+  padding-top: 10px;
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  border-bottom: 2px solid #1a5270;
+  margin-right: 10px;
+  font-family: inherit;
+}
+
 .card_name{
     font-size: 17px;
     color:#1a5270;
     font-weight: 500;
     padding-top: 10px;
+    cursor: pointer;
 }
 .card-wrapper{
     display: flex;

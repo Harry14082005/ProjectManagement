@@ -1,25 +1,93 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 import IconUser from '../icons/IconUser.vue';
 import BaseComment from '../base/BaseComment.vue';
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'update-task'])
 const close_detail_task =()=>{
   emit('close');
 }
-defineProps({
-  task_name:{
-    type:String,
-    default:'Task name'
+
+const props = defineProps({
+  task: {
+    type: Object,
+    default: () => ({ name: 'Task name', id: null, deadline: '' })
   }
 })
+
+const localDeadline = ref(props.task?.deadline ? props.task.deadline.split('T')[0] : '');
+const comments = ref([]);
+const newComment = ref('');
+const isSaving = ref(false);
+
+const fetchComments = async () => {
+    if(!props.task?.id) return;
+    try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get(`http://localhost:8080/api/tasks/${props.task.id}/comments`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        comments.value = res.data.data || res.data || [];
+    } catch (err) {
+        console.log("Load comments error or not found", err);
+    }
+};
+
+const saveDeadline = async () => {
+    if(!props.task?.id) return;
+    try {
+        const token = localStorage.getItem('token');
+        await axios.put(`http://localhost:8080/api/tasks/${props.task.id}`, {
+            name: props.task.name,
+            deadline: localDeadline.value,
+            completed: props.task.completed || false
+        }, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        emit('update-task');
+    } catch (error) {
+        console.error("Lỗi khi cập nhật deadline:", error);
+    }
+};
+
+const handleSaveTask = async () => {
+    isSaving.value = true;
+    await saveDeadline();
+    isSaving.value = false;
+    close_detail_task();
+};
+
+const handlePostComment = async () => {
+    if(!newComment.value.trim() || !props.task?.id) return;
+    try {
+        const token = localStorage.getItem('token');
+        await axios.post(`http://localhost:8080/api/tasks/${props.task.id}/comments`, {
+            content: newComment.value.trim()
+        }, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        newComment.value = '';
+        fetchComments();
+    } catch (error) {
+        console.error("Lỗi khi đăng bình luận:", error);
+    }
+};
+
+onMounted(() => {
+    fetchComments();
+});
+watch(() => props.task, (newVal) => {
+    localDeadline.value = newVal?.deadline ? newVal.deadline.split('T')[0] : '';
+    fetchComments();
+}, { deep: true });
+
 </script>
 
 <template>
   <Teleport to="body">
     <div class="modal-overlay" @click.self="close_detail_task">
       <div class="modal">
-         <div class="label_task">{{ task_name }}</div>
+         <div class="label_task">{{ task?.name }}</div>
         <div class="modal-content">
         
         <div class="left-modal">
@@ -31,21 +99,21 @@ defineProps({
         </div>
         <div class="wrapper-deadline">
           <div>Hạn chót</div>
-          <input class="Deadline" type="date"/>
+          <input class="Deadline" type="date" v-model="localDeadline" @change="saveDeadline"/>
         </div>
         </div>
         <div class="right-modal">
         <div class="comment_nav">
-          <input type="text" placeholder="Viết bình luận...">
+          <input type="text" placeholder="Viết bình luận..." v-model="newComment" @keydown.enter="handlePostComment">
         </div>
-        <BaseComment></BaseComment>
+        <BaseComment v-for="comment in comments" :key="comment.id || Math.random()" :userName="comment.userName || comment.user?.username || 'Người dùng'" :content="comment.content"></BaseComment>
         </div>
         </div>
         
         <div class="modal-actions">
           <button class="btn-cancel" @click="close_detail_task">Hủy</button>
-          <button class="btn-submit">
-            {{ isCreating ? 'Đang tạo...' : 'Lưu thẻ' }}
+          <button class="btn-submit" @click="handleSaveTask" :disabled="isSaving">
+            {{ isSaving ? 'Đang lưu...' : 'Lưu thẻ' }}
           </button>
         </div>
       </div>

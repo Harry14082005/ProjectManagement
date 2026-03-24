@@ -1,6 +1,11 @@
 <script setup>
+import { computed } from 'vue';
 import IconEdit from '../icons/IconEdit.vue';
 const props=defineProps({
+    taskId:{
+        type:[String,Number],
+        required:true
+    },
     task_name:{
         type:String,
         default:'Task Name'
@@ -8,18 +13,55 @@ const props=defineProps({
     deadline:{
         type:String,
         default:''
+    },
+    completed:{
+        type:Boolean,
+        default:false
     }
 })
+const emit=defineEmits(['update-status']);
+//format lại định dạng deadline
+
+const formattedDeadline = computed(() => {
+    if (!props.deadline) return '';
+    try {
+        const date = new Date(props.deadline);
+        if (isNaN(date.getTime())) return props.deadline;
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const yyyy = date.getFullYear();
+        return `${mm}/${dd}/${yyyy}`;
+    } catch {
+        return props.deadline;
+    }
+});
+
+const handleCheckboxChange = (event) => {
+  const isChecked = event.target.checked;
+  
+  emit('update-status', props.taskId, isChecked);
+};
+
 </script>
 <template>
     <div class="task">
-        <input type="checkbox" id="checkbox">
-        <label for="checkbox">{{ task_name }}</label>
-        <div class="deadline">{{ deadline }}</div>
+        <input type="checkbox" 
+        :id="'checkbox-' + taskId"
+        :checked="completed"
+        @change.stop="handleCheckboxChange"
+        @click.stop>
+        <label :for="'checkbox-' + taskId"
+        :class="{ 'is-done': completed }">{{ task_name }}  
+        </label>
+        <div class="deadline" v-if="formattedDeadline">{{ formattedDeadline }}</div>
         <IconEdit class="edit_task"></IconEdit>
     </div>
 </template>
 <style scoped>
+.is-done {
+  text-decoration: line-through;
+  color: #888;
+}
 .edit_task{
     display: none;
 }

@@ -18,6 +18,31 @@ const OpenDetailTask=(task)=>{
   isDetailTaskOpen.value=true;
 }
 
+// Hàm đón dữ liệu update checkbox từ BaseTask.vue gửi lên
+const handleUpdateTaskStatus = async (taskId, isChecked) => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    // Gọi API PUT để cập nhật trạng thái
+    await axios.put(`http://localhost:8080/api/tasks/${taskId}`, {
+      completed: isChecked
+    }, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    console.log(`Đã cập nhật trạng thái task ${taskId} thành: ${isChecked}`);
+    
+    // Gọi lại API load board để giao diện tự động đồng bộ (giống như lúc bạn xóa thẻ)
+    const spaceId = route.params.idSpace;
+    const boardId = route.params.idBoard;
+    fetchBoardCard(spaceId, boardId);
+    
+  } catch (error) {
+    console.error("Lỗi khi cập nhật trạng thái Task:", error);
+    alert("Không thể cập nhật trạng thái!");
+  }
+};
+
 const handleTaskChange = async (event, targetCardId) => {
 
   const action = event.added || event.moved;
@@ -126,7 +151,7 @@ const handleCreateTask = async (cardId, taskName) => {
 
     const payload = {
       name: taskName,
-      is_completed: false 
+      completed: false 
     };
 
     await axios.post(`http://localhost:8080/api/cards/${cardId}/tasks`, payload, { headers });
@@ -150,7 +175,7 @@ const handleDeleteCard=async(cardId)=>{
     });
     
     console.log(`Đã xóa thành công danh sách có ID: ${cardId}`);
-    const spaceId = route.params.idSpace;
+  const spaceId = route.params.idSpace;
     const boardId = route.params.idBoard;
     fetchBoardCard(spaceId, boardId);
     
@@ -160,6 +185,27 @@ const handleDeleteCard=async(cardId)=>{
   }
 
 }
+
+const handleUpdateCardName = async (cardId, newName) => {
+  try {
+    const token = localStorage.getItem('token');
+    await axios.put(`http://localhost:8080/api/cards/${cardId}`, {
+      name: newName
+    }, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    console.log(`Đã cập nhật tên danh sách ${cardId} thành: ${newName}`);
+    
+    const spaceId = route.params.idSpace;
+    const boardId = route.params.idBoard;
+    fetchBoardCard(spaceId, boardId);
+    
+  } catch (error) {
+    console.error("Lỗi khi cập nhật tên danh sách:", error);
+    alert("Không thể cập nhật tên danh sách!");
+  }
+};
 
 onMounted(() => {
   const spaceId = route.params.idSpace; 
@@ -207,6 +253,7 @@ watch(
                 :name_card="card.name"
                 @add-new-task="handleCreateTask"
                 @delete-card="handleDeleteCard"
+                @update-card-name="handleUpdateCardName"
           >
             <draggable 
             v-model="card.tasks" 
@@ -216,11 +263,17 @@ watch(
             ghost-class="ghost-task"
             class="task-list-container" 
             @change="handleTaskChange($event, card.id)"
+            :filter="'input, label, button'"
+            :preventOnFilter="false"
           >
             <template #item="{ element: task }">
             <Task
                :key="task.id"
+               :taskId="task.id"
                :task_name="task.name"
+               :deadline="task.deadline"
+               :completed="task.completed"
+               @update-status="handleUpdateTaskStatus"
                @click="OpenDetailTask(task)">
             </Task>
             </template>
@@ -236,7 +289,8 @@ watch(
       @created="refreshListAfterCreate"
     />
     <TaskInfo v-if="isDetailTaskOpen"
-      :task_name="selectedTask?.name"
+      :task="selectedTask"
+      @update-task="refreshListAfterCreate"
       @close="isDetailTaskOpen=false">
     </TaskInfo>
   </MainLayout>

@@ -1,13 +1,23 @@
 <script setup>
 import IconUser from '../icons/IconUserComment.vue';
+defineProps({
+  userName: {
+    type: String,
+    default: 'Username'
+  },
+  content: {
+    type: String,
+    default: ''
+  }
+});
 </script>
 <template>
     <div class="info_user">
     <div class="user_avatar"><IconUser></IconUser></div>
-        <div class="name_user">Username</div>
+        <div class="name_user">{{ userName }}</div>
         </div>
     <div class="container">
-        <div class="comment">Task này hay quá tôi đã wow. Omg, nó dãn ra cho coi nè. Buồn ngủ quá và đói bụng AAAAAAAAAAAAÂ FAÉNCXGHĂEBHSZCX XEADSNXCHẶBFHSDZXB ZXC BJSKADJKZXCBDSNVZX  ZBSDVHJ</div>
+        <div class="comment">{{ content }}</div>
         </div>
 </template>
 <style scoped>
