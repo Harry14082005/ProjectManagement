@@ -1,7 +1,7 @@
 <script setup>
 import {ref} from 'vue'
 import IconAdd from '../icons/IconAdd.vue';
-
+import IconDelete from '../icons/IconDelete.vue';
 const props = defineProps({
   name_card: {
     type: String,
@@ -13,7 +13,12 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['add-new-task']);
+const emit = defineEmits(['add-new-task','delete-card']);
+
+const handleDeleteCard=()=>{
+  if(confirm(`Bạn có muốn xóa danh sách "${props.name_card}" không. Toàn bộ dữ liệu thẻ trong danh sách sẽ bị xóa cùng với danh sách`))
+  emit('delete-card',props.cardId);
+}
 const isAdding = ref(false);
 const taskTitle = ref('');
 
@@ -37,7 +42,10 @@ const closeForm=()=>{
 </script>
 <template>
   <div class="card-wrapper">
+    <div class="header_card">
     <div class="card_name">{{ name_card }}</div>
+    <div class="delete" @click="handleDeleteCard"><IconDelete></IconDelete></div>
+    </div>
     <slot></slot>
     <div v-if="isAdding" class="add_task_form">
       <div class="separator"></div>
@@ -61,6 +69,19 @@ const closeForm=()=>{
 
 
 <style scoped>
+.delete{
+  display: flex;
+  padding-top: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.header_card{
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 .add_task_form {
   width: 100%;
   height: fit-content;
@@ -158,10 +179,7 @@ const closeForm=()=>{
     font-size: 17px;
     color:#1a5270;
     font-weight: 500;
-    text-align: center;
-    margin-top: 10px;
-    margin-right: auto;
-    padding-left:20px
+    padding-top: 10px;
 }
 .card-wrapper{
     display: flex;
