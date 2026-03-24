@@ -2,10 +2,26 @@
 import IconSetting from '../icons/IconSetting.vue';
 import IconCreate from '../icons/IconCreate.vue';
 import IconUser from '../icons/IconUser.vue';
+import BaseButton from '../base/BaseButton.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const emit = defineEmits(['open-modal','toggle-profile','toggle-notification']);
+
+const goToLogin = () => {
+    router.push('/');
+}
+const goToRegister = () => {
+    router.push('/register');
+}
 
 const props = defineProps({
   hasUnread: {
+    type: Boolean,
+    default: false
+  },
+  isAuthPage: {
     type: Boolean,
     default: false
   }
@@ -20,18 +36,23 @@ const props = defineProps({
     </div>
     <!-- <input class="search" placeholder="Search"></input> -->
     
-    <div class="create" @click="emit('open-modal')">
+    <div class="create" @click="emit('open-modal')" v-if="!isAuthPage">
       <div>Tạo mới</div>
       <IconCreate></IconCreate>
     </div>
     
-    <div class="right_navbar">
+    <div class="right_navbar" v-if="!isAuthPage">
       <div class="notification-container" @click="emit('toggle-notification')">
         <i id="icon1" class="fa-solid fa-bell"></i>
         <span v-if="hasUnread" class="unread-dot"></span>
       </div>
       <div id="icon2" class="avatar" @click="emit('toggle-profile')"><IconUser></IconUser></div>
       <div id="icon3"><IconSetting/></div>
+    </div>
+    
+    <div class="right_navbar_auth" v-if="isAuthPage">
+      <BaseButton class="auth-btn login-btn" text="Đăng nhập" type="ghost" @click="goToLogin" />
+      <BaseButton class="auth-btn register-btn" text="Đăng ký" type="ghost" @click="goToRegister" />
     </div>
   </div>
 </template>
@@ -143,6 +164,29 @@ const props = defineProps({
   }
   .right_navbar div:active{
     transform: scale(0.95);
+  }
+  .right_navbar_auth {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Tăng khoảng cách chút */
+  }
+  
+  /* Tuỳ chỉnh Button trong Auth Page */
+  .auth-btn {
+    width: 120px;
+    font-weight: 600;
+  }
+  
+  .login-btn {
+    background-color: #bce3f5 !important;
+  }
+  
+  .login-btn:hover {
+    background-color: #d4ecf8 !important; /* Hover có màu đậm hơn chút xíu để nhận biết */
+  }
+  
+  .register-btn:hover {
+    background-color: #f2f7fc !important;
   }
   .create{
     cursor: pointer;

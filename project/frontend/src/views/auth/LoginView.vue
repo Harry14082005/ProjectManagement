@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import LoginLayout from '@/components/layout/LoginLayout.vue'
+import AppNavbar from '@/components/layout/AppNavbar.vue'
 
 const router = useRouter()
 
@@ -52,15 +53,22 @@ const handleLogin = async () => {
 
     const code = error.response?.data?.code
 
-    if (code === 1003) {
-      errorMessage.value = "Sai mật khẩu!"
-    } else if (code === 1101) {
+    console.log(code)
+
+    if (code === 1101) {
       errorMessage.value = "Tài khoản không tồn tại!"
+      alert("Tài khoản không tồn tại!")
+    }else if (code === 1002) {
+      errorMessage.value = "Tài khoản hoặc mật khẩu không hợp lệ"
+      alert("Tài khoản hoặc mật khẩu không hợp lệ!")
+    }
+    else if (code === 1003) {
+      errorMessage.value = "Sai mật khẩu!"
+      alert("Sai mật khẩu!")
     } else {
       errorMessage.value = "Đăng nhập thất bại, vui lòng thử lại!"
+      alert("Đăng nhập thất bại, vui lòng thử lại!")
     }
-
-  console.log(errorMessage)
 
   } finally {
 
@@ -76,22 +84,30 @@ const goToRegister = () => {
 
 </script>
 <template>
-  <LoginLayout>
-     <form @submit.prevent="handleLogin">
+  <div class="auth-wrapper">
+    <AppNavbar :isAuthPage="true" />
+    <LoginLayout>
+       <form @submit.prevent="handleLogin">
   <div class="card">
         <div class="Title_content">Đăng nhập</div>
         <div class="label">Username</div>
         <input v-model="form.username"class="input">
         <div class="label">Password</div>
         <input v-model="form.password" class="input" type="password">
-        <div class="forgot_pw">Forgot your password</div>
         <button class="button" id="login" type="submit">Đăng nhập</button>
         <button class="button" id="register" @click="goToRegister" type="button" :disabled="isLoading">Tạo tài khoản mới</button>
   </div>
   </form>
   </LoginLayout>
+  </div>
 </template>
 <style scoped> 
+.auth-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f7ff;
+}
 .card{
   font-family:"Quicksand", sans-serif;
   font-optical-sizing: auto;
@@ -108,6 +124,7 @@ const goToRegister = () => {
   color:#2f4562;
   align-items: center;
   align-self: center;
+  margin-top: 15vh;
 }
 .Title_content{
     font-size: large;
@@ -153,7 +170,7 @@ const goToRegister = () => {
     color:#74c5e1;
 }
 .button{
-  margin-top: 10px;
+  margin-top: 30px;
   font-optical-sizing: auto;
   font-style:normal;
   font-size: 15px;

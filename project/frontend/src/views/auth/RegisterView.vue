@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import LoginLayout from '@/components/layout/RegisterLayout.vue'
+import AppNavbar from '@/components/layout/AppNavbar.vue'
 
 const router = useRouter()
 
@@ -67,7 +68,9 @@ const handleRegister = async () => {
 
 </script>
 <template>
-  <RegisterLayout>
+  <div class="auth-wrapper">
+    <AppNavbar :isAuthPage="true" />
+    <RegisterLayout>
           <form @submit.prevent="handleRegister">
   <div class="card">
         <div class="Title_content">Đăng ký</div>
@@ -83,9 +86,16 @@ const handleRegister = async () => {
   </div>
   </form>
   </RegisterLayout>
+  </div>
 </template>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&family=Quicksand:wght@300..700&display=swap');
+.auth-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f7ff;
+}
 form{
   align-items: center;
   justify-items: center;
@@ -106,6 +116,8 @@ form{
   color:#2f4562;
   align-items: center;
   align-self: center;
+
+  margin-top: 15vh;
 }
 .Title_content{
     font-size: large;
