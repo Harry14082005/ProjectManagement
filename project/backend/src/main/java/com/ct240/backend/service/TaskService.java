@@ -1,5 +1,6 @@
 package com.ct240.backend.service;
 
+import com.ct240.backend.dto.request.CompleteTaskRequest;
 import com.ct240.backend.dto.request.MoveTaskRequest;
 import com.ct240.backend.dto.request.TaskCreationRequest;
 import com.ct240.backend.dto.request.TaskUpdateRequest;
@@ -136,6 +137,32 @@ public class TaskService {
         task.setCard(moveToCard);
 
         taskRepository.save(task);
+        return taskMapper.toTaskResponse(task);
+
+    }
+
+    public TaskResponse complete(String taskId, CompleteTaskRequest request, Authentication authentication){
+        User user = permissionService.getUserAuth(authentication);
+
+        Task task = taskRepository.findById(taskId).orElseThrow(
+                () -> new AppException(ErrorCode.TASK_NOT_FOUND)
+        );
+
+        Card card = cardRepository.findById(task.getCard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.CARD_NOT_FOUND)
+        );
+
+        Board board = boardRepository.findById(card.getBoard().getId()).orElseThrow(
+                () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
+        );
+
+        //coi có quyền dưới board hay hông
+        permissionService.requireInBoard(user.getId(), board.getId());
+
+        taskMapper.updateTask(task, request);
+
+        taskRepository.save(task);
+
         return taskMapper.toTaskResponse(task);
 
     }

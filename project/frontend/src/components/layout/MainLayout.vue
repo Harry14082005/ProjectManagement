@@ -3,6 +3,7 @@ import Navbar from '../layout/AppNavbar.vue'
 import Sidebar from '../layout/AppSidebar.vue'
 import CreateSpace from './CreateSpace.vue';
 import NotificationCard from '../base/NotificationCard.vue';
+import ProfileSetting from './ProfileSetting.vue';
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import axios from 'axios'
 import { fetchEventSource } from '@microsoft/fetch-event-source';
@@ -26,6 +27,12 @@ const isShowSummaryProfile = ref(false);
 
 const SummaryProfile=()=>{
     isShowSummaryProfile.value= isShowSummaryProfile.value ===false ? true:false;
+}
+
+const isProfileSettingOpen = ref(false);
+const openProfileSetting = () => {
+    isProfileSettingOpen.value = true;
+    isShowSummaryProfile.value = false;
 }
 
 const isShowNotification = ref(false);
@@ -155,12 +162,13 @@ const handleLogOut=()=>{
     </div>
   </div>
       <CreateSpace v-if="isModalOpen" @close-modal="closeModal"></CreateSpace>
+      <ProfileSetting v-if="isProfileSettingOpen" @close="isProfileSettingOpen = false"></ProfileSetting>
     </div>
     <div class="overview_profile" v-if="isShowSummaryProfile">
             <div class="avatar">{{username.charAt(0).toUpperCase()}}</div>
             <div class="name_user">{{ username }}</div>
-        <div>Hồ sơ và hiển thị</div>
-        <div>Trợ giúp</div>
+        <div @click="openProfileSetting">Hồ sơ và hiển thị</div>
+        <!--<div>Trợ giúp</div>-->
         <div @click="handleLogOut">Đăng xuất</div>
     </div>
     <div class="notifications" v-if="isShowNotification" ref="notificationRef">
@@ -219,7 +227,7 @@ const handleLogOut=()=>{
     top:63px;
     right: 17px;;
     width: 260px;
-    height: 240px;
+    height: 200px;
     border-radius: 1.25rem;
     border: 0.5px solid #d4ecf8;
     background-color: rgb(255, 255, 255);
