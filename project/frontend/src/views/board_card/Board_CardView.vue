@@ -11,6 +11,59 @@ import Task from '@/components/base/BaseTask.vue'
 import ModalCreateCard from '@/components/layout/CreateCard.vue' 
 import TaskInfo from '@/components/layout/TaskInfo.vue'
 
+const isDetailTaskOpen=ref(false);
+const selectedTask=ref(null);
+const OpenDetailTask=(task)=>{
+  selectedTask.value=task;
+  isDetailTaskOpen.value=true;
+}
+
+const handleTaskChange = async (event, targetCardId) => {
+
+  const action = event.added || event.moved;
+  
+  if (action) {
+    const task = action.element; // Dữ liệu của task vừa kéo
+    const newPosition = action.newIndex; // Vị trí mới 
+
+    try {
+      const token = localStorage.getItem('token');
+      // Gọi API
+      await axios.put(`http://localhost:8080/api/tasks/${task.id}/move`, {
+        cardId: targetCardId, // ID của cột hiện tại
+        position: newPosition // Vị trí mới
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      console.log(`Đã lưu Task "${task.name}" vào vị trí ${newPosition} của cột ${targetCardId}`);
+    } catch (error) {
+      console.error("Lỗi cập nhật vị trí Task:", error);
+    }
+  }
+};
+
+
+const handleCardChange = async (event) => {
+  if (event.moved) {
+    const card = event.moved.element; 
+    const newPosition = event.moved.newIndex;
+
+    console.log(newPosition);
+
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(`http://localhost:8080/api/cards/${card.id}/move`, {
+        position: newPosition 
+      }, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      console.log(`Đã chuyển Cột "${card.title}" sang vị trí ${newPosition}`);
+    } catch (error) {
+      console.error("Lỗi cập nhật vị trí Card:", error);
+    }
+  }
+};
+
 const route=useRoute();
 const isLoading = ref(true);
 
@@ -32,19 +85,16 @@ const fetchBoardCard = async (SpaceId, BoardId) => {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
 
-    // 1. Lấy thông tin Board
     const BoardRes = await axios.get(`http://localhost:8080/api/boards/${BoardId}`, { headers });
     boardData.value = BoardRes.data.data || BoardRes.data;
 
-    // 2. Lấy danh sách Cards
     const CardRes = await axios.get(`http://localhost:8080/api/boards/${BoardId}/cards`, { headers });
     let tempCards = CardRes.data.data || CardRes.data;
 
-    // 3. CHIÊU ĐỘC: Lặp qua từng Card để lấy Task tương ứng
-    // Dùng Promise.all để lấy tất cả Task của các Card cùng lúc cho nhanh
+    // Dùng Promise.all để lấy tất cả Task của các Card cùng lúc 
     const cardsWithTasks = await Promise.all(tempCards.map(async (card) => {
       try {
-        // Gọi API lấy task của từng card (Giả sử bạn có endpoint này)
+        // Gọi API lấy task của từng card 
         const taskRes = await axios.get(`http://localhost:8080/api/cards/${card.id}/tasks`, { headers });
         
         // Trả về card có kèm thêm mảng tasks vừa lấy được
@@ -58,7 +108,7 @@ const fetchBoardCard = async (SpaceId, BoardId) => {
       }
     }));
 
-    // 4. Cập nhật lại biến cards xịn sò đã có đủ Task
+    //Cập nhật lại biến cards đã có đủ Task
     cards.value = cardsWithTasks;
 
   } catch (error) {
@@ -128,6 +178,8 @@ watch(
           animation="200"
           handle=".drag-handle-card" 
           ghost-class="ghost-card"
+          group="cards"
+          @change="handleCardChange"
         >
       <template #item="{ element: card }">
         <div class="drag-handle-card">
@@ -143,11 +195,13 @@ watch(
             animation="200"
             ghost-class="ghost-task"
             class="task-list-container" 
+            @change="handleTaskChange($event, card.id)"
           >
             <template #item="{ element: task }">
             <Task
                :key="task.id"
-               :task_name="task.name">
+               :task_name="task.name"
+               @click="OpenDetailTask(task)">
             </Task>
             </template>
             </draggable>
@@ -161,6 +215,10 @@ watch(
       @close="isModalOpen = false"
       @created="refreshListAfterCreate"
     />
+    <TaskInfo v-if="isDetailTaskOpen"
+      :task_name="selectedTask?.name"
+      @close="isDetailTaskOpen=false">
+    </TaskInfo>
   </MainLayout>
 </template>
 <style scoped> 
