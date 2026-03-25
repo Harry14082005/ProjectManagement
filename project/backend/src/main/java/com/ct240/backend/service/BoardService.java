@@ -149,12 +149,13 @@ public class BoardService {
         String spaceId = board.getSpace().getId();
 
         //Kiem duyet owner
-        boolean isOwner = spaceUserRepository
-                .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
-
-        if (!isOwner){
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
+//        boolean isOwner = spaceUserRepository
+//                .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
+//
+//        if (!isOwner){
+//            throw new AppException(ErrorCode.UNAUTHORIZED);
+//        }
+        permissionService.requireInBoard(user.getId(), boardId);
 
         boardMapper.updateBoard(board, request);
         boardRepository.save(board);
@@ -168,15 +169,17 @@ public class BoardService {
             Board board = boardRepository.findById(boardId).orElseThrow(
                     () -> new AppException(ErrorCode.BOARD_NOT_FOUND)
             );
-            boolean isOwner = boardUserRepository.existsByUserIdAndBoardIdAndIsOwner(user.getId(), boardId, true);
-            if (!isOwner){
-                throw new AppException(ErrorCode.UNAUTHORIZED);
-            }
+
+//            boolean isOwner = boardUserRepository.existsByUserIdAndBoardIdAndIsOwner(user.getId(), boardId, true);
+//            if (!isOwner){
+//                throw new AppException(ErrorCode.UNAUTHORIZED);
+//            }
+            permissionService.requireInBoard(user.getId(), boardId);
 
             List<User> users = boardUserRepository.findUsersByBoardId(boardId);
             notificationService.createNotificationForUsers(
                     users,
-                    board.getName() + "đã bị xoá",
+                    board.getName() + " đã bị xoá",
                     Type.DELETE_BOARD,
                     boardId
             );
