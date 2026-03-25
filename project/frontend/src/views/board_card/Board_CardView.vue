@@ -3,6 +3,7 @@ import { ref,onMounted,watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/services/api'
 import draggable from 'vuedraggable'
+import { globalSignal } from '@/stores/eventbus.js';
 
 import MainLayout from '@/components/layout/MainLayout.vue'
 import Button from '@/components/base/BaseButton.vue'
@@ -198,6 +199,7 @@ const fetchBoardCard = async (SpaceId, BoardId) => {
   }
 }
 
+
 const handleCreateTask = async (cardId, taskName) => {
   try {
     const payload = {
@@ -270,6 +272,19 @@ watch(
   },
   { deep: true }
 );
+
+// Bất cứ khi nào App.vue thay đổi biến globalSignal, hàm watch này sẽ chạy!
+watch(globalSignal, (newSignal) => {
+  if (!newSignal) return;
+
+  if (newSignal.action === 'RELOAD_BOARD') {
+    const currentBoardId = route.params.idBoard;
+    
+    if (String(newSignal.boardId) === String(currentBoardId)) {
+      fetchBoardCard(route.params.idSpace, currentBoardId);
+    }
+  }
+});
 </script>
 <template>
   <MainLayout>

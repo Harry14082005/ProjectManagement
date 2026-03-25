@@ -5,8 +5,9 @@ import IconMember from '../icons/IconMember.vue'
 import IconGears from '../icons/IconGears.vue'
 import { workspaceStore } from '@/stores/workspaceStore.js'
 import { deburr } from 'lodash'
-import { ref, onMounted } from 'vue' 
+import { ref, onMounted, watch } from 'vue' 
 import { useRoute, useRouter } from 'vue-router'
+import { globalSignal } from '@/stores/eventbus.js';
 import EditSpaceModal from './EditSpaceModal.vue'
 const router=useRouter();
 const route = useRoute();
@@ -47,6 +48,13 @@ onMounted(() => {
   // Không mở khi đang ở trang /spaces/:idSpace/boards/:idBoard/cards
   if (route.params.idSpace && route.path.startsWith('/space/')) {
     openSpaceId.value = parseInt(route.params.idSpace)
+  }
+});
+
+// Đồng bộ hóa khi có tín hiệu thay đổi Space
+watch(globalSignal, (newSignal) => {
+  if (newSignal?.action === 'RELOAD_SPACES') {
+    fetchWorkspaces();
   }
 });
 

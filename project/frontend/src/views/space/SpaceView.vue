@@ -7,6 +7,7 @@ import Card from '@/components/base/BaseBoard.vue'
 import Button from '@/components/base/BaseButton.vue'
 import CreateBoardModal from '@/components/layout/CreateBoardModal.vue'; 
 import router from '@/router'
+import { globalSignal } from '@/stores/eventbus.js';
 
 const route=useRoute();
 // 2. Thêm biến để điều khiển ẩn/hiện Modal
@@ -95,6 +96,16 @@ watch(
     if(newId) fetchSpaceBoard(newId)
   }
 )
+
+// Đồng bộ hóa khi có tín hiệu thay đổi danh sách Board của Space
+watch(globalSignal, (newSignal) => {
+  if (newSignal?.action === 'RELOAD_BOARDS') {
+    const currentSpaceId = route.params.id;
+    if (String(newSignal.spaceId) === String(currentSpaceId)) {
+      fetchSpaceBoard(currentSpaceId);
+    }
+  }
+});
 
 const goTo_BoardCardView=(boardId)=>{
   const spaceId = route.params.id;
