@@ -23,10 +23,18 @@ const closeModal = () => {
   isModalOpen.value = false;
 }
 
+let isToggling = false;
+
 const isShowSummaryProfile = ref(false);
+const profileRef = ref(null);
 
 const SummaryProfile=()=>{
-    isShowSummaryProfile.value= isShowSummaryProfile.value ===false ? true:false;
+    isToggling = true;
+    isShowSummaryProfile.value = !isShowSummaryProfile.value;
+    if (isShowSummaryProfile.value) {
+        isShowNotification.value = false;
+    }
+    setTimeout(() => { isToggling = false; }, 0);
 }
 
 const isProfileSettingOpen = ref(false);
@@ -37,11 +45,13 @@ const openProfileSetting = () => {
 
 const isShowNotification = ref(false);
 const notificationRef = ref(null);
-let isToggling = false;
 
 const toggleNotification=()=>{
     isToggling = true;
-    isShowNotification.value = isShowNotification.value ===false ? true:false;
+    isShowNotification.value = !isShowNotification.value;
+    if (isShowNotification.value) {
+        isShowSummaryProfile.value = false;
+    }
     setTimeout(() => { isToggling = false; }, 0);
 }
 
@@ -49,6 +59,9 @@ const handleClickOutside = (event) => {
     if (isToggling) return;
     if (isShowNotification.value && notificationRef.value && !notificationRef.value.contains(event.target)) {
         isShowNotification.value = false;
+    }
+    if (isShowSummaryProfile.value && profileRef.value && !profileRef.value.contains(event.target)) {
+        isShowSummaryProfile.value = false;
     }
 }
 
@@ -164,7 +177,7 @@ const handleLogOut=()=>{
       <CreateSpace v-if="isModalOpen" @close-modal="closeModal"></CreateSpace>
       <ProfileSetting v-if="isProfileSettingOpen" @close="isProfileSettingOpen = false"></ProfileSetting>
     </div>
-    <div class="overview_profile" v-if="isShowSummaryProfile">
+    <div class="overview_profile" v-if="isShowSummaryProfile" ref="profileRef">
             <div class="avatar">{{username.charAt(0).toUpperCase()}}</div>
             <div class="name_user">{{ username }}</div>
         <div @click="openProfileSetting">Hồ sơ và hiển thị</div>
