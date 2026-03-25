@@ -3,14 +3,17 @@ package com.ct240.backend.service;
 import com.ct240.backend.dto.request.BoardCreationRequest;
 import com.ct240.backend.dto.request.BoardUpdateRequest;
 import com.ct240.backend.dto.response.BoardResponse;
+import com.ct240.backend.dto.response.SseResponse;
 import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
 import com.ct240.backend.enums.Type;
+import com.ct240.backend.event.AppEvents;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.BoardMapper;
 import com.ct240.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 
@@ -44,6 +47,9 @@ public class BoardService {
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
+
     public BoardResponse createBoard(String spaceId, BoardCreationRequest request, Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
 
@@ -73,6 +79,13 @@ public class BoardService {
         boardUser.setOwner(true);
 
         boardUserRepository.save(boardUser);
+
+        eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
+                SseResponse.builder()
+                        .type(Type.SPACE_BOARD_UPDATE)
+                        .spaceId(spaceId)
+                        .build())
+        );
 
         return boardMapper.toBoardResponse(board);
     }
@@ -159,6 +172,14 @@ public class BoardService {
 
         boardMapper.updateBoard(board, request);
         boardRepository.save(board);
+
+        eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
+                SseResponse.builder()
+                        .type(Type.SPACE_BOARD_UPDATE)
+                        .spaceId(spaceId)
+                        .build())
+        );
+
         return boardMapper.toBoardResponse(board);
 
     }
@@ -182,6 +203,13 @@ public class BoardService {
                     board.getName() + " đã bị xoá",
                     Type.DELETE_BOARD,
                     boardId
+            );
+
+            eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
+                    SseResponse.builder()
+                            .type(Type.SPACE_BOARD_UPDATE)
+                            .spaceId(board.getSpace().getId())
+                            .build())
             );
 
             boardRepository.delete(board);
