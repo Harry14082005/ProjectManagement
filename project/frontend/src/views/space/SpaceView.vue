@@ -1,7 +1,7 @@
 <script setup>
 import { ref,onMounted,watch } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
+import api from '@/services/api'
 import MainLayout from '@/components/layout/MainLayout.vue'
 import Card from '@/components/base/BaseBoard.vue'
 import Button from '@/components/base/BaseButton.vue'
@@ -31,9 +31,7 @@ const handleCreateBoard = async (boardData) => {
       return;
     }
 
-    const token = localStorage.getItem('token');
-    
-    const url = `http://localhost:8080/api/spaces/${spaceId}/boards`;
+    const url = `/spaces/${spaceId}/boards`;
     
     const requestData = {
       name: boardData.name,               // Khớp @NotBlank String name;
@@ -43,9 +41,7 @@ const handleCreateBoard = async (boardData) => {
 
     console.log("Đang gửi data:", requestData, "đến URL:", url);
 
-    const response = await axios.post(url, requestData, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const response = await api.post(url, requestData);
     
     boards.value.push(response.data.data);
     closeCreateBoardModal();
@@ -73,13 +69,10 @@ const boards=ref([]);
 const fetchSpaceBoard= async (SpaceId)=>{
   isLoading.value=true;
   try{
-  const token=localStorage.getItem('token');
-  const headers={'Authorization':`Bearer ${token}`};
-
-  const SpaceRes= await axios.get(`http://localhost:8080/api/spaces/${SpaceId}`,{headers});
+  const SpaceRes= await api.get(`/spaces/${SpaceId}`);
   spaceData.value=SpaceRes.data.data || SpaceRes.data;
 
-  const BoardRes =await axios.get(`http://localhost:8080/api/spaces/${SpaceId}/boards`,{headers});
+  const BoardRes =await api.get(`/spaces/${SpaceId}/boards`);
   boards.value=BoardRes.data.data|| BoardRes.data;
   }
   catch(error){
