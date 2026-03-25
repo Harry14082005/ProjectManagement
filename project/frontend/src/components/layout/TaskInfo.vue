@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue'
-import axios from 'axios'
+import api from '@/services/api'
 import IconUser from '../icons/IconUser.vue';
 import BaseComment from '../base/BaseComment.vue';
 import IconDeleteTask from '../icons/IconDeleteTask.vue';
@@ -47,9 +47,7 @@ const getUserDisplayName = (u) => {
 const fetchBoardMembers = async () => {
   if (!boardId.value) return
   try {
-    const token = localStorage.getItem('token')
-    const headers = { Authorization: `Bearer ${token}` }
-    const res = await axios.get(`http://localhost:8080/api/boards/${boardId.value}/members`, { headers })
+    const res = await api.get(`/boards/${boardId.value}/members`)
     boardMembers.value = res.data?.data ?? res.data ?? []
   } catch (err) {
     console.error('Load board members error:', err)
@@ -59,9 +57,7 @@ const fetchBoardMembers = async () => {
 const fetchTaskAssignments = async () => {
   if (!props.task?.id) return
   try {
-    const token = localStorage.getItem('token')
-    const headers = { Authorization: `Bearer ${token}` }
-    const res = await axios.get(`http://localhost:8080/api/tasks/${props.task.id}/assignments`, { headers })
+    const res = await api.get(`/tasks/${props.task.id}/assignments`)
     taskAssignments.value = res.data?.data ?? res.data ?? []
   } catch (err) {
     console.error('Load task assignments error:', err)
@@ -99,9 +95,7 @@ const closeMemberPicker = () => {
 const handleSelectMember = async (user) => {
   if (!props.task?.id || !user?.id) return
   try {
-    const token = localStorage.getItem('token')
-    const headers = { Authorization: `Bearer ${token}` }
-    await axios.post(`http://localhost:8080/api/tasks/${props.task.id}/assign`, { userId: user.id }, { headers })
+    await api.post(`/tasks/${props.task.id}/assign`, { userId: user.id })
     await fetchTaskAssignments()
     closeMemberPicker()
   } catch (e) {
@@ -117,9 +111,7 @@ const handleUnassignMember = async (user) => {
   if (!ok) return
 
   try {
-    const token = localStorage.getItem('token')
-    const headers = { Authorization: `Bearer ${token}` }
-    await axios.delete(`http://localhost:8080/api/tasks/${props.task.id}/assign/${user.id}`, { headers })
+    await api.delete(`/tasks/${props.task.id}/assign/${user.id}`)
     await fetchTaskAssignments()
   } catch (e) {
     console.error('Unassign member from task error:', e)
@@ -140,13 +132,10 @@ const saveTaskInfo = async () => {
 
     if(!props.task?.id) return;
     try {
-        const token = localStorage.getItem('token');
-        await axios.put(`http://localhost:8080/api/tasks/${props.task.id}`, {
+        await api.put(`/tasks/${props.task.id}`, {
             name: editTaskNameValue.value.trim() || props.task.name,
             deadline: localDeadline.value,
             completed: props.task.completed || false
-        }, {
-            headers: { 'Authorization': `Bearer ${token}` }
         });
         isEditingTaskName.value = false;
         emit('update-task');
@@ -159,10 +148,7 @@ const handleDeleteTask = async () => {
     if(!props.task?.id) return;
     if (confirm(`Bạn có chắc chắn muốn xóa tác vụ "${props.task?.name}" không? Toàn bộ bình luận và dữ liệu liên quan sẽ bị xóa vĩnh viễn.`)) {
         try {
-            const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8080/api/tasks/${props.task.id}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            await api.delete(`/tasks/${props.task.id}`);
             emit('update-task');
             close_detail_task();
         } catch (error) {
@@ -175,10 +161,7 @@ const handleDeleteTask = async () => {
 const fetchComments = async () => {
     if(!props.task?.id) return;
     try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get(`http://localhost:8080/api/tasks/${props.task.id}/comments`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await api.get(`/tasks/${props.task.id}/comments`);
         comments.value = res.data.data || res.data || [];
     } catch (err) {
         console.log("Load comments error or not found", err);
@@ -199,11 +182,8 @@ const handleSaveTask = async () => {
 const handlePostComment = async () => {
     if(!newComment.value.trim() || !props.task?.id) return;
     try {
-        const token = localStorage.getItem('token');
-        await axios.post(`http://localhost:8080/api/tasks/${props.task.id}/comments`, {
+        await api.post(`/tasks/${props.task.id}/comments`, {
             content: newComment.value.trim()
-        }, {
-            headers: { 'Authorization': `Bearer ${token}` }
         });
         newComment.value = '';
         fetchComments();

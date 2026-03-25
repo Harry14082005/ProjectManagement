@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '@/services/api'
 import MainLayout from '@/components/layout/MainLayout.vue'
 import Card from '@/components/base/BaseBoard.vue'
 
@@ -11,12 +11,7 @@ const isLoading = ref(true);
 
 const fetchAllSpacesAndBoards = async () => {
   try {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
-    const response = await axios.get("http://localhost:8080/api/spaces", {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
+    const response = await api.get("/spaces");
     
     let spaceData = response.data.data || response.data;
     if (!Array.isArray(spaceData)) spaceData = [];
@@ -25,9 +20,7 @@ const fetchAllSpacesAndBoards = async () => {
     const spacesWithBoards = await Promise.all(
       spaceData.map(async (space) => {
         try {
-          const boardRes = await axios.get(`http://localhost:8080/api/spaces/${space.id}/boards`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
+          const boardRes = await api.get(`/spaces/${space.id}/boards`);
           return {
             ...space,
             boards: boardRes.data.data || boardRes.data || []

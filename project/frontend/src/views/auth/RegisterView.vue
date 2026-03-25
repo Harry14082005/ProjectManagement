@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '@/services/api'
 import LoginLayout from '@/components/layout/RegisterLayout.vue'
 import AppNavbar from '@/components/layout/AppNavbar.vue'
 
@@ -32,8 +32,8 @@ const handleRegister = async () => {
 
   try {
 
-    const response = await axios.post(
-      "http://localhost:8080/api/auth/register",
+    const response = await api.post(
+      "/auth/register",
       {
         name: form.name,
         username: form.username,

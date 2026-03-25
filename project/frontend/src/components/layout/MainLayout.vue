@@ -5,7 +5,7 @@ import CreateSpace from './CreateSpace.vue';
 import NotificationCard from '../base/NotificationCard.vue';
 import ProfileSetting from './ProfileSetting.vue';
 import { onMounted, onUnmounted, ref, computed } from 'vue'
-import axios from 'axios'
+import api from '@/services/api'
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useRouter } from 'vue-router'
 
@@ -67,12 +67,7 @@ const handleClickOutside = (event) => {
 
 const fetchUserProfile=async()=>{
     try{
-        const token=localStorage.getItem('token');
-        const response = await axios.get("http://localhost:8080/api/users/profile",{
-            headers:{
-                'Authorization':`Bearer ${token}`
-            }
-        });
+        const response = await api.get("/users/profile");
         username.value=response.data.data.name;
     }
     catch(error){
@@ -94,10 +89,7 @@ const hasUnreadNotifications = computed(() => {
 
 const fetchNotifications = async () => {
     try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get("http://localhost:8080/api/notifications", {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const response = await api.get("/notifications");
         const data = response.data;
         // Xử lý payload và sắp xếp theo thời gian mới nhất (createAt giảm dần)
         const rawData = Array.isArray(data) ? data : (data.data || []);
