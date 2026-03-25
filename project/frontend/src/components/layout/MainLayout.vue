@@ -82,14 +82,86 @@ const fetchNotifications = async () => {
   }
 }
 
+let sseController = null;
+
+const connectSSE = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  // Dùng AbortController để có thể huỷ kết nối
+  sseController = new AbortController();
+
+  try {
+    const response = await fetch('http://localhost:8080/api/notifications/subscribe', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'text/event-stream',
+      },
+      signal: sseController.signal,
+    });
+
+    if (!response.ok) {
+      console.error('SSE connection failed:', response.status);
+      // Tự động reconnect sau 5 giây
+      setTimeout(() => connectSSE(), 5000);
+      return;
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+
+      // Xử lý từng dòng SSE (format: "data:...\n\n")
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || ''; // Giữ lại phần chưa hoàn chỉnh
+
+      for (const line of lines) {
+        if (line.startsWith('data:')) {
+          const jsonStr = line.slice(5).trim();
+          if (!jsonStr) continue;
+          try {
+            const data = JSON.parse(jsonStr);
+            // Nếu code là 2000 thì không hiển thị thông báo
+            if (data.code === 2000) continue;
+            // Thêm notification mới vào store
+            if (data.data) {
+              notificationStore.addNotification(data.data);
+            } else if (data.id) {
+              notificationStore.addNotification(data);
+            }
+          } catch (e) {
+            console.error('Lỗi parse SSE message:', e);
+          }
+        }
+      }
+    }
+  } catch (error) {
+    if (error.name === 'AbortError') return; // Bị huỷ chủ động
+    console.error('SSE connection error:', error);
+    // Tự động reconnect sau 5 giây
+    setTimeout(() => connectSSE(), 5000);
+  }
+};
+
 onMounted(() => {
   fetchUserProfile();
   fetchNotifications();
+  connectSSE();
   document.addEventListener('click', handleClickOutside);
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
+  if (sseController) {
+    sseController.abort();
+    sseController = null;
+  }
 })
 
 const handleLogOut = () => {
@@ -127,8 +199,8 @@ const handleLogOut = () => {
                 v-for="notify in notifications" 
                 :key="notify.id" 
                 :notification="notify" 
-                @marked-read="(id) => { const n = notifications.find(x => x.id === id); if(n) n.readStatus = true; }"
-                @deleted="(id) => { notifications = notifications.filter(x => x.id !== id); }"
+                @marked-read="(id) => notificationStore.markAsRead(id)"
+                @deleted="(id) => notificationStore.removeNotification(id)"
             />
             <div v-if="notifications.length === 0" class="empty-state">
                 Không có thông báo nào

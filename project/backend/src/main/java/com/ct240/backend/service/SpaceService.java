@@ -3,12 +3,14 @@ package com.ct240.backend.service;
 import com.ct240.backend.dto.request.SpaceCreationRequest;
 import com.ct240.backend.dto.request.SpaceUpdateRequest;
 import com.ct240.backend.dto.response.SpaceResponse;
+import com.ct240.backend.dto.response.SseResponse;
 import com.ct240.backend.entity.Space;
 import com.ct240.backend.entity.SpaceUser;
 import com.ct240.backend.entity.SpaceUserId;
 import com.ct240.backend.entity.User;
 import com.ct240.backend.enums.Role;
 import com.ct240.backend.enums.Type;
+import com.ct240.backend.event.AppEvents;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.SpaceMapper;
@@ -16,6 +18,7 @@ import com.ct240.backend.repository.SpaceRepository;
 import com.ct240.backend.repository.SpaceUserRepository;
 import com.ct240.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +46,8 @@ public class SpaceService {
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
 
 //    public SpaceResponse getAllSpaces(String userId){
 //        SpaceResponse spaceResponse = new SpaceResponse();
@@ -122,6 +127,13 @@ public class SpaceService {
         spaceMapper.updateSpace(space, request);
 
         spaceRepository.save(space);
+
+        eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
+                SseResponse.builder()
+                        .type(Type.SPACE_BOARD_UPDATE)
+                        .spaceId(spaceId)
+                        .build())
+        );
 
         return spaceMapper.toSpaceResponse(space);
 
