@@ -85,6 +85,7 @@ const goToSpace = (spaceId) => {
             <Card 
               v-for="board in space.boards.slice(0, 2)" 
               :key="board.id"
+              :boardId="board.id"
               :title="board.name"
               :status_text="(board.isPrivate === true || board.private === true) ? 'Private' : 'Public'"
               :content="board.description || 'Chưa có mô tả'"

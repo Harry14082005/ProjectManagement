@@ -755,7 +755,7 @@ watch(() => boardId.value, () => {
   white-space: nowrap;
   width: fit-content;
   box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  z-index: 3000;
+  z-index: 30000;
   pointer-events: none;
 }
 .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }

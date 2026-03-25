@@ -128,6 +128,7 @@ const goTo_BoardCardView=(boardId)=>{
         <Card
           v-for="board in boards"
           :key="board.id"
+          :boardId="board.id"
           :title="board.name"
           :status_text="(board.isPrivate === true || board.private === true) ? 'Private' : 'Public'"
           :content="board.description||'Chưa có mô tả'"
