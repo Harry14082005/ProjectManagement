@@ -426,6 +426,7 @@ watch(() => boardId.value, () => {
   flex-direction: column;
   justify-items: center;
   position: relative;
+  overflow: visible;
 }
 .comment_nav{
   padding: 5px 4%;
@@ -506,7 +507,7 @@ watch(() => boardId.value, () => {
   background: white; padding: 40px; border-radius: 1.25rem;
   width: 750px; max-width: 90%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   font-family: "Quicksand", sans-serif;
-  overflow: hidden;
+  overflow: visible;
 }
 .modal h2 { margin-top: 0; margin-bottom: 16px; font-size: 20px; }
 .modal-assign {
@@ -538,7 +539,7 @@ watch(() => boardId.value, () => {
   border-radius: 1.25rem;
   padding: 12px;
   margin-bottom: 0;
-  max-height: 320px;
+  max-height: none;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -592,7 +593,8 @@ watch(() => boardId.value, () => {
   flex-direction: column;
   gap: 8px;
   padding-right: 4px;
-  max-height: 220px;
+  /* Vừa đủ hiển thị khoảng 2 dòng thành viên, còn lại sẽ cuộn */
+  max-height: 145px;
 }
 .member-picker-empty{
   color: #6b8799;

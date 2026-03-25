@@ -64,9 +64,20 @@ const usersInBoard = computed(() => {
   return (boardMembers.value || []).map((bm) => bm?.userResponse).filter(Boolean)
 })
 
-const firstThreeMembers = computed(() => usersInBoard.value.slice(0, 3))
-const remainingMembers = computed(() => usersInBoard.value.slice(3))
-const remainingCount = computed(() => Math.max(0, usersInBoard.value.length - 3))
+const shouldCollapseToPlus = computed(() => usersInBoard.value.length > 3)
+const firstMembers = computed(() => {
+  // Khi > 3: chỉ hiển thị 2 avatar + ô cuối dạng "+(số lượng-2)"
+  return shouldCollapseToPlus.value ? usersInBoard.value.slice(0, 2) : usersInBoard.value.slice(0, 3)
+})
+
+const remainingMembers = computed(() => {
+  // Chỉ dùng cho tooltip khi ô + xuất hiện
+  return shouldCollapseToPlus.value ? usersInBoard.value.slice(2) : []
+})
+
+const remainingCount = computed(() => {
+  return shouldCollapseToPlus.value ? Math.max(0, usersInBoard.value.length - 2) : 0
+})
 
 const totalCountText = computed(() => `${usersInBoard.value.length} members`)
 
@@ -85,7 +96,7 @@ const showRemainingTooltip = ref(false)
     <div class="member_card">
         <div class="member-avatars">
           <div
-            v-for="(u, idx) in firstThreeMembers"
+            v-for="(u, idx) in firstMembers"
             :key="u.id"
             class="member-avatar"
             :class="{ 'member-avatar-overlap': idx > 0 }"
@@ -99,7 +110,7 @@ const showRemainingTooltip = ref(false)
           </div>
 
           <div
-            v-if="remainingCount > 0"
+            v-if="shouldCollapseToPlus && remainingCount > 0"
             class="member-more"
             @mouseenter="showRemainingTooltip = true"
             @mouseleave="showRemainingTooltip = false"
