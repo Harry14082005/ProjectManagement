@@ -19,22 +19,20 @@ const toggleSpace=(id)=>{
   openSpaceId.value = openSpaceId.value=== id ? null:id;
 }
 
-// ĐÃ THÊM: onMounted để chạy code ngay khi mở trang
 
 
 const isShow = ref(false)
 
-// HÀM MỚI: Kéo danh sách Space từ server về khi load trang
 const fetchWorkspaces = async () => {
   try {
     const token = localStorage.getItem("token");
-    if (!token) return; // Nếu chưa đăng nhập thì thôi không gọi
+    if (!token) return; 
 
     const response = await axios.get("http://localhost:8080/api/spaces", {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
-    // Gán dữ liệu lấy được vào kho chung (Tùy cấu trúc API trả về mà bạn chỉnh .data cho đúng nhé)
+    // Gán dữ liệu lấy được vào kho chung 
     workspaceStore.workspaces = response.data.data || response.data; 
     
   } catch (error) {
@@ -45,8 +43,8 @@ const fetchWorkspaces = async () => {
 // Chạy hàm fetchWorkspaces ngay khi Sidebar xuất hiện
 onMounted(() => {
   fetchWorkspaces();
-  // Chỉ tự mở mục "Bảng/Thành viên" trong Sidebar khi đang ở trang Space (đường dẫn dạng /space/:id)
-  // Không mở khi đang ở trang board-card dạng /spaces/:idSpace/boards/:idBoard/cards
+  // Chỉ tự mở mục "Bảng/Thành viên" trong Sidebar khi đang ở trang Space (/space/:id)
+  // Không mở khi đang ở trang /spaces/:idSpace/boards/:idBoard/cards
   if (route.params.idSpace && route.path.startsWith('/space/')) {
     openSpaceId.value = parseInt(route.params.idSpace)
   }

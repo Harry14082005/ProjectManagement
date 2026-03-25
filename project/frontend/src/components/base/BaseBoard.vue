@@ -66,7 +66,7 @@ const usersInBoard = computed(() => {
 
 const shouldCollapseToPlus = computed(() => usersInBoard.value.length > 3)
 const firstMembers = computed(() => {
-  // Khi > 3: chỉ hiển thị 2 avatar + ô cuối dạng "+(số lượng-2)"
+  // Khi hien thi tren 3 avt, avt cuoi se bang tong so luong -2
   return shouldCollapseToPlus.value ? usersInBoard.value.slice(0, 2) : usersInBoard.value.slice(0, 3)
 })
 
@@ -229,13 +229,11 @@ const showRemainingTooltip = ref(false)
     margin-top: 10px;
     margin-left: 20px;
 }
-
 .member-avatars{
     display: flex;
     align-items: center;
     position: relative;
 }
-
 .member-avatar{
     display: flex;
     align-content: center;
@@ -250,11 +248,9 @@ const showRemainingTooltip = ref(false)
     font-weight: bold;
     position: relative;
 }
-
 .member-avatar-overlap{
     margin-left: -5px;
 }
-
 .member-tooltip{
     position: absolute;
     top: 34px;
