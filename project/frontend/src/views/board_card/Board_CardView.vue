@@ -3,7 +3,7 @@ import { ref,onMounted,watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/services/api'
 import draggable from 'vuedraggable'
-import { globalSignal } from '@/stores/eventbus.js';
+import { globalBus } from '@/stores/eventbus.js';
 
 import MainLayout from '@/components/layout/MainLayout.vue'
 import Button from '@/components/base/BaseButton.vue'
@@ -273,18 +273,27 @@ watch(
   { deep: true }
 );
 
-// Bất cứ khi nào App.vue thay đổi biến globalSignal, hàm watch này sẽ chạy!
-watch(globalSignal, (newSignal) => {
+// Đồng bộ hóa khi có tín hiệu thay đổi
+watch(() => globalBus.signal, (newSignal) => {
   if (!newSignal) return;
+  console.log("🕵️ Board_CardView: Nhận được tín hiệu từ globalBus:", newSignal);
 
-  if (newSignal.action === 'RELOAD_BOARD') {
-    const currentBoardId = route.params.idBoard;
-    
-    if (String(newSignal.boardId) === String(currentBoardId)) {
-      fetchBoardCard(route.params.idSpace, currentBoardId);
+  const currentSpaceId = route.params.idSpace;
+  const currentBoardId = route.params.idBoard;
+
+  if (newSignal.action === 'RELOAD_BOARD_TASKS' || newSignal.action === 'RELOAD_BOARD' || newSignal.action === 'RELOAD_ALL' || newSignal.action === 'RELOAD_PAGE') {
+    // Nếu là reload board tasks cụ thể, kiểm tra spaceId (nếu có)
+    const isTargetSpace = !newSignal.spaceId || String(newSignal.spaceId) === String(currentSpaceId);
+    const isTargetBoard = !newSignal.boardId || String(newSignal.boardId) === String(currentBoardId);
+
+    if (isTargetSpace && isTargetBoard) {
+       console.log(`🚀 Board_CardView: Tín hiệu khớp (${newSignal.action}). Đang thực hiện reload...`);
+       setTimeout(() => {
+         if (currentSpaceId && currentBoardId) fetchBoardCard(currentSpaceId, currentBoardId);
+       }, 300);
     }
   }
-});
+}, { deep: true });
 </script>
 <template>
   <MainLayout>
