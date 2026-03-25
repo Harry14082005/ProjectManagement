@@ -503,7 +503,7 @@ watch(() => boardId.value, () => {
 }
 .modal {
   position: relative;
-  background: white; padding: 24px; border-radius: 1.25rem;
+  background: white; padding: 40px; border-radius: 1.25rem;
   width: 750px; max-width: 90%; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   font-family: "Quicksand", sans-serif;
   overflow: hidden;
