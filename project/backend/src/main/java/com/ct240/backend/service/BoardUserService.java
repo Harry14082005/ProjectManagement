@@ -4,10 +4,7 @@ import com.ct240.backend.dto.request.BoardUserRequest;
 import com.ct240.backend.dto.response.BoardMemberResponse;
 import com.ct240.backend.dto.response.BoardUserResponse;
 import com.ct240.backend.dto.response.UserResponse;
-import com.ct240.backend.entity.Board;
-import com.ct240.backend.entity.BoardUser;
-import com.ct240.backend.entity.BoardUserId;
-import com.ct240.backend.entity.User;
+import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
 import com.ct240.backend.enums.Type;
 import com.ct240.backend.exception.AppException;
@@ -109,11 +106,12 @@ public class BoardUserService {
     public List<BoardMemberResponse> getAllUsersInBoard(String boardId, Authentication authentication){
         User user = permissionService.getUserAuth(authentication);
 
-        //kiểm tra phải thành viên board hông
-        boolean isMember = permissionService.isMemberInBoard(user.getId(), boardId);
-        if(!isMember){
-            throw new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD);
-        }
+        permissionService.requireInBoard(user.getId(), boardId);
+//        //kiểm tra phải thành viên board hông
+//        boolean isMember = permissionService.isMemberInBoard(user.getId(), boardId);
+//        if(!isMember){
+//            throw new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD);
+//        }
 
         var listUsers = boardUserRepository.findUsersByBoardId(boardId);
 
@@ -176,6 +174,17 @@ public class BoardUserService {
 
         BoardUser boardUser = boardUserRepository.findByUserIdAndBoardId(user.getId(), boardId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXIST_IN_BOARD)
+        );
+
+        BoardUser ownerOfBoard = boardUserRepository.findByBoardIdAndIsOwner(boardId, true).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        notificationService.createNotification(
+                ownerOfBoard.getUser(),
+                user.getUsername() + " đã rời khỏi bảng " + boardUser.getBoard().getName() ,
+                Type.DELETE_USER_FROM_BOARD,
+                boardId
         );
 
         boardUserRepository.delete(boardUser);

@@ -17,6 +17,8 @@ public interface BoardUserRepository extends JpaRepository<BoardUser, String> {
 
     Optional<BoardUser> findByUserIdAndBoardId(String userId, String boardId);
 
+    Optional<BoardUser> findByBoardIdAndIsOwner(String boardId, boolean isOwner);
+
     @Query("SELECT bu.user FROM BoardUser bu WHERE bu.board.id = :boardId")
     List<User> findUsersByBoardId(@Param("boardId") String boardId);
 

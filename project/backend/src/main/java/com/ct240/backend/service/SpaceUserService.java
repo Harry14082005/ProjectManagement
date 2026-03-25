@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -204,6 +205,19 @@ public class SpaceUserService {
         if(spaceUser.getRole() == Role.OWNER){
             throw new AppException(ErrorCode.OWNER_CANNOT_LEAVE_SPACE);
         }
+
+        List<SpaceUser> ownerOfSpace = spaceUserRepository.findBySpaceIdAndRole(spaceId, Role.OWNER);
+        List<SpaceUser> adminOfSpace = spaceUserRepository.findBySpaceIdAndRole(spaceId, Role.ADMIN);
+        List<SpaceUser> list = new ArrayList<>();
+        list.addAll(ownerOfSpace);
+        list.addAll(adminOfSpace);
+
+        notificationService.createNotificationForUsers(
+                list.stream().map(SpaceUser::getUser).toList(),
+                user.getUsername() + " đã rời khỏi space " + spaceUser.getSpace().getName() ,
+                Type.DELETE_USER_FROM_SPACE,
+                spaceId
+        );
 
         spaceUserRepository.delete(spaceUser);
     }
