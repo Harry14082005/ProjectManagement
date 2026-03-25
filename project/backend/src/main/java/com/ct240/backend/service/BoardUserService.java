@@ -43,6 +43,9 @@ public class BoardUserService {
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    TaskAssignmentService taskAssignmentService;
+
     ///         NGƯỜI CÓ QUYỀN THÊM MEMBER VÀO BOARD       ///
     /// 1. OWNER, ADMIN của SPACE                          ///
     /// 2. OWNER của BOARD                                 ///
@@ -160,6 +163,10 @@ public class BoardUserService {
 
         boardUserRepository.delete(boardUser);
 
+
+        ///xoá tất cả các task người đó dược giao
+        taskAssignmentService.unassignAllTasksInBoard(deletedUser.getId(), boardId);
+
     }
 
     //tự rời
@@ -189,5 +196,12 @@ public class BoardUserService {
 
         boardUserRepository.delete(boardUser);
 
+        ///xoá tất cả các task người đó dược giao
+        taskAssignmentService.unassignAllTasksInBoard(user.getId(), boardId);
+    }
+
+    public void deleteUserFromAllBoards(String userId, String spaceId){
+        List<BoardUser> list =  boardUserRepository.findAllByUserIdAndSpaceId(userId, spaceId);
+        boardUserRepository.deleteAll(list);
     }
 }
