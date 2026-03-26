@@ -168,7 +168,8 @@ public class BoardService {
 //        if (!isOwner){
 //            throw new AppException(ErrorCode.UNAUTHORIZED);
 //        }
-        permissionService.requireInBoard(user.getId(), boardId);
+        permissionService.requireCanModifyBoard(user.getId(), boardId);
+
 
         boardMapper.updateBoard(board, request);
         boardRepository.save(board);
@@ -195,7 +196,7 @@ public class BoardService {
 //            if (!isOwner){
 //                throw new AppException(ErrorCode.UNAUTHORIZED);
 //            }
-            permissionService.requireInBoard(user.getId(), boardId);
+            permissionService.requireCanModifyBoard(user.getId(), boardId);
 
             List<User> users = boardUserRepository.findUsersByBoardId(boardId);
             notificationService.createNotificationForUsers(

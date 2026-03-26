@@ -3,10 +3,12 @@ package com.ct240.backend.service;
 import com.ct240.backend.dto.request.BoardUserRequest;
 import com.ct240.backend.dto.response.BoardMemberResponse;
 import com.ct240.backend.dto.response.BoardUserResponse;
+import com.ct240.backend.dto.response.SseResponse;
 import com.ct240.backend.dto.response.UserResponse;
 import com.ct240.backend.entity.*;
 import com.ct240.backend.enums.Role;
 import com.ct240.backend.enums.Type;
+import com.ct240.backend.event.AppEvents;
 import com.ct240.backend.exception.AppException;
 import com.ct240.backend.exception.ErrorCode;
 import com.ct240.backend.mapper.BoardUserMapper;
@@ -120,6 +122,13 @@ public class BoardUserService {
                 boardId
         );
 
+        eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
+                SseResponse.builder()
+                        .type(Type.SPACE_BOARD_UPDATE)
+                        .spaceId(board.getSpace().getId())
+                        .build())
+        );
+
         boardUserRepository.save(boardUser);
 
         return boardUserMapper.toSpaceUserResponse(boardUser);
@@ -182,6 +191,13 @@ public class BoardUserService {
                 "Bạn được đã bị xoá khỏi bảng " + boardUser.getBoard().getName() ,
                 Type.ADD_USER_IN_BOARD,
                 boardId
+        );
+
+        eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
+                SseResponse.builder()
+                        .type(Type.SPACE_BOARD_UPDATE)
+                        .spaceId(boardUser.getBoard().getId())
+                        .build())
         );
 
         //sseEmitterService.createSseResponse(boardUser.getBoard().getSpace().getId(), Type.);

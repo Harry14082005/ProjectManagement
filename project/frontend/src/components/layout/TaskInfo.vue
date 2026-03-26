@@ -162,7 +162,10 @@ const fetchComments = async () => {
     if(!props.task?.id) return;
     try {
         const res = await api.get(`/tasks/${props.task.id}/comments`);
-        comments.value = res.data.data || res.data || [];
+        const raw = res.data.data || res.data || [];
+
+        comments.value = raw.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+
     } catch (err) {
         console.log("Load comments error or not found", err);
     }

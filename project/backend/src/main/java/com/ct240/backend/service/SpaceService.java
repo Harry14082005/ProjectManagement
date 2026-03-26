@@ -117,6 +117,8 @@ public class SpaceService {
                 () -> new AppException(ErrorCode.SPACE_NOT_FOUND)
         );
 
+        String oldName = space.getName();
+
         boolean isOwner = spaceUserRepository
                 .existsByUserIdAndSpaceIdAndRole(user.getId(), spaceId, Role.OWNER);
 
@@ -127,6 +129,14 @@ public class SpaceService {
         spaceMapper.updateSpace(space, request);
 
         spaceRepository.save(space);
+
+        List<User> users = spaceUserRepository.findUsersBySpaceId(spaceId);
+        notificationService.createNotificationForUsers(
+                users,
+                oldName + " đã được điều chỉnh thành " + space.getName(),
+                Type.DELETE_SPACE,
+                spaceId
+        );
 
         eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
                 SseResponse.builder()
@@ -163,9 +173,17 @@ public class SpaceService {
                 spaceId
         );
 
+        eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
+                SseResponse.builder()
+                        .type(Type.SPACE_BOARD_UPDATE)
+                        .spaceId(spaceId)
+                        .build())
+        );
+
         ///thiết lập xoá cascade cho Entity Space
         ///             để khi xoá space tự động xoá trong bảng SpaceUser///
         spaceRepository.delete(space);
+
     }
 
 }

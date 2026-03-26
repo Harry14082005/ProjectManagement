@@ -8,6 +8,7 @@ export const notificationStore = reactive({
   },
   
   addNotification(newNotification) {
+    console.log("Store: addNotification called", newNotification);
     this.notifications.unshift(newNotification);
     // Keep it sorted just in case
     this.notifications.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));

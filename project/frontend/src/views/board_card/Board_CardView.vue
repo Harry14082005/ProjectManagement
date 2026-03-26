@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import api from '@/services/api'
 import draggable from 'vuedraggable'
 import { globalBus } from '@/stores/eventbus.js';
+import { useRouter } from 'vue-router'
 
 import MainLayout from '@/components/layout/MainLayout.vue'
 import Button from '@/components/base/BaseButton.vue'
@@ -14,6 +15,7 @@ import TaskInfo from '@/components/layout/TaskInfo.vue'
 import EditBoardModal from '@/components/layout/EditBoardModal.vue'
 
 const isDetailTaskOpen=ref(false);
+const router = useRouter();
 const isEditBoardModalOpen = ref(false);
 const selectedTask=ref(null);
 const OpenDetailTask=(task)=>{
@@ -182,6 +184,14 @@ const fetchBoardCard = async (SpaceId, BoardId) => {
 
   } catch (error) {
     console.error("Lỗi tổng thể:", error);
+
+    const status = error?.response?.status;
+    if (status === 403 || status === 404) {
+      console.log(`Board_CardView: Lỗi ${status}, về trang chính`);
+      router.push('/home');
+      return;
+    }
+
     cards.value = [];
   } finally {
     isLoading.value = false;
@@ -265,7 +275,7 @@ watch(
 // Đồng bộ hóa khi có tín hiệu thay đổi
 watch(() => globalBus.signal, (newSignal) => {
   if (!newSignal) return;
-  console.log("🕵️ Board_CardView: Nhận được tín hiệu từ globalBus:", newSignal);
+  console.log("Board_CardView: Nhận được tín hiệu từ globalBus:", newSignal);
 
   const currentSpaceId = route.params.idSpace;
   const currentBoardId = route.params.idBoard;
@@ -276,7 +286,7 @@ watch(() => globalBus.signal, (newSignal) => {
     const isTargetBoard = !newSignal.boardId || String(newSignal.boardId) === String(currentBoardId);
 
     if (isTargetSpace && isTargetBoard) {
-       console.log(`🚀 Board_CardView: Tín hiệu khớp (${newSignal.action}). Đang thực hiện reload...`);
+       console.log(`Board_CardView: Tín hiệu khớp (${newSignal.action}). Đang thực hiện reload...`);
        setTimeout(() => {
          if (currentSpaceId && currentBoardId) fetchBoardCard(currentSpaceId, currentBoardId);
        }, 300);

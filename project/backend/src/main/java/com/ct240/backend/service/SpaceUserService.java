@@ -229,7 +229,7 @@ public class SpaceUserService {
 
         eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
                 SseResponse.builder()
-                        .type(Type.SPACE_MEMBER_UPDATE)
+                        .type(Type.SPACE_BOARD_UPDATE)
                         .spaceId(spaceId)
                         .build())
         );
@@ -262,18 +262,18 @@ public class SpaceUserService {
                 spaceId
         );
 
-        spaceUserRepository.delete(spaceUser);
-
-        //// --- /// ----- KHI XOÁ THÌ XOÁ LUÔN TRONG BOARD VA TASK ASSIGNMENT /// --- ///
-        boardUserService.deleteUserFromAllBoards(user.getId(), spaceId);
-        taskAssignmentService.unassignAllTasksInSpace(user.getId(), spaceId);
-
         eventPublisher.publishEvent(new AppEvents.SpaceUpdateEvent(
                 SseResponse.builder()
                         .type(Type.SPACE_MEMBER_UPDATE)
                         .spaceId(spaceId)
                         .build())
         );
+
+        spaceUserRepository.delete(spaceUser);
+
+        //// --- /// ----- KHI XOÁ THÌ XOÁ LUÔN TRONG BOARD VA TASK ASSIGNMENT /// --- ///
+        boardUserService.deleteUserFromAllBoards(user.getId(), spaceId);
+        taskAssignmentService.unassignAllTasksInSpace(user.getId(), spaceId);
 
     }
 }
