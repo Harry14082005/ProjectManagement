@@ -192,6 +192,20 @@ const handlePostComment = async () => {
     }
 };
 
+const handleDeleteComment = async (commentId) => {
+    if (!commentId) return;
+    const ok = window.confirm('Bạn có chắc chắn muốn xóa bình luận này không?');
+    if (!ok) return;
+
+    try {
+        await api.delete(`/comments/${commentId}`);
+        await fetchComments();
+    } catch (error) {
+        console.error("Lỗi khi xóa bình luận:", error);
+        alert("Không thể xóa bình luận! Vui lòng thử lại.");
+    }
+};
+
 onMounted(() => {
     fetchComments();
     fetchTaskAssignments();
@@ -337,7 +351,14 @@ watch(() => boardId.value, () => {
           <input type="text" placeholder="Viết bình luận..." v-model="newComment" @keydown.enter="handlePostComment">
         </div>
         <div class="comments-list">
-          <BaseComment v-for="comment in comments" :key="comment.id || Math.random()" :userName="comment.userName || comment.user?.username || 'Người dùng'" :content="comment.content"></BaseComment>
+          <BaseComment 
+            v-for="comment in comments" 
+            :key="comment.id || Math.random()" 
+            :userName="comment.user?.name || comment.user?.username || 'Người dùng'" 
+            :content="comment.content"
+            :createAt="comment.createAt"
+            @delete="handleDeleteComment(comment.id)"
+          />
         </div>
         </div>
         </div>

@@ -1,3 +1,14 @@
-import { ref } from 'vue';
-//Luu tin hieu moi nhat tu server gui ve
-export const globalSignal = ref(null);
+import { reactive } from 'vue';
+
+export const globalBus = reactive({
+  signal: null,
+  
+  emitSignal(action, data = {}) {
+    console.log(`📡 [globalBus] Emitting signal: ${action}`, data);
+    this.signal = { 
+      action, 
+      ...data, 
+      timestamp: Date.now() 
+    };
+  }
+});
