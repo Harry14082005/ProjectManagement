@@ -108,38 +108,27 @@ const handleCardChange = async (event) => {
     const card = event.moved.element;
     const newIndex = event.moved.newIndex;
 
-    // Lấy danh sách cards hiện tại (đã được Vue cập nhật thứ tự sau khi kéo)
-    const prevCard = cards.value[newIndex - 1]; // card phía trên
-    const nextCard = cards.value[newIndex + 1]; // card phía dưới
+    // Loại card đang move ra khỏi array trước khi tính prev/next
+    const otherCards = cards.value.filter(c => c.id !== card.id);
 
-    console.log(cards)
-    console.log(prevCard)
-    console.log(nextCard)
+    const prevCard = otherCards[newIndex - 1];
+    const nextCard = otherCards[newIndex];     // không phải newIndex + 1 vì đã filter ra rồi
 
     let newPosition;
 
     if (!prevCard && !nextCard) {
-      // Chỉ có 1 card
       newPosition = 1000;
     } else if (!prevCard) {
-      // Kéo lên đầu danh sách
       newPosition = Math.round(nextCard.position / 2);
     } else if (!nextCard) {
-      // Kéo xuống cuối danh sách
       newPosition = prevCard.position + 1000;
     } else {
-      // Xen giữa 2 card → công thức của bạn
       newPosition = Math.round((prevCard.position + nextCard.position) / 2);
     }
 
     try {
-      await api.put(`/cards/${card.id}/move`, {
-        position: newPosition
-      });
-
-      // Quan trọng: Cập nhật lại position ở client để các lần thả sau không bị dùng dữ liệu cũ
+      await api.put(`/cards/${card.id}/move`, { position: newPosition });
       card.position = newPosition;
-
       console.log(`Đã chuyển Card "${card.name}" sang vị trí ${newPosition}`);
     } catch (error) {
       console.error("Lỗi cập nhật vị trí Card:", error);
